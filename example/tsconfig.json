@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "rootDir": "src",
+    "outDir": "dist",
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "moduleResolution": "NodeNext",
+    "module": "ESNext",
+    "lib": ["ESNext"],
+    "sourceMap": true,
+    "declaration": true,
+    "strict": true,
+    "strictNullChecks": true,
+    "target": "ES2022",
+    "incremental": true,
+    "types": ["bun-types", "typescript/lib/lib.tsplus"],
+    "tsPlusConfig": "./tsplus.config.json",
+    "tsBuildInfoFile": "./tsconfig.tsbuildinfo"
+  },
+  "include": ["src/**/*"]
+}

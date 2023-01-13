@@ -1,0 +1,73 @@
+lockfileVersion: 5.4
+
+specifiers:
+  '@effect/io': ~0.0.62
+  '@fp-ts/data': ~0.0.39
+  '@tsplus-types/effect__io': ~0.0.62-a78c1b9
+  '@tsplus-types/fp-ts__data': ~0.0.39-a78c1b9
+  bun-types: ^0.4.0
+  effect-bun-http: link:../dist
+  prettier: ^2.8.2
+  typescript: https://cdn.jsdelivr.net/npm/@tsplus/installer@0.0.164/compiler/typescript.tgz
+
+dependencies:
+  '@effect/io': 0.0.62
+  '@fp-ts/data': 0.0.39
+  effect-bun-http: link:../dist
+
+devDependencies:
+  '@tsplus-types/effect__io': 0.0.62-a78c1b9_@effect+io@0.0.62
+  '@tsplus-types/fp-ts__data': 0.0.39-a78c1b9_@fp-ts+data@0.0.39
+  bun-types: 0.4.0
+  prettier: 2.8.2
+  typescript: '@cdn.jsdelivr.net/npm/@tsplus/installer@0.0.164/compiler/typescript.tgz'
+
+packages:
+
+  /@effect/io/0.0.62:
+    resolution: {integrity: sha512-d05Chya07Lkb+IHRFwqbVZbtZ08gCM10ZoFy362fGOy4IxjIhGB/ObZsb9idrLqK8T2IG+Hp3HJk7q6tpYlBfA==}
+    dependencies:
+      '@fp-ts/core': 0.0.11
+      '@fp-ts/data': 0.0.39
+
+  /@fp-ts/core/0.0.11:
+    resolution: {integrity: sha512-BCAJBYzghwoJpcUOARJ1tui50HoYJFlV2pJlVMlsEkDFhD8MTtq8xQVpZCRF66RmtkxtGBYINCQ+5H1lRaL35Q==}
+
+  /@fp-ts/data/0.0.39:
+    resolution: {integrity: sha512-dNw1LWjQmChmdenrDuxPct+ycucgKQQboVtWqov8rkAGY3DULznoSDJZam6l2kaLdq1ScPv810N4mzLLT+cBBw==}
+    dependencies:
+      '@fp-ts/core': 0.0.11
+
+  /@tsplus-types/effect__io/0.0.62-a78c1b9_@effect+io@0.0.62:
+    resolution: {integrity: sha512-TzTHEZjP3F9PvjI/sOnitYTCCzuZw7+ajO5hbtkbF1MadfXB4TogH/CwPUco3fCNuDHiF966YF2ww09Kcb77Mg==}
+    peerDependencies:
+      '@effect/io': 0.0.62
+    dependencies:
+      '@effect/io': 0.0.62
+    dev: true
+
+  /@tsplus-types/fp-ts__data/0.0.39-a78c1b9_@fp-ts+data@0.0.39:
+    resolution: {integrity: sha512-Qbx7b6nH8JHnqtpm6DFBRSMrNI6aBiKYULgO80foJNzpbMruWbZcbr3kXsob5eiZlBCb5Y2muIL/R/XUaB8ZQw==}
+    peerDependencies:
+      '@fp-ts/data': 0.0.39
+    dependencies:
+      '@fp-ts/data': 0.0.39
+    dev: true
+
+  /bun-types/0.4.0:
+    resolution: {integrity: sha512-KaXuDgaIHmvpCxpZCVUHTbsfKYRnSKBdzlYMBNjHnav7VCvT6KqEvykd007xP86iCxytO/7C9yLvR2+7JRtMrA==}
+    dev: true
+
+  /prettier/2.8.2:
+    resolution: {integrity: sha512-BtRV9BcncDyI2tsuS19zzhzoxD8Dh8LiCx7j7tHzrkz8GFXAexeWFdi22mjE1d16dftH2qNaytVxqiRTGlMfpw==}
+    engines: {node: '>=10.13.0'}
+    hasBin: true
+    dev: true
+
+  '@cdn.jsdelivr.net/npm/@tsplus/installer@0.0.164/compiler/typescript.tgz':
+    resolution: {tarball: https://cdn.jsdelivr.net/npm/@tsplus/installer@0.0.164/compiler/typescript.tgz}
+    name: typescript
+    version: 5.0.0-tsplus.20230113
+    engines: {node: '>=4.2.0'}
+    hasBin: true
+    dev: true
