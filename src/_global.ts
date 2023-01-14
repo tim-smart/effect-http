@@ -39,8 +39,6 @@ import { flow, pipe, identity } from "@fp-ts/data/Function"
 import {
   Route,
   Concat,
-  DefaultRequestEnv,
-  RequestContext,
   RouteContext,
 } from "effect-bun-http/definitions"
 

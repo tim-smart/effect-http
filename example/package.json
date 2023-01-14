@@ -13,7 +13,8 @@
   "dependencies": {
     "@effect/io": "~0.0.62",
     "@fp-ts/data": "~0.0.39",
-    "effect-bun-http": "link:../dist"
+    "effect-bun-http": "link:../dist",
+    "find-my-way": "^7.4.0"
   },
   "devDependencies": {
     "@tsplus-types/effect__io": "~0.0.62-a78c1b9",

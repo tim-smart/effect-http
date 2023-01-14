@@ -18,8 +18,8 @@ const r = router.route(
   }),
 )
 
-const makeRefererCheck = Do(($) => {
-  const { request } = $(Effect.service(RequestContext))
+const makeReferer = Do(($) => {
+  const { request } = $(Effect.service(RouteContext))
   const referer = Option.fromNullable(request.headers.get("referer"))
 
   // Short circuit test
@@ -32,12 +32,22 @@ const makeRefererCheck = Do(($) => {
   return { referer }
 })
 
-interface Referer extends Effect.Success<typeof makeRefererCheck> {}
+interface Referer extends Effect.Success<typeof makeReferer> {}
 const Referer = Tag<Referer>()
-const RefererLive = Layer.effect(Referer)(makeRefererCheck)
+
+const makeAnother = Do(($) => {
+  const { referer } = $(Effect.service(Referer))
+  const another = referer.map((a) => `${a} - another`)
+
+  return { another }
+})
+
+interface Another extends Effect.Success<typeof makeAnother> {}
+const Another = Tag<Another>()
 
 const another = router
-  .provideRequestLayer(RefererLive)
+  .provideServiceEffect(Referer)(makeReferer)
+  .provideServiceEffect(Another)(makeAnother)
   .route(
     "GET",
     "/test",
@@ -45,6 +55,15 @@ const another = router
       const { referer } = $(Effect.service(Referer))
 
       return new Response(JSON.stringify(referer))
+    }),
+  )
+  .route(
+    "GET",
+    "/test2",
+    Do(($) => {
+      const { another } = $(Effect.service(Another))
+
+      return new Response(JSON.stringify(another))
     }),
   )
   // Test short circuit
@@ -57,8 +76,10 @@ const another = router
 const combined = r.combineWith(another)
 
 const serve = make(
-  combined.handle.catchTag("RouteNotFound", () =>
-    Effect.succeed(new Response("Not found")),
+  combined.handle((a) =>
+    a.catchTag("RouteNotFound", () =>
+      Effect.succeed(new Response("Not found")),
+    ),
   ),
 )
 

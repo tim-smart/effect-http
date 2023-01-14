@@ -21,13 +21,7 @@ import { Tag } from "@fp-ts/data/Context"
 /**
  * @tsplus global
  */
-import {
-  Route,
-  Concat,
-  DefaultRequestEnv,
-  RequestContext,
-  RouteContext,
-} from "effect-bun-http/definitions"
+import { Route, Concat, RouteContext } from "effect-bun-http/definitions"
 /**
  * @tsplus global
  */

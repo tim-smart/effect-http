@@ -1,18 +1,17 @@
 import FindMyWay, { HTTPMethod } from "find-my-way"
-import { catchTag } from "@effect/io/Effect"
 
-export class Router<R = never, E = never, ReqR = never> {
+export class Router<R = never, E = never, EnvR = never, ReqR = never> {
   constructor(
     readonly routes: ReadonlyArray<Route<R, E> | Concat<R, E>> = [],
-    readonly layer: Maybe<Layer<R, E, any>> = Maybe.none,
+    readonly env: Maybe<Effect<R, E, Context<ReqR>>> = Maybe.none,
   ) {}
 
-  combineWith<R2, E2>(
-    router: Router<R2, E2, any>,
-  ): Router<Exclude<R | R2, DefaultRequestEnv | ReqR>, E | E2, ReqR> {
+  combineWith<R2, E2, EnvR2>(
+    router: Router<R2, E2, EnvR2, any>,
+  ): Router<R | Exclude<R2 | EnvR2, ReqR>, E | E2, EnvR, ReqR> {
     return new Router(
       [...this.routes, new Concat(router)] as any,
-      this.layer as any,
+      this.env as any,
     )
   }
 
@@ -21,29 +20,36 @@ export class Router<R = never, E = never, ReqR = never> {
     path: string,
     handler: Effect<R2, E2, Response>,
   ) {
-    return new Router<Exclude<R | R2, DefaultRequestEnv | ReqR>, E | E2, ReqR>(
+    return new Router<R | Exclude<R2, RouteContext | ReqR>, E | E2, EnvR, ReqR>(
       [...this.routes, new Route(method, path, handler)] as any,
-      this.layer as any,
+      this.env as any,
     )
   }
 
-  provideRequestLayer<R2, E2, A>(layer: Layer<R2, E2, A>) {
-    return new Router<
-      Exclude<R | R2, DefaultRequestEnv | ReqR | A>,
-      E | E2,
-      ReqR | A
-    >(
-      this.routes as any,
-      this.layer.match(
-        () => Maybe.some(layer),
-        (prevLayer) => Maybe.some(prevLayer.provideToAndMerge(layer)),
-      ) as any,
-    )
+  provideService<A>(tag: Tag<A>) {
+    return (service: A) =>
+      this.provideServiceEffect(tag)(Effect.succeed(service))
   }
 
-  provideRequestService<A>(tag: Tag<A>, service: A) {
-    const layer = Layer.succeed(tag)(service)
-    return this.provideRequestLayer(layer)
+  provideServiceEffect<A>(tag: Tag<A>) {
+    return <R2, E2>(service: Effect<R2, E2, A>) =>
+      new Router<
+        Exclude<R, A> | Exclude<R2, RouteContext | ReqR>,
+        E | E2,
+        EnvR | Exclude<R2, RouteContext | ReqR>,
+        ReqR | A
+      >(
+        this.routes as any,
+        this.env
+          .map((prevEnv) =>
+            prevEnv.flatMap((ctx) =>
+              service
+                .provideSomeEnvironment((a) => a.merge(ctx))
+                .map((a) => pipe(ctx, Context.add(tag)(a))),
+            ),
+          )
+          .orElseSucceed(() => service.map((a) => Context.make(tag)(a))) as any,
+      )
   }
 
   get routesWithLayer(): Route<R, E>[] {
@@ -51,10 +57,14 @@ export class Router<R = never, E = never, ReqR = never> {
       a._tag === "Route" ? [a] : a.router.routesWithLayer,
     )
 
-    return allRoutes.map((r) => r.maybeProvide(this.layer))
+    return allRoutes.map((r) => r.maybeProvide(this.env))
   }
 
-  get handle(): Effect<RequestContext | R, E | RouteNotFound, Response> {
+  handle<R2, E2>(
+    transform: (
+      a: Effect<R | EnvR, E | RouteNotFound, Response>,
+    ) => Effect<R2, E2, Response>,
+  ): (request: Request) => Effect<R2, E2, Response> {
     const routes = this.routesWithLayer
     const router = FindMyWay()
 
@@ -62,25 +72,25 @@ export class Router<R = never, E = never, ReqR = never> {
       router.on(route.method, route.path, () => route)
     }
 
-    return Do(($) => {
-      const { request } = $(Effect.service(RequestContext))
+    return (request) => {
       const findResult = router.find(request.method as HTTPMethod, request.url)
-      $(findResult ? Effect.unit() : Effect.fail(new RouteNotFound(request)))
+
+      if (!findResult) {
+        return transform(Effect.fail(new RouteNotFound(request)))
+      }
 
       const handler = findResult!.handler as any
       const route = handler() as Route<R, E>
+      const routeCtx = Context.make(RouteContext)({
+        request,
+        params: findResult!.params,
+        searchParams: findResult!.searchParams,
+      })
 
-      return $(
-        pipe(
-          route.handlerWithEnv,
-          Effect.provideService(RequestContext)({ request }),
-          Effect.provideService(RouteContext)({
-            params: findResult!.params,
-            searchParams: findResult!.searchParams,
-          }),
-        ),
+      return transform(
+        route.handlerWithEnv.provideSomeEnvironment((a) => a.merge(routeCtx)),
       )
-    })
+    }
   }
 }
 

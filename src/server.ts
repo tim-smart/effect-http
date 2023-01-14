@@ -1,15 +1,14 @@
 export const make = <R>(
-  handle: Effect<R | RequestContext, EarlyResponse, Response>,
-): Effect<Exclude<R, RequestContext>, never, void> =>
-  Effect.runtime<Exclude<R, RequestContext>>().flatMap((rt) =>
+  handle: (ctx: Request) => Effect<R, EarlyResponse, Response>,
+): Effect<R, never, void> =>
+  Effect.runtime<R>().flatMap((rt) =>
     Effect.asyncInterrupt<never, never, void>(() => {
       const server = Bun.serve({
         fetch(request) {
           return rt.unsafeRunPromise(
-            pipe(
-              handle,
-              Effect.provideService(RequestContext)({ request }),
-            ).catchTag("EarlyResponse", (e) => Effect.succeed(e.response)),
+            handle(request).catchTag("EarlyResponse", (e) =>
+              Effect.succeed(e.response),
+            ),
           )
         },
       })
