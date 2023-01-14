@@ -2,7 +2,7 @@ import FMY from "find-my-way"
 
 const router = FMY()
 
-router.on("GET", "/", () => new Response("Hello!"))
+router.on("GET", "/", async () => new Response("Hello!"))
 
 Bun.serve({
   async fetch(req) {

@@ -1,5 +1,5 @@
 export const make = <R>(
-  handle: (ctx: Request) => Effect<R, EarlyResponse, Response>,
+  handle: (request: Request) => Effect<R, EarlyResponse, Response>,
 ): Effect<R, never, void> =>
   Effect.runtime<R>().flatMap((rt) =>
     Effect.asyncInterrupt<never, never, void>(() => {

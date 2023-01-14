@@ -8,16 +8,6 @@ interface Counter extends Effect.Success<typeof makeCounter> {}
 const Counter = Tag<Counter>()
 const CounterLive = Layer.effect(Counter)(makeCounter)
 
-const r = router.route(
-  "GET",
-  "/",
-  Do(($) => {
-    const { count } = $(Effect.service(Counter))
-    const currentCount = $(count.getAndUpdate((i) => i + 1))
-    return new Response(`Hello! ${currentCount}`)
-  }),
-)
-
 const makeReferer = Do(($) => {
   const { request } = $(Effect.service(RouteContext))
   const referer = Option.fromNullable(request.headers.get("referer"))
@@ -44,6 +34,31 @@ const makeAnother = Do(($) => {
 
 interface Another extends Effect.Success<typeof makeAnother> {}
 const Another = Tag<Another>()
+
+const users = router
+  .provideServiceEffect(Referer)(makeReferer)
+  .route(
+    "GET",
+    "/",
+    Do(($) => {
+      $(Effect.service(Referer))
+      const { count } = $(Effect.service(Counter))
+      const currentCount = $(count.getAndUpdate((i) => i + 1))
+      return new Response(`Users: ${currentCount}`)
+    }),
+  )
+
+const r = router
+  .route(
+    "GET",
+    "/",
+    Do(($) => {
+      const { count } = $(Effect.service(Counter))
+      const currentCount = $(count.getAndUpdate((i) => i + 1))
+      return new Response(`Hello! ${currentCount}`)
+    }),
+  )
+  .mountRouter("/users", users)
 
 const another = router
   .provideServiceEffect(Referer)(makeReferer)
