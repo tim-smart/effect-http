@@ -63,6 +63,22 @@ export class Concat<R, E> {
   }
 }
 
+export class ConcatWithPrefix<R, E> {
+  readonly _tag = "ConcatWithPrefix"
+  constructor(
+    readonly router: Router<R, E, any, any>,
+    readonly prefix: string,
+  ) {}
+
+  get routes() {
+    return this.router.routes
+  }
+
+  get layer() {
+    return this.router.env
+  }
+}
+
 export interface RouteContext {
   request: Request
   params: Record<string, string | undefined>

@@ -2,8 +2,10 @@ lockfileVersion: 5.4
 
 specifiers:
   '@effect/io': ~0.0.62
+  '@effect/stream': ~0.0.12
   '@fp-ts/data': ~0.0.39
   '@tsplus-types/effect__io': ~0.0.62-a78c1b9
+  '@tsplus-types/effect__stream': ~0.0.12-1eeff19
   '@tsplus-types/fp-ts__data': ~0.0.39-a78c1b9
   bun-types: ^0.4.0
   effect-bun-http: link:../dist
@@ -13,12 +15,14 @@ specifiers:
 
 dependencies:
   '@effect/io': 0.0.62
+  '@effect/stream': 0.0.12
   '@fp-ts/data': 0.0.39
   effect-bun-http: link:../dist
   find-my-way: 7.4.0
 
 devDependencies:
   '@tsplus-types/effect__io': 0.0.62-a78c1b9_@effect+io@0.0.62
+  '@tsplus-types/effect__stream': 0.0.12-1eeff19_@effect+stream@0.0.12
   '@tsplus-types/fp-ts__data': 0.0.39-a78c1b9_@fp-ts+data@0.0.39
   bun-types: 0.4.0
   prettier: 2.8.2
@@ -29,6 +33,13 @@ packages:
   /@effect/io/0.0.62:
     resolution: {integrity: sha512-d05Chya07Lkb+IHRFwqbVZbtZ08gCM10ZoFy362fGOy4IxjIhGB/ObZsb9idrLqK8T2IG+Hp3HJk7q6tpYlBfA==}
     dependencies:
+      '@fp-ts/core': 0.0.11
+      '@fp-ts/data': 0.0.39
+
+  /@effect/stream/0.0.12:
+    resolution: {integrity: sha512-th6NokgLZQC97jGxo4vM4x29aYtmqkGSwMlNFAQUJCp0e0RGfmr+Wr2KRL24L+oRttd7ITNFJ9U2m+uo1IbBOg==}
+    dependencies:
+      '@effect/io': 0.0.62
       '@fp-ts/core': 0.0.11
       '@fp-ts/data': 0.0.39
 
@@ -46,6 +57,14 @@ packages:
       '@effect/io': 0.0.62
     dependencies:
       '@effect/io': 0.0.62
+    dev: true
+
+  /@tsplus-types/effect__stream/0.0.12-1eeff19_@effect+stream@0.0.12:
+    resolution: {integrity: sha512-GZC2JJD+4TjEGo+FOoK+VIFZKkbh854HX7ghFVLUTsaPQkOu02opB1hyGFUUfMCN0eABb8fxH+LqPI3noW99lA==}
+    peerDependencies:
+      '@effect/stream': 0.0.12
+    dependencies:
+      '@effect/stream': 0.0.12
     dev: true
 
   /@tsplus-types/fp-ts__data/0.0.39-a78c1b9_@fp-ts+data@0.0.39:

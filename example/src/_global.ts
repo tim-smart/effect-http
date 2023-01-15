@@ -16,7 +16,22 @@ import type { Ref } from "@effect/io/Ref"
 /**
  * @tsplus global
  */
+import type { Stream } from "@effect/stream/Stream"
+
+/**
+ * @tsplus global
+ */
 import { Tag } from "@fp-ts/data/Context"
+
+/**
+ * @tsplus global
+ */
+import { pipe, flow, identity } from "@fp-ts/data/Function"
+
+/**
+ * @tsplus global
+ */
+import { Option as Maybe } from "@fp-ts/data/Option"
 
 /**
  * @tsplus global

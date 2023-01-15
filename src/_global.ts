@@ -39,10 +39,11 @@ import { flow, pipe, identity } from "@fp-ts/data/Function"
 import {
   Route,
   Concat,
+  ConcatWithPrefix,
   RouteContext,
 } from "effect-bun-http/definitions"
 
 /**
  * @tsplus global
  */
-import { Router } from "effect-bun-http/router"
+import { Router, RequestHandler } from "effect-bun-http/router"

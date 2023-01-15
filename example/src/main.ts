@@ -35,20 +35,19 @@ const makeAnother = Do(($) => {
 interface Another extends Effect.Success<typeof makeAnother> {}
 const Another = Tag<Another>()
 
-const users = router
-  .provideServiceEffect(Referer)(makeReferer)
-  .route(
-    "GET",
-    "/",
-    Do(($) => {
-      $(Effect.service(Referer))
-      const { count } = $(Effect.service(Counter))
-      const currentCount = $(count.getAndUpdate((i) => i + 1))
-      return new Response(`Users: ${currentCount}`)
-    }),
-  )
+const users = router.route(
+  "GET",
+  "/",
+  Do(($) => {
+    $(Effect.service(Referer))
+    const { count } = $(Effect.service(Counter))
+    const currentCount = $(count.getAndUpdate((i) => i + 1))
+    return new Response(`Users: ${currentCount}`)
+  }),
+)
 
 const r = router
+  .provideServiceEffect(Referer)(makeReferer)
   .route(
     "GET",
     "/",

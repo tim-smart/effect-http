@@ -1,13 +1,15 @@
 import FindMyWay, { HTTPMethod } from "find-my-way"
 
-type RequestHandler<R, E> = (
+export type RequestHandler<R, E> = (
+  url: string,
   request: Request,
-  urlOverride?: string,
 ) => Effect<R, E, Response>
 
 export class Router<R = never, E = never, EnvR = never, ReqR = never> {
   constructor(
-    readonly routes: ReadonlyArray<Route<R, E> | Concat<R, E>> = [],
+    readonly routes: ReadonlyArray<
+      Route<R, E> | Concat<R, E> | ConcatWithPrefix<R, E>
+    > = [],
     readonly env: Maybe<Effect<R, E, Context<ReqR>>> = Maybe.none,
     readonly mounts: HashMap<string, RequestHandler<R, E>> = HashMap.empty(),
   ) {}
@@ -61,14 +63,6 @@ export class Router<R = never, E = never, EnvR = never, ReqR = never> {
       )
   }
 
-  get routesWithEnv(): Route<R, E>[] {
-    const allRoutes = this.routes.flatMap((a) =>
-      a._tag === "Route" ? [a] : a.router.routesWithEnv,
-    )
-
-    return allRoutes.map((r) => r.maybeProvide(this.env))
-  }
-
   mount<R2, E2>(path: string, handler: RequestHandler<R2, E2>) {
     path = path.endsWith("/") ? path.slice(0, -1) : path
 
@@ -82,8 +76,38 @@ export class Router<R = never, E = never, EnvR = never, ReqR = never> {
   mountRouter<R2, E2, EnvR2>(
     path: string,
     router: Router<R2, E2, EnvR2, any> | Router<R2, E2, EnvR2, never>,
-  ) {
-    return this.mount(path, router.handle(identity))
+  ): Router<R | Exclude<R2 | EnvR2, ReqR>, E | E2, EnvR, ReqR> {
+    return new Router(
+      [...this.routes, new ConcatWithPrefix(router as any, path)],
+      this.env as any,
+      this.mounts,
+    )
+  }
+
+  routesWithEnv(prefix?: string): Route<R, E>[] {
+    const allRoutes = this.routes.flatMap((a) =>
+      a._tag === "Route"
+        ? [a]
+        : a._tag === "ConcatWithPrefix"
+        ? a.router.routesWithEnv(prefix ? `${a.prefix}${prefix}` : a.prefix)
+        : a.router.routesWithEnv(prefix),
+    )
+
+    if (prefix) {
+      return allRoutes
+        .map(
+          (a) =>
+            new Route(
+              a.method,
+              a.path === "/" ? prefix : prefix + a.path,
+              a.handler,
+              a.env,
+            ),
+        )
+        .map((r) => r.maybeProvide(this.env))
+    }
+
+    return allRoutes.map((r) => r.maybeProvide(this.env))
   }
 
   handle<R2, E2>(
@@ -91,7 +115,7 @@ export class Router<R = never, E = never, EnvR = never, ReqR = never> {
       a: Effect<R | EnvR, E | RouteNotFound, Response>,
     ) => Effect<R2, E2, Response>,
   ): RequestHandler<R2, E2> {
-    const routes = this.routesWithEnv
+    const routes = this.routesWithEnv()
     const router = FindMyWay()
 
     for (const route of routes) {
@@ -103,25 +127,26 @@ export class Router<R = never, E = never, EnvR = never, ReqR = never> {
     const mounts = [...this.mounts]
     const mountsLength = mounts.length
 
-    return (request, urlOverride) => {
+    return (url, request) => {
       if (hasMounts) {
-        const url = new URL(urlOverride ?? request.url)
+        const urlObj = new URL(url)
         for (var i = 0; i < mountsLength; i++) {
           const [path, handler] = mounts[i]
-          if (!(url.pathname === path || url.pathname.startsWith(`${path}/`))) {
+          if (
+            !(
+              urlObj.pathname === path || urlObj.pathname.startsWith(`${path}/`)
+            )
+          ) {
             continue
           }
 
-          url.pathname = url.pathname.slice(path.length)
+          urlObj.pathname = urlObj.pathname.slice(path.length)
 
-          return transform(handler(request, url.toString()))
+          return transform(handler(urlObj.toString(), request))
         }
       }
 
-      const findResult = router.find(
-        request.method as HTTPMethod,
-        urlOverride ?? request.url,
-      )
+      const findResult = router.find(request.method as HTTPMethod, url)
 
       if (!findResult) {
         return transform(Effect.fail(new RouteNotFound(request)))
