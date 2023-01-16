@@ -37,6 +37,8 @@ import { flow, pipe, identity } from "@fp-ts/data/Function"
  * @tsplus global
  */
 import {
+  HttpApp,
+  Middleware,
   Route,
   Concat,
   ConcatWithPrefix,
@@ -46,4 +48,4 @@ import {
 /**
  * @tsplus global
  */
-import { Router, RequestHandler } from "effect-bun-http/router"
+import { Router } from "effect-bun-http/router"

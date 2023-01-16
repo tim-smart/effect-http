@@ -1,17 +1,12 @@
 import FindMyWay, { HTTPMethod } from "find-my-way"
 
-export type RequestHandler<R, E> = (
-  url: string,
-  request: Request,
-) => Effect<R, E, Response>
-
 export class Router<R = never, E = never, EnvR = never, ReqR = never> {
   constructor(
     readonly routes: ReadonlyArray<
       Route<R, E> | Concat<R, E> | ConcatWithPrefix<R, E>
     > = [],
     readonly env: Maybe<Effect<R, E, Context<ReqR>>> = Maybe.none,
-    readonly mounts: HashMap<string, RequestHandler<R, E>> = HashMap.empty(),
+    readonly mounts: HashMap<string, HttpApp<R, E>> = HashMap.empty(),
   ) {}
 
   combineWith<R2, E2, EnvR2>(
@@ -63,7 +58,7 @@ export class Router<R = never, E = never, EnvR = never, ReqR = never> {
       )
   }
 
-  mount<R2, E2>(path: string, handler: RequestHandler<R2, E2>) {
+  mount<R2, E2>(path: string, handler: HttpApp<R2, E2>) {
     path = path.endsWith("/") ? path.slice(0, -1) : path
 
     return new Router<R, E | Exclude<E2, RouteNotFound>, EnvR | R2, ReqR>(
@@ -84,42 +79,62 @@ export class Router<R = never, E = never, EnvR = never, ReqR = never> {
     )
   }
 
-  routesWithEnv(prefix?: string): Route<R, E>[] {
-    const allRoutes = this.routes.flatMap((a) =>
+  routesWithEnv(
+    prefix?: string,
+  ): (readonly [Route<R, E>, Maybe<Effect<R, E, Context<ReqR>>>])[] {
+    let allRoutes = this.routes.flatMap((a) =>
       a._tag === "Route"
-        ? [a]
+        ? [[a, this.env] as const]
         : a._tag === "ConcatWithPrefix"
         ? a.router.routesWithEnv(prefix ? `${a.prefix}${prefix}` : a.prefix)
         : a.router.routesWithEnv(prefix),
     )
 
     if (prefix) {
-      return allRoutes
-        .map(
-          (a) =>
-            new Route(
-              a.method,
-              a.path === "/" ? prefix : prefix + a.path,
-              a.handler,
-              a.env,
-            ),
-        )
-        .map((r) => r.maybeProvide(this.env))
+      allRoutes = allRoutes.map(([a, env]) => [
+        new Route(
+          a.method,
+          a.path === "/" ? prefix : prefix + a.path,
+          a.handler,
+        ),
+        env,
+      ])
     }
 
-    return allRoutes.map((r) => r.maybeProvide(this.env))
+    return allRoutes.map(([route, env]) => [
+      route,
+      this.env.match(
+        () => env,
+        (selfEnv) =>
+          env.match(
+            () => Maybe.some(selfEnv),
+            (prevEnv) =>
+              Maybe.some(
+                selfEnv.flatMap((selfCtx) =>
+                  prevEnv
+                    .provideSomeEnvironment((a: Context<any>) =>
+                      a.merge(selfCtx),
+                    )
+                    .map((prevCtx) => selfCtx.merge(prevCtx)),
+                ),
+              ),
+          ),
+      ),
+    ])
   }
 
-  handle<R2, E2>(
-    transform: (
-      a: Effect<R | EnvR, E | RouteNotFound, Response>,
-    ) => Effect<R2, E2, Response>,
-  ): RequestHandler<R2, E2> {
+  toHttpApp(): HttpApp<R | EnvR, E | RouteNotFound> {
     const routes = this.routesWithEnv()
     const router = FindMyWay()
 
-    for (const route of routes) {
-      const handler = route.handlerWithEnv
+    for (const [route, env] of routes) {
+      const handler = env.match(
+        () => route.handler,
+        (env) =>
+          env.flatMap((ctx) =>
+            route.handler.provideSomeEnvironment((a) => a.merge(ctx)),
+          ),
+      )
       router.on(route.method, route.path, () => handler)
     }
 
@@ -130,6 +145,7 @@ export class Router<R = never, E = never, EnvR = never, ReqR = never> {
     return (url, request) => {
       if (hasMounts) {
         const urlObj = new URL(url)
+
         for (var i = 0; i < mountsLength; i++) {
           const [path, handler] = mounts[i]
           if (
@@ -142,26 +158,24 @@ export class Router<R = never, E = never, EnvR = never, ReqR = never> {
 
           urlObj.pathname = urlObj.pathname.slice(path.length)
 
-          return transform(handler(urlObj.toString(), request))
+          return handler(urlObj.toString(), request)
         }
       }
 
       const findResult = router.find(request.method as HTTPMethod, url)
 
       if (!findResult) {
-        return transform(Effect.fail(new RouteNotFound(request)))
+        return Effect.fail(new RouteNotFound(request))
       }
 
       const handler = findResult!.handler as any
       const routeHandler = handler() as Effect<R | RouteContext, E, Response>
 
-      return transform(
-        Effect.provideService(RouteContext)({
-          request,
-          params: findResult!.params,
-          searchParams: findResult!.searchParams,
-        })(routeHandler),
-      )
+      return Effect.provideService(RouteContext)({
+        request,
+        params: findResult.params,
+        searchParams: findResult.searchParams,
+      })(routeHandler)
     }
   }
 }
