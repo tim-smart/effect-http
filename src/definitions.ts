@@ -9,10 +9,18 @@ export interface HttpApp<R, E> {
 
 /**
  * @tsplus type effect-bun-http/Middleware
+ * @tsplus companion effect-bun-http/Middleware.Ops
  */
-export interface Middleware<ROut, EOut> {
-  <RIn, EIn>(self: HttpApp<RIn, EIn>): HttpApp<ROut, EOut>
+export interface Middleware<RIn, EIn, ROut, EOut> {
+  (self: HttpApp<RIn, EIn>): HttpApp<ROut, EOut>
 }
+
+/**
+ * @tsplus static effect-bun-http/Middleware.Ops make
+ */
+export const middleware = <RIn, EIn, ROut, EOut>(
+  f: Middleware<RIn, EIn, ROut, EOut>,
+): Middleware<RIn, EIn, ROut, EOut> => f
 
 export class Route<R, E> {
   readonly _tag = "Route"

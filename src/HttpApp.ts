@@ -36,12 +36,11 @@ export const catchAll =
   <R>(self: HttpApp<R, E>): HttpApp<R | R1, E1> =>
   (url, request) =>
     self(url, request).catchAll(onError)
-
 /**
  * @tsplus pipeable effect-bun-http/HttpApp applyMiddleware
  * @tsplus pipeable-operator effect-bun-http/HttpApp >>
  */
 export const applyMiddleware =
-  <R1, E1>(fa: Middleware<R1, E1>) =>
-  <R, E>(self: HttpApp<R, E>) =>
+  <R, E, R1, E1>(fa: Middleware<R, E, R1, E1>) =>
+  (self: HttpApp<R, E>): HttpApp<R1, E1> =>
     fa(self)
