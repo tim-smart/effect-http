@@ -17,9 +17,9 @@ export const make = <R>(
         ...options,
         fetch(request) {
           return rt.unsafeRunPromise(
-            httpApp(HttpRequest.fromStandard(request)).map(
-              HttpResponse.toStandard,
-            ),
+            httpApp(HttpRequest.fromStandard(request))
+              .catchTag("EarlyResponse", (e) => Effect.succeed(e.response))
+              .map(HttpResponse.toStandard),
           )
         },
       })
