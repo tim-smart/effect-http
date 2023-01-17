@@ -1,7 +1,10 @@
 {
   "name": "@effect-http/bun",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "type": "module",
+  "publishConfig": {
+    "access": "public"
+  },
   "exports": {
     ".": "./dist/index.js",
     "./*": "./dist/*.js"
@@ -13,7 +16,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@effect-http/core": "workspace:*",
+    "@effect-http/core": "^0.1.0",
     "@effect/io": "~0.0.65",
     "@fp-ts/data": "~0.0.40"
   },

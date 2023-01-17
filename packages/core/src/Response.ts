@@ -24,7 +24,7 @@ export type ResponseBody =
     }
 
 /**
- * @tsplus static effect-http/Response json
+ * @tsplus static effect-http/Response.Ops json
  */
 export const json = (
   value: unknown,

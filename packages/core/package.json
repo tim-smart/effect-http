@@ -2,8 +2,12 @@
   "name": "@effect-http/core",
   "version": "0.1.0",
   "type": "module",
+  "publishConfig": {
+    "access": "public"
+  },
   "exports": {
     ".": "./dist/index.js",
+    "./HttpApp": "./dist/HttpApp.js",
     "./Request": "./dist/Request.js",
     "./Response": "./dist/Response.js",
     "./*": "./dist/*.js"

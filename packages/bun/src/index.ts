@@ -1,7 +1,8 @@
 import type { Effect } from "@effect/io/Effect"
 import type { GenericServeOptions } from "bun"
-import type { HttpApp, EarlyResponse, HttpRequest } from "@effect-http/core"
-import { response } from "@effect-http/core"
+import type { HttpApp } from "@effect-http/core"
+import type { HttpRequest } from "@effect-http/core/Request"
+import { EarlyResponse, HttpResponse } from "@effect-http/core/Response"
 
 /**
  * @tsplus fluent effect-http/HttpApp serveBun
@@ -16,7 +17,9 @@ export const make = <R>(
         ...options,
         fetch(request) {
           return rt.unsafeRunPromise(
-            httpApp(HttpRequest.fromStandard(request)).map(response.toStandard),
+            httpApp(HttpRequest.fromStandard(request)).map(
+              HttpResponse.toStandard,
+            ),
           )
         },
       })
