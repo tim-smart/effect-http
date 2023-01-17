@@ -2,12 +2,54 @@
  * @tsplus type effect-http/Response
  * @tsplus companion effect-http/Response.Ops
  */
-export class HttpResponse {
-  readonly _tag = "HttpResponse"
+export type HttpResponse =
+  | EmptyResponse
+  | TextResponse
+  | JsonResponse
+  | SearchParamsResponse
+  | StreamResponse
+
+export class EmptyResponse {
+  readonly _tag = "EmptyResponse"
+  constructor(readonly status: number, readonly headers: Maybe<Headers>) {}
+}
+
+export class TextResponse {
+  readonly _tag = "TextResponse"
   constructor(
     readonly status: number,
     readonly headers: Maybe<Headers>,
-    readonly body: ResponseBody,
+    readonly contentType: string,
+    readonly body: string,
+  ) {}
+}
+
+export class JsonResponse {
+  readonly _tag = "JsonResponse"
+  constructor(
+    readonly status: number,
+    readonly headers: Maybe<Headers>,
+    readonly body: unknown,
+  ) {}
+}
+
+export class SearchParamsResponse {
+  readonly _tag = "SearchParamsResponse"
+  constructor(
+    readonly status: number,
+    readonly headers: Maybe<Headers>,
+    readonly body: URLSearchParams,
+  ) {}
+}
+
+export class StreamResponse {
+  readonly _tag = "StreamResponse"
+  constructor(
+    readonly status: number,
+    readonly headers: Maybe<Headers>,
+    readonly contentType: string,
+    readonly contentLength: Maybe<number>,
+    readonly body: ReadableStream,
   ) {}
 }
 
@@ -35,11 +77,7 @@ export const json = (
     status?: number
     headers?: Maybe<Headers>
   } = {},
-) =>
-  new HttpResponse(status, headers, {
-    _tag: "Json",
-    value,
-  })
+): HttpResponse => new JsonResponse(status, headers, value)
 
 /**
  * @tsplus static effect-http/Response.Ops text
@@ -55,12 +93,7 @@ export const text = (
     contentType?: string
     headers?: Maybe<Headers>
   } = {},
-) =>
-  new HttpResponse(status, headers, {
-    _tag: "Text",
-    contentType,
-    value,
-  })
+): HttpResponse => new TextResponse(status, headers, contentType, value)
 
 /**
  * @tsplus static effect-http/Response.Ops searchParams
@@ -74,11 +107,7 @@ export const searchParams = (
     status?: number
     headers?: Maybe<Headers>
   } = {},
-) =>
-  new HttpResponse(status, headers, {
-    _tag: "URLSearchParams",
-    value,
-  })
+): HttpResponse => new SearchParamsResponse(status, headers, value)
 
 /**
  * @tsplus static effect-http/Response.Ops stream
@@ -96,13 +125,14 @@ export const stream = (
     contentType?: string
     contentLength?: number
   } = {},
-) =>
-  new HttpResponse(status, Maybe.fromNullable(headers), {
-    _tag: "ReadableStream",
+): HttpResponse =>
+  new StreamResponse(
+    status,
+    Maybe.fromNullable(headers),
     contentType,
-    contentLength: Maybe.fromNullable(contentLength),
+    Maybe.fromNullable(contentLength),
     value,
-  })
+  )
 
 export class EarlyResponse {
   readonly _tag = "EarlyResponse"
@@ -122,7 +152,7 @@ export const early = (
  * @tsplus static effect-http/Response.Ops toStandard
  */
 export const toStandard = (self: HttpResponse): Response => {
-  if (self.body._tag === "Empty") {
+  if (self._tag === "EmptyResponse") {
     return new Response(null, {
       status: self.status,
       headers: self.headers._tag === "Some" ? self.headers.value : undefined,
@@ -133,28 +163,28 @@ export const toStandard = (self: HttpResponse): Response => {
     self.headers._tag === "Some" ? self.headers.value : new Headers()
   let body: any = null
 
-  switch (self.body._tag) {
-    case "Json":
-      body = JSON.stringify(self.body.value)
+  switch (self._tag) {
+    case "JsonResponse":
       headers.set("content-type", "application/json")
+      body = JSON.stringify(self.body)
       break
 
-    case "Text":
-      headers.set("content-type", self.body.contentType)
-      body = self.body.value
+    case "TextResponse":
+      headers.set("content-type", self.contentType)
+      body = self.body
       break
 
-    case "URLSearchParams":
+    case "SearchParamsResponse":
       headers.set("content-type", "application/x-www-form-urlencoded")
-      body = self.body.value.toString()
+      body = self.body.toString()
       break
 
-    case "ReadableStream":
-      headers.set("content-type", self.body.contentType)
-      if (self.body.contentLength._tag === "Some") {
-        headers.set("content-length", self.body.value.toString())
+    case "StreamResponse":
+      headers.set("content-type", self.contentType)
+      if (self.contentLength._tag === "Some") {
+        headers.set("content-length", self.contentLength.toString())
       }
-      body = self.body.value
+      body = self.body
   }
 
   return new Response(body, {

@@ -58,7 +58,12 @@ import {
 /**
  * @tsplus global
  */
-import type { HttpResponse, ResponseBody } from "@effect-http/core/response"
+import type { HttpResponse, ResponseBody } from "@effect-http/core/Response"
+
+/**
+ * @tsplus global
+ */
+import { HttpRequest, RequestBodyError } from "@effect-http/core/Request"
 
 /**
  * @tsplus global

@@ -43,11 +43,6 @@ export const parseBodyWithParams = ({
       : allParams
   })
 
-export class DecodeBodyError {
-  readonly _tag = "DecodeBodyError"
-  constructor(readonly reason: unknown, readonly request: HttpRequest) {}
-}
-
 export const parseBody = (request: HttpRequest) => {
   const contentType = request.headers.get("content-type")?.toLowerCase()
 
@@ -64,6 +59,6 @@ export const queryStringBody = (request: HttpRequest) =>
   request.text.flatMap((a) =>
     Effect.tryCatch(
       () => Object.fromEntries(new URLSearchParams(a).entries()),
-      (reason) => new DecodeBodyError(reason, request),
+      (reason) => new RequestBodyError(reason),
     ),
   )

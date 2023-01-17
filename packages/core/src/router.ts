@@ -160,10 +160,7 @@ export class Router<R = never, E = never, EnvR = never, ReqR = never> {
 
           urlObj.pathname = urlObj.pathname.slice(path.length)
 
-          return handler({
-            ...request,
-            url: urlObj.toString(),
-          })
+          return handler(request.setUrl(urlObj.toString()))
         }
       }
 
