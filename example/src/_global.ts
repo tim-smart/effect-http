@@ -36,6 +36,16 @@ import { Option as Maybe } from "@fp-ts/data/Option"
 /**
  * @tsplus global
  */
+import { ParseError, ParseResult } from "@fp-ts/schema/ParseError"
+
+/**
+ * @tsplus global
+ */
+import { Schema } from "@fp-ts/schema/Schema"
+
+/**
+ * @tsplus global
+ */
 import { Route, Concat, RouteContext } from "effect-bun-http/definitions"
 /**
  * @tsplus global

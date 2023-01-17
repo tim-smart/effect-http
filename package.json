@@ -13,14 +13,16 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@effect/io": "~0.0.62",
+    "@effect/io": "~0.0.64",
     "@fp-ts/data": "~0.0.39",
+    "@fp-ts/schema": "^0.0.8",
     "@types/route-parser": "^0.1.4",
     "find-my-way": "^7.4.0"
   },
   "devDependencies": {
-    "@tsplus-types/effect__io": "~0.0.62-a78c1b9",
-    "@tsplus-types/fp-ts__data": "~0.0.39-a78c1b9",
+    "@tsplus-types/effect__io": "0.0.64-44b6108",
+    "@tsplus-types/fp-ts__data": "0.0.39-44b6108",
+    "@tsplus-types/fp-ts__schema": "0.0.8-44b6108",
     "bun-types": "^0.4.0",
     "prettier": "^2.8.2",
     "typescript": "https://cdn.jsdelivr.net/npm/@tsplus/installer@0.0.164/compiler/typescript.tgz"

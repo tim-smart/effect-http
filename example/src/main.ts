@@ -1,5 +1,5 @@
 import { Option } from "@fp-ts/data/Option"
-import { make, respond, router } from "effect-bun-http"
+import { respondEarly, router } from "effect-bun-http"
 
 // Dependencies
 
@@ -17,7 +17,7 @@ const makeReferer = Do(($) => {
   // Short circuit test
   $(
     request.url.includes("/fail")
-      ? respond(new Response("Boom!"))
+      ? respondEarly(new Response("Boom!"))
       : Effect.unit(),
   )
 

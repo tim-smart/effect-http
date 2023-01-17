@@ -3,24 +3,18 @@
  */
 import type {
   Cause,
-  Config,
-  ConfigSecret,
-  ConfigError,
   Effect,
   Exit,
   Layer,
-  Queue,
-  Schedule,
   Scope,
-  Chunk,
   Context,
-  Duration,
-  Equal,
   Either,
   HashMap,
   Maybe,
-  Ref,
-  HashSet,
+  NonEmptyReadonlyArray,
+  ParseError,
+  Parser,
+  Schema,
 } from "effect-bun-http/_common"
 
 /**
@@ -49,3 +43,8 @@ import {
  * @tsplus global
  */
 import { Router } from "effect-bun-http/router"
+
+/**
+ * @tsplus global
+ */
+import type { EffectAspects } from "@tsplus-types/effect__io/Aspects"
