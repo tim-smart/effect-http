@@ -11,26 +11,35 @@ export const decode = <A>(schema: Schema<A>) => {
   const decode = Parser.decode(schema)
 
   return Do(($) => {
-    const { request, params, searchParams } = $(Effect.service(RouteContext))
-    const allParams = { ...searchParams, ...params }
-    const body = $(parseBody(request))
-    const paramsWithBody =
-      body._tag === "Some"
-        ? {
-            ...allParams,
-            ...(body.value as any),
-          }
-        : allParams
+    const ctx = $(Effect.service(RouteContext))
+    const params = $(parseBodyWithParams(ctx))
 
     return $(
       Effect.fromEither(
-        decode(paramsWithBody).mapLeft(
-          (errors) => new DecodeError(errors, request, paramsWithBody),
+        decode(params).mapLeft(
+          (errors) => new DecodeError(errors, ctx.request, params),
         ),
       ),
     )
   })
 }
+
+export const parseBodyWithParams = ({
+  request,
+  params,
+  searchParams,
+}: RouteContext) =>
+  Do(($): unknown => {
+    const allParams = { ...searchParams, ...params }
+    const body = $(parseBody(request))
+
+    return body._tag === "Some"
+      ? {
+          ...allParams,
+          ...(body.value as any),
+        }
+      : allParams
+  })
 
 export class BodyParseError {
   readonly _tag = "BodyParseError"
