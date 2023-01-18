@@ -8,6 +8,7 @@ import * as Body from "./body.js"
 import { Readable } from "stream"
 
 export interface RequestOptions {
+  baseUrl: string
   bodyLimit: number
 }
 
@@ -26,12 +27,15 @@ export const make =
     Effect.runtime<R>().flatMap((rt) =>
       Effect.asyncInterrupt<never, never, never>(() => {
         const reqOptions: RequestOptions = {
+          baseUrl: options.baseUrl ?? `http://localhost:${options.port}`,
           bodyLimit: options.bodyLimit ?? 5 * MB,
         }
 
         server.on("request", (request, response) => {
+          const url = reqOptions.baseUrl + request.url!
+
           rt.unsafeRun(
-            httpApp(new HttpRequestImpl(request, request.url!, reqOptions)).tap(
+            httpApp(new HttpRequestImpl(request, url, url, reqOptions)).tap(
               (r) =>
                 Effect(() => {
                   handleResponse(r, response)
@@ -52,6 +56,7 @@ class HttpRequestImpl implements HttpRequest {
   constructor(
     readonly source: Http.IncomingMessage,
     readonly url: string,
+    readonly originalUrl: string,
     readonly options: RequestOptions,
   ) {}
 
@@ -63,12 +68,8 @@ class HttpRequestImpl implements HttpRequest {
     return new Headers(this.source.headers as Record<string, string>)
   }
 
-  get originalUrl() {
-    return this.source.url!
-  }
-
   setUrl(url: string): HttpRequest {
-    return new HttpRequestImpl(this.source, url, this.options)
+    return new HttpRequestImpl(this.source, url, this.originalUrl, this.options)
   }
 
   get text() {
