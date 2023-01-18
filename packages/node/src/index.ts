@@ -8,7 +8,6 @@ import * as Body from "./body.js"
 import { Readable } from "stream"
 
 export interface RequestOptions {
-  baseUrl: string
   bodyLimit: number
 }
 
@@ -27,12 +26,11 @@ export const make =
     Effect.runtime<R>().flatMap((rt) =>
       Effect.asyncInterrupt<never, never, never>(() => {
         const reqOptions: RequestOptions = {
-          baseUrl: options.baseUrl ?? `http://localhost:${options.port}`,
           bodyLimit: options.bodyLimit ?? 5 * MB,
         }
 
         server.on("request", (request, response) => {
-          const url = reqOptions.baseUrl + request.url!
+          const url = requestUrl(request, options.port)
 
           rt.unsafeRun(
             httpApp(new HttpRequestImpl(request, url, url, reqOptions)).tap(
@@ -130,4 +128,31 @@ const handleResponse = (source: HttpResponse, dest: Http.ServerResponse) => {
 
   dest.writeHead(source.status, headers)
   dest.end(body)
+}
+
+const requestUrl = (source: Http.IncomingMessage, port: number) => {
+  const proto = requestProtocol(source)
+  const host = requestHost(source, port)
+
+  return `${proto}://${host}${source.url}`
+}
+
+const requestProtocol = (source: Http.IncomingMessage) => {
+  if ((source.socket as any).encrypted) {
+    return "https"
+  } else if (typeof source.headers["x-forwarded-proto"] === "string") {
+    return source.headers["x-forwarded-proto"].trim()
+  }
+
+  return "http"
+}
+
+const requestHost = (source: Http.IncomingMessage, port: number) => {
+  if (typeof source.headers["x-forwarded-host"] === "string") {
+    return source.headers["x-forwarded-host"].trim()
+  } else if (typeof source.headers["host"] === "string") {
+    return source.headers["host"].trim()
+  }
+
+  return `localhost:${port}`
 }
