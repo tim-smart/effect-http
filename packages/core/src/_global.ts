@@ -6,7 +6,7 @@ import type { Effect } from "@effect/io/Effect"
 /**
  * @tsplus global
  */
-import type { Option as Maybe } from "@fp-ts/data/Option"
+import type { Maybe } from "@effect-http/core/_common"
 
 /**
  * @tsplus global

@@ -1,0 +1,32 @@
+{
+  "name": "@effect-http/node",
+  "version": "0.1.1",
+  "type": "module",
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": "./dist/index.js",
+    "./*": "./dist/*.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@effect-http/core": "^0.1.2",
+    "@effect/io": "~0.0.65",
+    "@fp-ts/data": "~0.0.40",
+    "raw-body": "^2.5.1"
+  },
+  "devDependencies": {
+    "@tsplus-types/effect__io": "0.0.65-6d1900e",
+    "@tsplus-types/fp-ts__data": "0.0.40-6d1900e",
+    "@types/node": "^18.11.18",
+    "prettier": "^2.8.3",
+    "typescript": "https://cdn.jsdelivr.net/npm/@tsplus/installer@0.0.164/compiler/typescript.tgz"
+  },
+  "sideEffects": false
+}
