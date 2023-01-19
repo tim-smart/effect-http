@@ -45,15 +45,16 @@ export const decodeParams = <A>(schema: Schema<A>) => {
 
 export const decodeFormData =
   <A>(schema: Schema<A>) =>
-  (formData: FormData, key: string) => {
+  (key: string, formData?: FormData) => {
     const decode = Parser.decode(schema)
 
     return Do(($) => {
       const { request } = $(Effect.service(RouteContext))
+      const data = $(formData ? Effect.succeed(formData) : request.formData)
 
       const result = Either.fromNullable(
         new RequestBodyError(`decodeFormData: ${key} not found`),
-      )(formData.get(key))
+      )(data.get(key))
         .flatMap((a) =>
           Either.fromThrowable(
             () => JSON.parse(a.toString()) as unknown,
@@ -65,6 +66,10 @@ export const decodeFormData =
             (errors) => new DecodeSchemaError(errors, request, a),
           ),
         )
+        .map((value) => ({
+          value,
+          formData: data,
+        }))
 
       return $(Effect.fromEither(result))
     })
