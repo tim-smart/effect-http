@@ -36,6 +36,11 @@ import { Context, Tag } from "@fp-ts/data/Context"
 /**
  * @tsplus global
  */
+import { Either } from "@fp-ts/data/Either"
+
+/**
+ * @tsplus global
+ */
 import type { HashMap } from "@fp-ts/data/HashMap"
 
 /**

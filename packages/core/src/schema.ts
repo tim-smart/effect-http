@@ -26,6 +26,50 @@ export const decode = <A>(schema: Schema<A>) => {
   })
 }
 
+export const decodeParams = <A>(schema: Schema<A>) => {
+  const decode = Parser.decode(schema)
+
+  return Do(($) => {
+    const { request, params, searchParams } = $(Effect.service(RouteContext))
+
+    return $(
+      Effect.fromEither(
+        decode({
+          ...params,
+          ...searchParams,
+        }).mapLeft((errors) => new DecodeSchemaError(errors, request, params)),
+      ),
+    )
+  })
+}
+
+export const decodeFormData =
+  <A>(schema: Schema<A>) =>
+  (formData: FormData, key: string) => {
+    const decode = Parser.decode(schema)
+
+    return Do(($) => {
+      const { request } = $(Effect.service(RouteContext))
+
+      const result = Either.fromNullable(
+        new RequestBodyError(`decodeFormData: ${key} not found`),
+      )(formData.get(key))
+        .flatMap((a) =>
+          Either.fromThrowable(
+            () => JSON.parse(a.toString()) as unknown,
+            (reason) => new RequestBodyError(reason),
+          ),
+        )
+        .flatMap((a) =>
+          decode(a).mapLeft(
+            (errors) => new DecodeSchemaError(errors, request, a),
+          ),
+        )
+
+      return $(Effect.fromEither(result))
+    })
+  }
+
 export const parseBodyWithParams = ({
   request,
   params,
