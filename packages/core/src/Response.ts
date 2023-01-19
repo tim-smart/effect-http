@@ -64,6 +64,17 @@ export class StreamResponse {
 }
 
 /**
+ * @tsplus static effect-http/Response.Ops empty
+ */
+export const empty = ({
+  headers = Maybe.none,
+  status = 200,
+}: {
+  status?: number
+  headers?: Maybe<Headers>
+} = {}): HttpResponse => new EmptyResponse(status, headers)
+
+/**
  * @tsplus static effect-http/Response.Ops json
  */
 export const json = (
