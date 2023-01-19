@@ -43,7 +43,7 @@ export const decodeParams = <A>(schema: Schema<A>) => {
   })
 }
 
-export const decodeFormData =
+export const decodeJsonFromFormData =
   <A>(schema: Schema<A>) =>
   (key: string, formData?: FormData) => {
     const decode = Parser.decode(schema)
