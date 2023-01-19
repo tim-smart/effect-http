@@ -25,19 +25,12 @@ export const make =
   <R>(httpApp: HttpApp<R, EarlyResponse>): Effect<R, never, never> =>
     Effect.runtime<R>().flatMap((rt) =>
       Effect.asyncInterrupt<never, never, never>(() => {
-        const reqOptions: RequestOptions = {
-          bodyLimit: options.bodyLimit ?? 5 * MB,
-        }
-
         server.on("request", (request, response) => {
-          const url = requestUrl(request, options.port)
-
           rt.unsafeRun(
-            httpApp(new HttpRequestImpl(request, url, url, reqOptions)).tap(
-              (r) =>
-                Effect(() => {
-                  handleResponse(r, response)
-                }),
+            httpApp(convertRequest(request, options.port)).tap((r) =>
+              Effect(() => {
+                handleResponse(r, response)
+              }),
             ),
           )
         })
@@ -50,44 +43,18 @@ export const make =
       }),
     )
 
-class HttpRequestImpl implements HttpRequest {
-  constructor(
-    readonly source: Http.IncomingMessage,
-    readonly url: string,
-    readonly originalUrl: string,
-    readonly options: RequestOptions,
-  ) {}
+const convertRequest = (source: Http.IncomingMessage, port: number) => {
+  const url = requestUrl(source, port)
+  const noBody = source.method === "GET" || source.method === "HEAD"
 
-  get method() {
-    return this.source.method!
-  }
-
-  get headers() {
-    return new Headers(this.source.headers as Record<string, string>)
-  }
-
-  setUrl(url: string): HttpRequest {
-    return new HttpRequestImpl(this.source, url, this.originalUrl, this.options)
-  }
-
-  get text() {
-    return Body.utf8String(this.source, this.options.bodyLimit).mapError(
-      (e) => new RequestBodyError(e),
-    )
-  }
-
-  get json() {
-    return this.text.flatMap((body) =>
-      Effect.tryCatch(
-        () => JSON.parse(body) as unknown,
-        (reason) => new RequestBodyError(reason),
-      ),
-    )
-  }
-
-  get stream() {
-    return Effect.succeed(Readable.toWeb(this.source) as any)
-  }
+  return HttpRequest.fromStandard(
+    new Request(url, {
+      method: source.method,
+      body: noBody ? null : (source as any),
+      headers: new Headers(source.headers as any),
+      duplex: noBody ? undefined : "half",
+    } as any),
+  )
 }
 
 const handleResponse = (source: HttpResponse, dest: Http.ServerResponse) => {
