@@ -24,11 +24,16 @@ export const make =
       Effect.asyncInterrupt<never, never, never>(() => {
         server.on("request", (request, response) => {
           rt.unsafeRun(
-            httpApp(convertRequest(request, options.port)).tap((r) =>
-              Effect(() => {
-                handleResponse(r, response)
-              }),
-            ),
+            httpApp(convertRequest(request, options.port)),
+            (exit) => {
+              if (exit.isSuccess()) {
+                handleResponse(exit.value, response)
+              } else {
+                console.error(exit.cause.pretty())
+                response.writeHead(500)
+                response.end()
+              }
+            },
           )
         })
 
