@@ -5,6 +5,7 @@ import type { ListenOptions } from "net"
 import { EarlyResponse, HttpResponse } from "@effect-http/core/Response"
 import * as Http from "http"
 import { Readable } from "stream"
+import { LazyArg } from "@fp-ts/data/Function"
 
 export interface RequestOptions {
   // TODO: Implement body size limit
@@ -16,12 +17,14 @@ export interface RequestOptions {
  */
 export const make =
   (
-    server: Http.Server,
+    makeServer: LazyArg<Http.Server>,
     options: ListenOptions & { port: number } & Partial<RequestOptions>,
   ) =>
   <R>(httpApp: HttpApp<R, EarlyResponse>): Effect<R, never, never> =>
     Effect.runtime<R>().flatMap((rt) =>
       Effect.asyncInterrupt<never, never, never>(() => {
+        const server = makeServer()
+
         server.on("request", (request, response) => {
           rt.unsafeRun(
             httpApp(convertRequest(request, options.port)),
