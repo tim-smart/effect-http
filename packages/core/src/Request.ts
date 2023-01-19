@@ -13,6 +13,7 @@ export interface HttpRequest {
   readonly headers: Headers
   readonly json: Effect<never, RequestBodyError, unknown>
   readonly text: Effect<never, RequestBodyError, string>
+  readonly formData: Effect<never, RequestBodyError, FormData>
   readonly stream: Effect<never, RequestBodyError, ReadableStream>
 }
 
@@ -50,6 +51,13 @@ class HttpRequestImpl implements HttpRequest {
   get text() {
     return Effect.tryCatchPromise(
       () => this.source.text(),
+      (reason) => new RequestBodyError(reason),
+    )
+  }
+
+  get formData() {
+    return Effect.tryCatchPromise(
+      () => this.source.formData(),
       (reason) => new RequestBodyError(reason),
     )
   }
