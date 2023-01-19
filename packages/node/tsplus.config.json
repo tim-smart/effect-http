@@ -1,8 +1,8 @@
 {
   "importMap": {
-    "^(.*)/src/(.*)\\.(ts|js)$": "@effect-http/bun/$2"
+    "^(.*)/src/(.*)\\.(ts|js)$": "@effect-http/node/$2"
   },
   "traceMap": {
-    "^(.*)/src/(.*)\\.(ts|js)$": "(@effect-http/bun) $2"
+    "^(.*)/src/(.*)\\.(ts|js)$": "(@effect-http/node) $2"
   }
 }
