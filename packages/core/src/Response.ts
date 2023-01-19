@@ -68,7 +68,7 @@ export class StreamResponse {
  */
 export const empty = ({
   headers = Maybe.none,
-  status = 200,
+  status = 204,
 }: {
   status?: number
   headers?: Maybe<Headers>
