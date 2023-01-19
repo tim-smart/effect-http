@@ -1,18 +1,15 @@
 import type { Effect } from "@effect/io/Effect"
 import type { HttpApp } from "@effect-http/core"
-import { HttpRequest, RequestBodyError } from "@effect-http/core/Request"
+import { HttpRequest } from "@effect-http/core/Request"
 import type { ListenOptions } from "net"
 import { EarlyResponse, HttpResponse } from "@effect-http/core/Response"
 import * as Http from "http"
-import * as Body from "./body.js"
 import { Readable } from "stream"
 
 export interface RequestOptions {
+  // TODO: Implement body size limit
   bodyLimit: number
 }
-
-const KB = 1024
-const MB = 1024 * KB
 
 /**
  * @tsplus pipeable effect-http/HttpApp serveNode
@@ -82,6 +79,13 @@ const handleResponse = (source: HttpResponse, dest: Http.ServerResponse) => {
       body = source.body.toString()
       headers["content-length"] = Buffer.byteLength(body).toString()
       break
+
+    case "FormDataResponse":
+      const response = new Response(source.body)
+      headers["content-type"] = response.headers.get("content-type")!
+      dest.writeHead(source.status, headers)
+      Readable.fromWeb(source.body as any).pipe(dest)
+      return
 
     case "StreamResponse":
       headers["content-type"] = source.contentType
