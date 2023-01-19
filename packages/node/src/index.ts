@@ -29,7 +29,7 @@ export const make =
               if (exit.isSuccess()) {
                 handleResponse(exit.value, response)
               } else {
-                console.error(exit.cause.pretty())
+                console.error("@effect-http/node", exit.cause.pretty())
                 response.writeHead(500)
                 response.end()
               }

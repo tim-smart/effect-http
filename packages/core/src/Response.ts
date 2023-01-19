@@ -105,6 +105,21 @@ export const text = (
 ): HttpResponse => new TextResponse(status, headers, contentType, value)
 
 /**
+ * @tsplus static effect-http/Response.Ops html
+ */
+export const html = (
+  value: string,
+  {
+    headers = Maybe.none,
+    status = 200,
+  }: {
+    status?: number
+    contentType?: string
+    headers?: Maybe<Headers>
+  } = {},
+): HttpResponse => new TextResponse(status, headers, "text/html", value)
+
+/**
  * @tsplus static effect-http/Response.Ops searchParams
  */
 export const searchParams = (
