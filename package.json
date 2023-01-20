@@ -8,10 +8,5 @@
   },
   "keywords": [],
   "author": "",
-  "license": "MIT",
-  "pnpm": {
-    "overrides": {
-      "@fp-ts/data": "0.0.39"
-    }
-  }
+  "license": "MIT"
 }

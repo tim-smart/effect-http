@@ -51,7 +51,7 @@ export class Router<R = never, E = never, EnvR = never, ReqR = never> {
           .map((prevEnv) =>
             prevEnv.flatMap((ctx) =>
               service
-                .provideSomeEnvironment((a) => a.merge(ctx))
+                .contramapContext((a) => a.merge(ctx))
                 .map((a) => pipe(ctx, Context.add(tag)(a))),
             ),
           )
@@ -114,9 +114,7 @@ export class Router<R = never, E = never, EnvR = never, ReqR = never> {
               Maybe.some(
                 selfEnv.flatMap((selfCtx) =>
                   prevEnv
-                    .provideSomeEnvironment((a: Context<any>) =>
-                      a.merge(selfCtx),
-                    )
+                    .contramapContext((a: Context<any>) => a.merge(selfCtx))
                     .map((prevCtx) => selfCtx.merge(prevCtx)),
                 ),
               ),
@@ -134,7 +132,7 @@ export class Router<R = never, E = never, EnvR = never, ReqR = never> {
         () => route.handler,
         (env) =>
           env.flatMap((ctx) =>
-            route.handler.provideSomeEnvironment((a) => a.merge(ctx)),
+            route.handler.contramapContext((a) => a.merge(ctx)),
           ),
       )
       router.on(route.method, route.path, () => handler)
@@ -177,11 +175,11 @@ export class Router<R = never, E = never, EnvR = never, ReqR = never> {
         HttpResponse
       >
 
-      return Effect.provideService(RouteContext)({
+      return routeHandler.provideService(RouteContext, {
         request,
         params: findResult.params,
         searchParams: findResult.searchParams,
-      })(routeHandler)
+      })
     }
   }
 }
