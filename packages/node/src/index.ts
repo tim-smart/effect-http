@@ -53,12 +53,14 @@ const convertRequest = (source: Http.IncomingMessage, port: number) => {
   const noBody = source.method === "GET" || source.method === "HEAD"
 
   return HttpRequest.fromStandard(
-    new Request(url, {
-      method: source.method,
-      body: noBody ? null : (source as any),
-      headers: new Headers(source.headers as any),
-      duplex: noBody ? undefined : "half",
-    } as any),
+    () =>
+      new Request(url, {
+        method: source.method,
+        body: noBody ? null : (source as any),
+        headers: new Headers(source.headers as any),
+        duplex: noBody ? undefined : "half",
+      } as any),
+    url,
   )
 }
 
