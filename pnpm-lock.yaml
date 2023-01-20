@@ -32,25 +32,31 @@ importers:
   packages/core:
     specifiers:
       '@effect/io': ~0.0.65
+      '@effect/stream': ^0.0.12
       '@fp-ts/data': 0.0.39
       '@fp-ts/schema': ^0.0.8
       '@tsplus-types/effect__io': 0.0.65-6d1900e
+      '@tsplus-types/effect__stream': 0.0.12-992cae5
       '@tsplus-types/fp-ts__data': 0.0.40-6d1900e
       '@tsplus-types/fp-ts__schema': 0.0.8-6d1900e
+      '@types/node': ^18.11.18
       '@types/route-parser': ^0.1.4
       find-my-way: ^7.4.0
       prettier: ^2.8.3
       typescript: https://cdn.jsdelivr.net/npm/@tsplus/installer@0.0.164/compiler/typescript.tgz
     dependencies:
       '@effect/io': 0.0.65
+      '@effect/stream': 0.0.12
       '@fp-ts/data': 0.0.39
       '@fp-ts/schema': 0.0.8
       '@types/route-parser': 0.1.4
       find-my-way: 7.4.0
     devDependencies:
       '@tsplus-types/effect__io': 0.0.65-6d1900e_@effect+io@0.0.65
+      '@tsplus-types/effect__stream': 0.0.12-992cae5_@effect+stream@0.0.12
       '@tsplus-types/fp-ts__data': 0.0.40-6d1900e_@fp-ts+data@0.0.39
       '@tsplus-types/fp-ts__schema': 0.0.8-6d1900e_@fp-ts+schema@0.0.8
+      '@types/node': 18.11.18
       prettier: 2.8.3
       typescript: '@cdn.jsdelivr.net/npm/@tsplus/installer@0.0.164/compiler/typescript.tgz'
 
@@ -85,6 +91,13 @@ packages:
       '@fp-ts/core': 0.0.11
       '@fp-ts/data': 0.0.39
 
+  /@effect/stream/0.0.12:
+    resolution: {integrity: sha512-th6NokgLZQC97jGxo4vM4x29aYtmqkGSwMlNFAQUJCp0e0RGfmr+Wr2KRL24L+oRttd7ITNFJ9U2m+uo1IbBOg==}
+    dependencies:
+      '@effect/io': 0.0.65
+      '@fp-ts/core': 0.0.11
+      '@fp-ts/data': 0.0.39
+
   /@fp-ts/core/0.0.11:
     resolution: {integrity: sha512-BCAJBYzghwoJpcUOARJ1tui50HoYJFlV2pJlVMlsEkDFhD8MTtq8xQVpZCRF66RmtkxtGBYINCQ+5H1lRaL35Q==}
 
@@ -106,6 +119,14 @@ packages:
       '@effect/io': 0.0.65
     dependencies:
       '@effect/io': 0.0.65
+    dev: true
+
+  /@tsplus-types/effect__stream/0.0.12-992cae5_@effect+stream@0.0.12:
+    resolution: {integrity: sha512-0IAz3JmdtDpC032z24CDggezw/hR46Mk8+U8dovetxI8oICPXprS03JIPwnrfq5gvup9xdhZ33KETagyhM3mNw==}
+    peerDependencies:
+      '@effect/stream': 0.0.12
+    dependencies:
+      '@effect/stream': 0.0.12
     dev: true
 
   /@tsplus-types/fp-ts__data/0.0.40-6d1900e_@fp-ts+data@0.0.39:
