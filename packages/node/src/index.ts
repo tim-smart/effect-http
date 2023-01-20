@@ -73,21 +73,9 @@ const handleResponse = (source: HttpResponse, dest: Http.ServerResponse) => {
   let body: string | null = null
 
   switch (source._tag) {
-    case "JsonResponse":
-      headers["content-type"] = "application/json"
-      body = JSON.stringify(source.body)
-      headers["content-length"] = Buffer.byteLength(body).toString()
-      break
-
     case "TextResponse":
       headers["content-type"] = source.contentType
       body = source.body
-      headers["content-length"] = Buffer.byteLength(body).toString()
-      break
-
-    case "SearchParamsResponse":
-      headers["content-type"] = "application/x-www-form-urlencoded"
-      body = source.body.toString()
       headers["content-length"] = Buffer.byteLength(body).toString()
       break
 
