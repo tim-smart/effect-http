@@ -6,6 +6,11 @@ import type { Effect } from "@effect/io/Effect"
 /**
  * @tsplus global
  */
+import type { Stream } from "@effect/stream/Stream"
+
+/**
+ * @tsplus global
+ */
 import type { Maybe } from "@effect-http/core/_common"
 
 /**
@@ -79,3 +84,16 @@ import { Router } from "@effect-http/core/router"
  * @tsplus global
  */
 import type { EffectAspects } from "@tsplus-types/effect__io/Aspects"
+
+/**
+ * @tsplus global
+ */
+import {
+  ReadableStreamError,
+  fromReadableStream,
+} from "@effect-http/core/util/stream"
+
+/**
+ * @tsplus global
+ */
+import { FormDataPart } from "@effect-http/core/multipart"
