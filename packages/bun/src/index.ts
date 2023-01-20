@@ -16,7 +16,7 @@ export const make =
           ...options,
           fetch(request) {
             return rt.unsafeRunPromise(
-              httpApp(HttpRequest.fromStandard(request))
+              httpApp(HttpRequest.fromStandard(request, request.url))
                 .catchTag("EarlyResponse", (e) => Effect.succeed(e.response))
                 .map(HttpResponse.toStandard),
             )
