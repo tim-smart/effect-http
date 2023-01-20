@@ -16,6 +16,11 @@ export interface HttpRequest {
   readonly formData: Effect<never, RequestBodyError, FormData>
   readonly formDataStream: Stream<never, RequestBodyError, FormDataPart>
   readonly stream: Stream<never, ReadableStreamError, Uint8Array>
+  readonly webStream: Effect<
+    never,
+    RequestBodyError,
+    ReadableStream<Uint8Array>
+  >
 }
 
 export class RequestBodyError {
@@ -80,6 +85,12 @@ class HttpRequestImpl implements HttpRequest {
     return this.source.body
       ? fromReadableStream(this.source.body)
       : Stream.fail(new ReadableStreamError("no body"))
+  }
+
+  get webStream() {
+    return this.source.body
+      ? Effect.succeed(this.source.body)
+      : Effect.fail(new RequestBodyError("no body"))
   }
 }
 
