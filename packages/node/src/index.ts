@@ -79,13 +79,6 @@ const handleResponse = (source: HttpResponse, dest: Http.ServerResponse) => {
       headers["content-length"] = Buffer.byteLength(body).toString()
       break
 
-    case "FormDataResponse":
-      const response = new Response(source.body)
-      headers["content-type"] = response.headers.get("content-type")!
-      dest.writeHead(source.status, headers)
-      Readable.fromWeb(source.body as any).pipe(dest)
-      return
-
     case "StreamResponse":
       headers["content-type"] = source.contentType
       if (source.contentLength._tag === "Some") {

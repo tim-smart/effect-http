@@ -2,7 +2,11 @@
  * @tsplus type effect-http/Response
  * @tsplus companion effect-http/Response.Ops
  */
-export type HttpResponse = EmptyResponse | TextResponse | StreamResponse
+export type HttpResponse =
+  | EmptyResponse
+  | TextResponse
+  | FormDataResponse
+  | StreamResponse
 
 export class EmptyResponse {
   readonly _tag = "EmptyResponse"
@@ -16,6 +20,15 @@ export class TextResponse {
     readonly headers: Maybe<Headers>,
     readonly contentType: string,
     readonly body: string,
+  ) {}
+}
+
+export class FormDataResponse {
+  readonly _tag = "FormDataResponse"
+  constructor(
+    readonly status: number,
+    readonly headers: Maybe<Headers>,
+    readonly body: FormData,
   ) {}
 }
 
@@ -132,6 +145,21 @@ export const stream = (
     value,
   )
 
+/**
+ * @tsplus static effect-http/Response.Ops stream
+ */
+export const formData = (
+  value: FormData,
+  {
+    headers,
+    status = 200,
+  }: {
+    status?: number
+    headers?: Headers
+  } = {},
+): HttpResponse =>
+  new FormDataResponse(status, Maybe.fromNullable(headers), value)
+
 export class EarlyResponse {
   readonly _tag = "EarlyResponse"
   constructor(readonly response: HttpResponse) {}
@@ -164,6 +192,10 @@ export const toStandard = (self: HttpResponse): Response => {
   switch (self._tag) {
     case "TextResponse":
       headers.set("content-type", self.contentType)
+      body = self.body
+      break
+
+    case "FormDataResponse":
       body = self.body
       break
 
