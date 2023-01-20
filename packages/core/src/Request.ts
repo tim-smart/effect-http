@@ -24,21 +24,18 @@ export class RequestBodyError {
 
 class HttpRequestImpl implements HttpRequest {
   constructor(
-    private readonly _build: LazyArg<Request>,
+    private _build: Request | LazyArg<Request>,
+    readonly method: string,
     readonly url: string,
   ) {}
 
-  private _request: Request | undefined
-
   get source() {
-    if (!this._request) {
-      this._request = this._build()
+    if (typeof this._build !== "function") {
+      return this._build
     }
-    return this._request!
-  }
 
-  get method() {
-    return this.source.method
+    this._build = this._build()
+    return this._build
   }
 
   get originalUrl() {
@@ -46,7 +43,7 @@ class HttpRequestImpl implements HttpRequest {
   }
 
   setUrl(url: string): HttpRequest {
-    return new HttpRequestImpl(this.source, url)
+    return new HttpRequestImpl(this.source, this.method, url)
   }
 
   get headers() {
@@ -85,6 +82,7 @@ class HttpRequestImpl implements HttpRequest {
  * @tsplus static effect-http/Request.Ops fromStandard
  */
 export const fromStandard = (
-  source: LazyArg<Request>,
+  source: LazyArg<Request> | Request,
+  method: string,
   url: string,
-): HttpRequest => new HttpRequestImpl(source, url)
+): HttpRequest => new HttpRequestImpl(source, method, url)
