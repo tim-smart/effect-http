@@ -23,7 +23,19 @@ export class RequestBodyError {
 }
 
 class HttpRequestImpl implements HttpRequest {
-  constructor(readonly source: Request, readonly url: string) {}
+  constructor(
+    private readonly _build: LazyArg<Request>,
+    readonly url: string,
+  ) {}
+
+  private _request: Request | undefined
+
+  get source() {
+    if (!this._request) {
+      this._request = this._build()
+    }
+    return this._request!
+  }
 
   get method() {
     return this.source.method
@@ -72,5 +84,7 @@ class HttpRequestImpl implements HttpRequest {
 /**
  * @tsplus static effect-http/Request.Ops fromStandard
  */
-export const fromStandard = (source: Request): HttpRequest =>
-  new HttpRequestImpl(source, source.url)
+export const fromStandard = (
+  source: LazyArg<Request>,
+  url: string,
+): HttpRequest => new HttpRequestImpl(source, url)

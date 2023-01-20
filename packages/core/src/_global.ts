@@ -46,7 +46,7 @@ import type { HashMap } from "@fp-ts/data/HashMap"
 /**
  * @tsplus global
  */
-import { flow, pipe, identity } from "@fp-ts/data/Function"
+import { flow, pipe, identity, LazyArg } from "@fp-ts/data/Function"
 
 /**
  * @tsplus global
