@@ -60,6 +60,7 @@ const convertRequest = (source: Http.IncomingMessage, port: number) => {
         headers: new Headers(source.headers as any),
         duplex: noBody ? undefined : "half",
       } as any),
+    source.method!,
     url,
   )
 }
