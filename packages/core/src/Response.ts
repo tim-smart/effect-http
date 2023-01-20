@@ -5,8 +5,6 @@
 export type HttpResponse =
   | EmptyResponse
   | TextResponse
-  | JsonResponse
-  | SearchParamsResponse
   | FormDataResponse
   | StreamResponse
 
@@ -22,24 +20,6 @@ export class TextResponse {
     readonly headers: Maybe<Headers>,
     readonly contentType: string,
     readonly body: string,
-  ) {}
-}
-
-export class JsonResponse {
-  readonly _tag = "JsonResponse"
-  constructor(
-    readonly status: number,
-    readonly headers: Maybe<Headers>,
-    readonly body: unknown,
-  ) {}
-}
-
-export class SearchParamsResponse {
-  readonly _tag = "SearchParamsResponse"
-  constructor(
-    readonly status: number,
-    readonly headers: Maybe<Headers>,
-    readonly body: URLSearchParams,
   ) {}
 }
 
@@ -86,7 +66,8 @@ export const json = (
     status?: number
     headers?: Maybe<Headers>
   } = {},
-): HttpResponse => new JsonResponse(status, headers, value)
+): HttpResponse =>
+  new TextResponse(status, headers, "application/json", JSON.stringify(value))
 
 /**
  * @tsplus static effect-http/Response.Ops text
@@ -131,7 +112,13 @@ export const searchParams = (
     status?: number
     headers?: Maybe<Headers>
   } = {},
-): HttpResponse => new SearchParamsResponse(status, headers, value)
+): HttpResponse =>
+  new TextResponse(
+    status,
+    headers,
+    "application/x-www-form-urlencoded",
+    value.toString(),
+  )
 
 /**
  * @tsplus static effect-http/Response.Ops formData
@@ -202,19 +189,9 @@ export const toStandard = (self: HttpResponse): Response => {
   let body: any = null
 
   switch (self._tag) {
-    case "JsonResponse":
-      headers.set("content-type", "application/json")
-      body = JSON.stringify(self.body)
-      break
-
     case "TextResponse":
       headers.set("content-type", self.contentType)
       body = self.body
-      break
-
-    case "SearchParamsResponse":
-      headers.set("content-type", "application/x-www-form-urlencoded")
-      body = self.body.toString()
       break
 
     case "FormDataResponse":
