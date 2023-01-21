@@ -14,6 +14,7 @@ import * as OS from "os"
 import * as NS from "stream/promises"
 import * as Path from "path"
 import * as NFS from "fs"
+import * as Crypto from "crypto"
 
 export const fromRequest = (source: IncomingMessage, limits: BB.Limits) => {
   const make = Effect(BB({ headers: source.headers, limits }))
@@ -38,7 +39,7 @@ export const fromRequest = (source: IncomingMessage, limits: BB.Limits) => {
               name,
               info.filename,
               info.mimeType,
-              Readable.toWeb(stream) as any,
+              () => Readable.toWeb(stream) as any,
               stream,
             ),
           )
@@ -66,13 +67,33 @@ export const formData = flow(fromRequest, (_) =>
       return Effect.succeed(formData)
     }
 
-    const path = Path.join(OS.tmpdir(), part.name)
+    return Do(($) => {
+      const dir = $(randomTmpDir.mapError((e) => new RequestBodyError(e)))
+      const path = Path.join(dir, part.name)
 
-    formData.append(part.key, new Blob(), path)
+      formData.append(part.key, new Blob(), path)
 
-    return Effect.tryCatchPromise(
-      () => NS.pipeline(part.source as any, NFS.createWriteStream(path)),
-      (reason) => new RequestBodyError(reason),
-    ).map(() => formData)
+      return $(
+        Effect.tryCatchPromise(
+          () => NS.pipeline(part.source as any, NFS.createWriteStream(path)),
+          (reason) => new RequestBodyError(reason),
+        ).map(() => formData),
+      )
+    })
   }),
+)
+
+const randomTmpDir = Effect.async<never, NodeJS.ErrnoException, string>(
+  (resume) => {
+    const random = Crypto.randomBytes(10).toString("hex")
+    const dir = Path.join(OS.tmpdir(), random)
+
+    NFS.mkdir(dir, (err) => {
+      if (err) {
+        resume(Effect.fail(err))
+      } else {
+        resume(Effect.succeed(dir))
+      }
+    })
+  },
 )
