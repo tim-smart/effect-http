@@ -77,7 +77,7 @@ export const formData = flow(fromRequest, (_) =>
         Effect.tryCatchPromise(
           () => NS.pipeline(part.source as any, NFS.createWriteStream(path)),
           (reason) => new RequestBodyError(reason),
-        ).map(() => formData),
+        ).as(formData),
       )
     })
   }),
