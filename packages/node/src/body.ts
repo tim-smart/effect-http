@@ -2,7 +2,10 @@ import type { Effect } from "@effect/io/Effect"
 import * as Http from "http"
 import Body from "raw-body"
 
-export const utf8String = (request: Http.IncomingMessage, limit: number) =>
+export const utf8String = (
+  request: Http.IncomingMessage,
+  limit = 1024 * 1024,
+) =>
   Effect.async<never, Body.RawBodyError, string>((resume) => {
     Body(
       request,

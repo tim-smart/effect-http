@@ -1,16 +1,12 @@
 import type { Effect } from "@effect/io/Effect"
 import type { HttpApp } from "@effect-http/core"
-import { HttpRequest } from "@effect-http/core/Request"
 import type { ListenOptions } from "net"
 import { EarlyResponse, HttpResponse } from "@effect-http/core/Response"
 import * as Http from "http"
 import { Readable } from "stream"
 import { LazyArg } from "@fp-ts/data/Function"
-
-export interface RequestOptions {
-  // TODO: Implement body size limit
-  bodyLimit: number
-}
+import { NodeHttpRequest } from "./Request.js"
+import * as BB from "busboy"
 
 /**
  * @tsplus pipeable effect-http/HttpApp serveNode
@@ -18,7 +14,7 @@ export interface RequestOptions {
 export const make =
   (
     makeServer: LazyArg<Http.Server>,
-    options: ListenOptions & { port: number } & Partial<RequestOptions>,
+    options: ListenOptions & { port: number; limits?: BB.Limits },
   ) =>
   <R>(httpApp: HttpApp<R, EarlyResponse>): Effect<R, never, never> =>
     Effect.runtime<R>().flatMap((rt) =>
@@ -26,18 +22,15 @@ export const make =
         const server = makeServer()
 
         server.on("request", (request, response) => {
-          rt.unsafeRun(
-            httpApp(convertRequest(request, options.port)),
-            (exit) => {
-              if (exit.isSuccess()) {
-                handleResponse(exit.value, response)
-              } else {
-                console.error("@effect-http/node", exit.cause.pretty())
-                response.writeHead(500)
-                response.end()
-              }
-            },
-          )
+          rt.unsafeRun(httpApp(convertRequest(request, options)), (exit) => {
+            if (exit.isSuccess()) {
+              handleResponse(exit.value, response)
+            } else {
+              console.error("@effect-http/node", exit.cause.pretty())
+              response.writeHead(500)
+              response.end()
+            }
+          })
         })
 
         server.listen(options)
@@ -48,21 +41,12 @@ export const make =
       }),
     )
 
-const convertRequest = (source: Http.IncomingMessage, port: number) => {
+const convertRequest = (
+  source: Http.IncomingMessage,
+  { port, limits = {} }: { port: number; limits?: BB.Limits },
+) => {
   const url = requestUrl(source, port)
-  const noBody = source.method === "GET" || source.method === "HEAD"
-
-  return HttpRequest.fromStandard(
-    () =>
-      new Request(url, {
-        method: source.method,
-        body: noBody ? null : (source as any),
-        headers: new Headers(source.headers as any),
-        duplex: noBody ? undefined : "half",
-      } as any),
-    source.method!,
-    url,
-  )
+  return new NodeHttpRequest(source, url, url, limits)
 }
 
 const handleResponse = (source: HttpResponse, dest: Http.ServerResponse) => {
@@ -78,6 +62,13 @@ const handleResponse = (source: HttpResponse, dest: Http.ServerResponse) => {
       body = source.body
       headers["content-length"] = Buffer.byteLength(body).toString()
       break
+
+    case "FormDataResponse":
+      const r = new Response(source.body)
+      headers["content-type"] = r.headers.get("content-type")!
+      dest.writeHead(source.status, headers)
+      Readable.fromWeb(r.body as any).pipe(dest)
+      return
 
     case "StreamResponse":
       headers["content-type"] = source.contentType
