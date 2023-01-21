@@ -15,8 +15,6 @@ import * as NS from "stream/promises"
 import * as Path from "path"
 import * as NFS from "fs"
 
-const tmpDir = OS.tmpdir()
-
 export const fromRequest = (source: IncomingMessage, limits: BB.Limits) => {
   const make = Effect(BB({ headers: source.headers, limits }))
     .acquireRelease((_) =>
@@ -53,6 +51,8 @@ export const fromRequest = (source: IncomingMessage, limits: BB.Limits) => {
         bb.on("finish", () => {
           emit.end()
         })
+
+        source.pipe(bb)
       }),
     )
 
@@ -66,7 +66,7 @@ export const formData = flow(fromRequest, (_) =>
       return Effect.succeed(formData)
     }
 
-    const path = Path.join(tmpDir, part.name)
+    const path = Path.join(OS.tmpdir(), part.name)
 
     formData.append(part.key, new Blob(), path)
 
