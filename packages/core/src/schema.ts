@@ -66,7 +66,7 @@ export const decodeJsonFromFormData =
             (errors) => new DecodeSchemaError(errors, request, a),
           ),
         )
-        .map((value) => [value, formData!] as const)
+        .map((value) => [value, data] as const)
 
       return $(Effect.fromEither(result))
     })
