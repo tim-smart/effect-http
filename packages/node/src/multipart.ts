@@ -21,6 +21,8 @@ export const fromRequest = (source: IncomingMessage, limits: BB.Limits) => {
   const make = Effect(BB({ headers: source.headers, limits }))
     .acquireRelease((_) =>
       Effect(() => {
+        _.removeAllListeners()
+
         if (!_.closed) {
           _.destroy()
         }
@@ -66,7 +68,7 @@ export const formData = flow(fromRequest, (_) =>
 
     const path = Path.join(tmpDir, part.name)
 
-    formData.append(part.key, new Blob([Buffer.from(path)]), part.name)
+    formData.append(part.key, new Blob(), path)
 
     return Effect.tryCatchPromise(
       () => NS.pipeline(part.source as any, NFS.createWriteStream(path)),
