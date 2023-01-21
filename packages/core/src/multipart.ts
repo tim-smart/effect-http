@@ -17,8 +17,8 @@ export class FormDataFile {
     readonly key: string,
     readonly name: string,
     readonly contentType: string,
-    readonly size: number,
     readonly content: ReadableStream<Uint8Array>,
+    readonly source?: unknown,
   ) {}
 
   get stream() {
