@@ -7,6 +7,7 @@ export type HttpResponse =
   | TextResponse
   | FormDataResponse
   | StreamResponse
+  | FileResponse
 
 export class EmptyResponse {
   readonly _tag = "EmptyResponse"
@@ -40,6 +41,18 @@ export class StreamResponse {
     readonly contentType: string,
     readonly contentLength: Maybe<number>,
     readonly body: ReadableStream,
+  ) {}
+}
+
+export class FileResponse {
+  readonly _tag = "FileResponse"
+  constructor(
+    readonly status: number,
+    readonly headers: Maybe<Headers>,
+    readonly contentType: string,
+    readonly path: string,
+    readonly offset: number,
+    readonly length: Maybe<number>,
   ) {}
 }
 
@@ -160,6 +173,34 @@ export const formData = (
 ): HttpResponse =>
   new FormDataResponse(status, Maybe.fromNullable(headers), value)
 
+/**
+ * @tsplus static effect-http/Response.Ops file
+ */
+export const file = (
+  path: string,
+  {
+    headers,
+    contentType,
+    status = 200,
+    offset = 0,
+    length,
+  }: {
+    status?: number
+    contentType?: string
+    headers?: Headers
+    offset?: number
+    length?: number
+  } = {},
+): HttpResponse =>
+  new FileResponse(
+    status,
+    Maybe.fromNullable(headers),
+    contentType ?? "",
+    path,
+    offset,
+    Maybe.fromNullable(length),
+  )
+
 export class EarlyResponse {
   readonly _tag = "EarlyResponse"
   constructor(readonly response: HttpResponse) {}
@@ -205,6 +246,7 @@ export const toStandard = (self: HttpResponse): Response => {
         headers.set("content-length", self.contentLength.toString())
       }
       body = self.body
+      break
   }
 
   return new Response(body, {
