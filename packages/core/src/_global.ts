@@ -83,7 +83,7 @@ import {
 /**
  * @tsplus global
  */
-import type { HttpResponse } from "@effect-http/core/Response"
+import type { HttpResponse, HttpStreamError } from "@effect-http/core/Response"
 
 /**
  * @tsplus global
@@ -93,7 +93,7 @@ import { HttpRequest, RequestBodyError } from "@effect-http/core/Request"
 /**
  * @tsplus global
  */
-import { Router } from "@effect-http/core/router"
+import { Router, RouteNotFound } from "@effect-http/core/router"
 
 /**
  * @tsplus global
@@ -112,3 +112,8 @@ import {
  * @tsplus global
  */
 import { FormDataPart } from "@effect-http/core/multipart"
+
+/**
+ * @tsplus global
+ */
+import { HttpFs, HttpFsError } from "@effect-http/core/internal/HttpFs"

@@ -1,3 +1,4 @@
+import { ToResponseOptions } from "./internal/HttpFs.js"
 import { toReadableStream } from "./util/stream.js"
 
 /**
@@ -9,11 +10,11 @@ export type HttpResponse =
   | TextResponse
   | FormDataResponse
   | StreamResponse
-  | FileResponse
+  | RawResponse
 
-export class HttpResponseError {
-  readonly _tag = "HttpResponseError"
-  constructor(readonly status: number, readonly error: unknown) {}
+export class HttpStreamError {
+  readonly _tag = "HttpStreamError"
+  constructor(readonly error: unknown) {}
 }
 
 export class EmptyResponse {
@@ -47,18 +48,16 @@ export class StreamResponse {
     readonly headers: Maybe<Headers>,
     readonly contentType: string,
     readonly contentLength: Maybe<number>,
-    readonly body: Stream<never, HttpResponseError, Uint8Array>,
+    readonly body: Stream<never, HttpStreamError, Uint8Array>,
   ) {}
 }
 
-export class FileResponse {
-  readonly _tag = "FileResponse"
+export class RawResponse {
+  readonly _tag = "RawResponse"
   constructor(
     readonly status: number,
     readonly headers: Maybe<Headers>,
-    readonly contentType: string,
-    readonly path: string,
-    readonly range: Maybe<readonly [start: number, end: number]>,
+    readonly body: unknown,
   ) {}
 }
 
@@ -143,7 +142,7 @@ export const searchParams = (
  * @tsplus static effect-http/Response.Ops stream
  */
 export const stream = (
-  value: Stream<never, HttpResponseError, Uint8Array>,
+  value: Stream<never, HttpStreamError, Uint8Array>,
   {
     headers,
     status = 200,
@@ -180,29 +179,24 @@ export const formData = (
   new FormDataResponse(status, Maybe.fromNullable(headers), value)
 
 /**
- * @tsplus static effect-http/Response.Ops file
+ * @tsplus static effect-http/Response.Ops raw
  */
-export const file = (
-  path: string,
+export const raw = (
+  body: unknown,
   {
-    headers,
-    contentType,
+    headers = Maybe.none,
     status = 200,
-    range,
   }: {
     status?: number
-    contentType?: string
-    headers?: Headers
-    range?: readonly [start: number, end: number]
+    headers?: Maybe<Headers>
   } = {},
-): HttpResponse =>
-  new FileResponse(
-    status,
-    Maybe.fromNullable(headers),
-    contentType ?? "",
-    path,
-    Maybe.fromNullable(range),
-  )
+): HttpResponse => new RawResponse(status, headers, body)
+
+/**
+ * @tsplus static effect-http/Response.Ops file
+ */
+export const file = (path: string, opts: ToResponseOptions = {}) =>
+  HttpFs.accessWithEffect((_) => _.toResponse(path, opts))
 
 export class EarlyResponse {
   readonly _tag = "EarlyResponse"
@@ -221,17 +215,12 @@ export const early = (
  * @tsplus fluent effect-http/Response toStandard
  * @tsplus static effect-http/Response.Ops toStandard
  */
-export const toStandard = (
-  self: HttpResponse,
-  handleFiles: (response: FileResponse) => Response,
-): Response => {
+export const toStandard = (self: HttpResponse): Response => {
   if (self._tag === "EmptyResponse") {
     return new Response(null, {
       status: self.status,
       headers: self.headers._tag === "Some" ? self.headers.value : undefined,
     })
-  } else if (self._tag === "FileResponse") {
-    return handleFiles(self)
   }
 
   const headers =
@@ -244,6 +233,7 @@ export const toStandard = (
       body = self.body
       break
 
+    case "RawResponse":
     case "FormDataResponse":
       body = self.body
       break
@@ -255,6 +245,8 @@ export const toStandard = (
       }
       body = toReadableStream(self.body)
       break
+
+    case "RawResponse":
   }
 
   return new Response(body, {

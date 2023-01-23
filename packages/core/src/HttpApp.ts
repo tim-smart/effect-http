@@ -38,6 +38,7 @@ export const catchAll =
   <R>(self: HttpApp<R, E>): HttpApp<R | R1, E1> =>
   (request) =>
     self(request).catchAll(onError)
+
 /**
  * @tsplus pipeable effect-http/HttpApp applyMiddleware
  * @tsplus pipeable-operator effect-http/HttpApp >>
