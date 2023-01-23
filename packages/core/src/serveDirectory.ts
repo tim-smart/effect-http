@@ -15,9 +15,8 @@ export const serveDirectory =
 
       return HttpResponse.file(path, {
         contentType: contentType || "application/octet-stream",
-        offset: validRange ? parsedRange[0].start : undefined,
-        length: validRange
-          ? parsedRange[0].end - parsedRange[0].start
+        range: validRange
+          ? [parsedRange[0].start, parsedRange[1].end]
           : undefined,
       })
     })

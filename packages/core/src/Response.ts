@@ -51,8 +51,7 @@ export class FileResponse {
     readonly headers: Maybe<Headers>,
     readonly contentType: string,
     readonly path: string,
-    readonly offset: number,
-    readonly length: Maybe<number>,
+    readonly range: Maybe<readonly [start: number, end: number]>,
   ) {}
 }
 
@@ -182,14 +181,12 @@ export const file = (
     headers,
     contentType,
     status = 200,
-    offset = 0,
-    length,
+    range,
   }: {
     status?: number
     contentType?: string
     headers?: Headers
-    offset?: number
-    length?: number
+    range?: readonly [start: number, end: number]
   } = {},
 ): HttpResponse =>
   new FileResponse(
@@ -197,8 +194,7 @@ export const file = (
     Maybe.fromNullable(headers),
     contentType ?? "",
     path,
-    offset,
-    Maybe.fromNullable(length),
+    Maybe.fromNullable(range),
   )
 
 export class EarlyResponse {
