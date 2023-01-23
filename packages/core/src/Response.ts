@@ -165,7 +165,7 @@ export const stream = (
   )
 
 /**
- * @tsplus static effect-http/Response.Ops stream
+ * @tsplus static effect-http/Response.Ops formData
  */
 export const formData = (
   value: FormData,

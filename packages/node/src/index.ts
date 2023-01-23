@@ -23,6 +23,7 @@ export const make =
     options: ListenOptions & {
       port: number
       limits?: BB.Limits
+      debug?: boolean
     },
   ) =>
   <R>(httpApp: HttpApp<R, EarlyResponse>): Effect<R, never, never> =>
@@ -39,7 +40,9 @@ export const make =
               )
               .catchTag("HttpResponseError", (e) =>
                 Effect(() => {
-                  console.error("ERROR", "HttpResponseError", e.status)
+                  if (options.debug) {
+                    console.error("@effect-http/node", e)
+                  }
                   response.writeHead(e.status)
                   response.end()
                 }),
