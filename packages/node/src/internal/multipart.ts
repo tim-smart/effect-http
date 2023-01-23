@@ -9,7 +9,6 @@ import {
   FormDataFile,
   FormDataPart,
 } from "@effect-http/core/multipart"
-import { flow } from "@fp-ts/data/Function"
 import * as OS from "os"
 import * as NS from "stream/promises"
 import * as Path from "path"
@@ -17,7 +16,18 @@ import * as NFS from "fs"
 import * as Crypto from "crypto"
 import { readableToString } from "./stream.js"
 
-export const fromRequest = (source: IncomingMessage, limits: BB.Limits) => {
+export interface MultipartOptions {
+  limits: BB.Limits
+  /**
+   * Convert files with this MIME type to FormData fields instead of File's
+   */
+  multipartFieldTypes: string[]
+}
+
+export const fromRequest = (
+  source: IncomingMessage,
+  { limits }: MultipartOptions,
+) => {
   const make = Effect(BB({ headers: source.headers, limits }))
     .acquireRelease((_) =>
       Effect(() => {
@@ -61,14 +71,14 @@ export const fromRequest = (source: IncomingMessage, limits: BB.Limits) => {
   return Stream.unwrapScoped(make)
 }
 
-const toFieldContentTypes = ["application/json"]
-
-export const formData = flow(fromRequest, (_) =>
-  _.runFoldEffect(new FormData(), (formData, part) => {
+export const formData = (source: IncomingMessage, opts: MultipartOptions) =>
+  fromRequest(source, opts).runFoldEffect(new FormData(), (formData, part) => {
     if (part._tag === "FormDataField") {
       formData.append(part.key, part.value)
       return Effect.succeed(formData)
-    } else if (toFieldContentTypes.some((_) => part.contentType.includes(_))) {
+    } else if (
+      opts.multipartFieldTypes.some((_) => part.contentType.includes(_))
+    ) {
       return readableToString(part.source as any)
         .map((_) => {
           formData.append(part.key, _)
@@ -90,8 +100,7 @@ export const formData = flow(fromRequest, (_) =>
         ).as(formData),
       )
     })
-  }),
-)
+  })
 
 const randomTmpDir = Effect.async<never, NodeJS.ErrnoException, string>(
   (resume) => {

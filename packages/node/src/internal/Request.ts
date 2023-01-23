@@ -5,14 +5,13 @@ import * as Body from "./body.js"
 import { fromReadable } from "./stream.js"
 import { Readable } from "stream"
 import * as MP from "./multipart.js"
-import * as BB from "busboy"
 
 export class NodeHttpRequest implements HttpRequest {
   constructor(
     readonly source: IncomingMessage,
     readonly originalUrl: string,
     readonly url: string,
-    readonly limits: BB.Limits,
+    readonly options: MP.MultipartOptions,
   ) {}
 
   get method() {
@@ -24,11 +23,11 @@ export class NodeHttpRequest implements HttpRequest {
   }
 
   setUrl(url: string): HttpRequest {
-    return new NodeHttpRequest(this.source, this.originalUrl, url, this.limits)
+    return new NodeHttpRequest(this.source, this.originalUrl, url, this.options)
   }
 
   get text() {
-    return Body.utf8String(this.source, this.limits.fieldSize).mapError(
+    return Body.utf8String(this.source, this.options.limits.fieldSize).mapError(
       (e) => new RequestBodyError(e),
     )
   }
@@ -43,11 +42,11 @@ export class NodeHttpRequest implements HttpRequest {
   }
 
   get formData(): any {
-    return MP.formData(this.source, this.limits)
+    return MP.formData(this.source, this.options)
   }
 
   get formDataStream(): any {
-    return MP.fromRequest(this.source, this.limits)
+    return MP.fromRequest(this.source, this.options)
   }
 
   get stream() {

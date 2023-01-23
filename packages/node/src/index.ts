@@ -10,8 +10,8 @@ import * as Http from "http"
 import { Readable } from "stream"
 import { LazyArg } from "@fp-ts/data/Function"
 import { NodeHttpRequest } from "./internal/Request.js"
-import * as BB from "busboy"
 import * as S from "./internal/stream.js"
+import { MultipartOptions } from "./internal/multipart.js"
 
 export * from "./internal/HttpFs.js"
 
@@ -21,11 +21,11 @@ export * from "./internal/HttpFs.js"
 export const make =
   (
     makeServer: LazyArg<Http.Server>,
-    options: ListenOptions & {
-      port: number
-      limits?: BB.Limits
-      debug?: boolean
-    },
+    options: ListenOptions &
+      MultipartOptions & {
+        port: number
+        debug?: boolean
+      },
   ) =>
   <R>(httpApp: HttpApp<R, EarlyResponse>): Effect<R, never, never> =>
     Effect.runtime<R>().flatMap((rt) =>
@@ -57,10 +57,17 @@ export const make =
 
 const convertRequest = (
   source: Http.IncomingMessage,
-  { port, limits = {} }: { port: number; limits?: BB.Limits },
+  {
+    port,
+    limits = {},
+    multipartFieldTypes = ["application/json"],
+  }: { port: number } & MultipartOptions,
 ) => {
   const url = requestUrl(source, port)
-  return new NodeHttpRequest(source, url, url, limits)
+  return new NodeHttpRequest(source, url, url, {
+    limits,
+    multipartFieldTypes,
+  })
 }
 
 const handleResponse = (
