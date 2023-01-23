@@ -1,12 +1,18 @@
 import type { Effect } from "@effect/io/Effect"
 import type { HttpApp } from "@effect-http/core"
 import type { ListenOptions } from "net"
-import { EarlyResponse, HttpResponse } from "@effect-http/core/Response"
+import {
+  EarlyResponse,
+  HttpResponse,
+  HttpResponseError,
+} from "@effect-http/core/Response"
 import * as Http from "http"
 import { Readable } from "stream"
 import { LazyArg } from "@fp-ts/data/Function"
 import { NodeHttpRequest } from "./Request.js"
 import * as BB from "busboy"
+import * as Fs from "./fs.js"
+import * as S from "./stream.js"
 
 /**
  * @tsplus pipeable effect-http/HttpApp serveNode
@@ -14,7 +20,10 @@ import * as BB from "busboy"
 export const make =
   (
     makeServer: LazyArg<Http.Server>,
-    options: ListenOptions & { port: number; limits?: BB.Limits },
+    options: ListenOptions & {
+      port: number
+      limits?: BB.Limits
+    },
   ) =>
   <R>(httpApp: HttpApp<R, EarlyResponse>): Effect<R, never, never> =>
     Effect.runtime<R>().flatMap((rt) =>
@@ -22,15 +31,27 @@ export const make =
         const server = makeServer()
 
         server.on("request", (request, response) => {
-          rt.unsafeRun(httpApp(convertRequest(request, options)), (exit) => {
-            if (exit.isSuccess()) {
-              handleResponse(exit.value, response)
-            } else {
-              console.error("@effect-http/node", exit.cause.pretty())
-              response.writeHead(500)
-              response.end()
-            }
-          })
+          rt.unsafeRun(
+            httpApp(convertRequest(request, options))
+              .flatMap((_) => handleResponse(_, response))
+              .catchTag("EarlyResponse", (_) =>
+                handleResponse(_.response, response),
+              )
+              .catchTag("HttpResponseError", (e) =>
+                Effect(() => {
+                  console.error("ERROR", "HttpResponseError", e.status)
+                  response.writeHead(e.status)
+                  response.end()
+                }),
+              ),
+            (exit) => {
+              if (exit.isFailure()) {
+                console.error("@effect-http/node", exit.cause.pretty())
+                response.writeHead(500)
+                response.end()
+              }
+            },
+          )
         })
 
         server.listen(options)
@@ -49,7 +70,10 @@ const convertRequest = (
   return new NodeHttpRequest(source, url, url, limits)
 }
 
-const handleResponse = (source: HttpResponse, dest: Http.ServerResponse) => {
+const handleResponse = (
+  source: HttpResponse,
+  dest: Http.ServerResponse,
+): Effect<never, HttpResponseError, void> => {
   const headers: Record<string, string> =
     source.headers._tag === "Some"
       ? Object.fromEntries(source.headers.value.entries())
@@ -64,24 +88,68 @@ const handleResponse = (source: HttpResponse, dest: Http.ServerResponse) => {
       break
 
     case "FormDataResponse":
-      const r = new Response(source.body)
-      headers["content-type"] = r.headers.get("content-type")!
-      dest.writeHead(source.status, headers)
-      Readable.fromWeb(r.body as any).pipe(dest)
-      return
+      return Effect(() => {
+        const r = new Response(source.body)
+        headers["content-type"] = r.headers.get("content-type")!
+        dest.writeHead(source.status, headers)
+        Readable.fromWeb(r.body as any).pipe(dest)
+      })
 
     case "StreamResponse":
       headers["content-type"] = source.contentType
       if (source.contentLength._tag === "Some") {
         headers["content-length"] = source.contentLength.value.toString()
       }
-      dest.writeHead(source.status, headers)
-      Readable.fromWeb(source.body as any).pipe(dest)
-      return
+
+      return Effect(() => {
+        dest.writeHead(source.status, headers)
+      })
+        .tap(() => source.body.run(S.sink(dest)))
+        .catchTag("WritableError", (e) =>
+          Effect.fail(new HttpResponseError(500, e)),
+        )
+
+    case "FileResponse":
+      return Do(($) => {
+        const stats = $(Fs.stat(source.path))
+
+        headers["content-type"] = source.contentType
+        if (source.range._tag === "Some") {
+          const [start, end] = source.range.value
+          headers["content-length"] = `${end - start}`
+        } else {
+          headers["content-length"] = `${stats.size}`
+        }
+
+        dest.writeHead(source.status, headers)
+
+        $(
+          Fs.stream(source.path, {
+            offset:
+              source.range._tag === "Some" ? source.range.value[0] : undefined,
+            bytesToRead:
+              source.range._tag === "Some"
+                ? source.range.value[1] - source.range.value[0]
+                : undefined,
+          }).run(S.sink(dest)),
+        )
+      })
+        .catchTag("ErrnoError", (e) =>
+          Effect.fail(
+            e.error.code === "ENOENT"
+              ? new HttpResponseError(404, e)
+              : new HttpResponseError(500, e),
+          ),
+        )
+        .mapError((e) =>
+          e._tag !== "HttpResponseError" ? new HttpResponseError(500, e) : e,
+        )
   }
 
-  dest.writeHead(source.status, headers)
-  dest.end(body)
+  return Effect(() => {
+    dest.writeHead(source.status, headers)
+    dest.end(body)
+  })
 }
 
 const requestUrl = (source: Http.IncomingMessage, port: number) => {
