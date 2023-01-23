@@ -1,6 +1,6 @@
 {
   "name": "@effect-http/bun",
-  "version": "0.1.7",
+  "version": "0.2.0",
   "type": "module",
   "publishConfig": {
     "access": "public"
