@@ -218,12 +218,17 @@ export const early = (
  * @tsplus fluent effect-http/Response toStandard
  * @tsplus static effect-http/Response.Ops toStandard
  */
-export const toStandard = (self: HttpResponse): Response => {
+export const toStandard = (
+  self: HttpResponse,
+  handleFiles: (response: FileResponse) => Response,
+): Response => {
   if (self._tag === "EmptyResponse") {
     return new Response(null, {
       status: self.status,
       headers: self.headers._tag === "Some" ? self.headers.value : undefined,
     })
+  } else if (self._tag === "FileResponse") {
+    return handleFiles(self)
   }
 
   const headers =
