@@ -184,13 +184,13 @@ export const formData = (
 export const raw = (
   body: unknown,
   {
-    headers = Maybe.none,
+    headers,
     status = 200,
   }: {
     status?: number
-    headers?: Maybe<Headers>
+    headers?: Headers
   } = {},
-): HttpResponse => new RawResponse(status, headers, body)
+): HttpResponse => new RawResponse(status, Maybe.fromNullable(headers), body)
 
 /**
  * @tsplus static effect-http/Response.Ops file

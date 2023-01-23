@@ -12,11 +12,16 @@ export class HttpFsError {
   constructor(readonly error: unknown) {}
 }
 
+export class HttpFsNotFound {
+  readonly _tag = "HttpFsNotFound"
+  constructor(readonly path: string, readonly error: unknown) {}
+}
+
 export interface HttpFs {
   toResponse: (
     path: string,
     opts?: ToResponseOptions,
-  ) => Effect<never, RouteNotFound | HttpFsError, HttpResponse>
+  ) => Effect<never, HttpFsNotFound | HttpFsError, HttpResponse>
 }
 
 export const HttpFs = Tag<HttpFs>()

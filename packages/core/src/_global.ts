@@ -116,4 +116,8 @@ import { FormDataPart } from "@effect-http/core/multipart"
 /**
  * @tsplus global
  */
-import { HttpFs, HttpFsError } from "@effect-http/core/internal/HttpFs"
+import {
+  HttpFs,
+  HttpFsError,
+  HttpFsNotFound,
+} from "@effect-http/core/internal/HttpFs"

@@ -2,7 +2,7 @@ import * as Mime from "mime-types"
 import parseRange from "range-parser"
 
 export const serveDirectory =
-  (directory: string): HttpApp<HttpFs, RouteNotFound | HttpFsError> =>
+  (directory: string): HttpApp<HttpFs, HttpFsNotFound | HttpFsError> =>
   (request) => {
     const url = new URL(request.url)
     const path = `${directory}${url.pathname}`
