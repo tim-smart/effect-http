@@ -2,6 +2,7 @@ export * from "./definitions.js"
 
 export { early as respondEarly } from "./Response.js"
 export { RouteNotFound } from "./router.js"
+export * from "./serveDirectory.js"
 
 export * from "./schema.js"
 

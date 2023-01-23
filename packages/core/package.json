@@ -1,6 +1,6 @@
 {
   "name": "@effect-http/core",
-  "version": "0.1.20",
+  "version": "0.1.22",
   "type": "module",
   "publishConfig": {
     "access": "public"
@@ -24,14 +24,18 @@
     "@fp-ts/data": "~0.0.40",
     "@fp-ts/schema": "^0.0.8",
     "@types/route-parser": "^0.1.4",
-    "find-my-way": "^7.4.0"
+    "find-my-way": "^7.4.0",
+    "mime-types": "^2.1.35",
+    "range-parser": "^1.2.1"
   },
   "devDependencies": {
     "@tsplus-types/effect__io": "0.0.66-f715d9e",
     "@tsplus-types/effect__stream": "0.0.13-f715d9e",
     "@tsplus-types/fp-ts__data": "0.0.40-f715d9e",
     "@tsplus-types/fp-ts__schema": "0.0.8-f715d9e",
+    "@types/mime-types": "^2.1.1",
     "@types/node": "^18.11.18",
+    "@types/range-parser": "^1.2.4",
     "prettier": "^2.8.3",
     "typescript": "https://cdn.jsdelivr.net/npm/@tsplus/installer@0.0.164/compiler/typescript.tgz"
   },
