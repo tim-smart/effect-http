@@ -1,3 +1,5 @@
+import { toReadableStream } from "./util/stream.js"
+
 /**
  * @tsplus type effect-http/Response
  * @tsplus companion effect-http/Response.Ops
@@ -8,6 +10,11 @@ export type HttpResponse =
   | FormDataResponse
   | StreamResponse
   | FileResponse
+
+export class HttpResponseError {
+  readonly _tag = "HttpResponseError"
+  constructor(readonly status: number, readonly error: unknown) {}
+}
 
 export class EmptyResponse {
   readonly _tag = "EmptyResponse"
@@ -40,7 +47,7 @@ export class StreamResponse {
     readonly headers: Maybe<Headers>,
     readonly contentType: string,
     readonly contentLength: Maybe<number>,
-    readonly body: ReadableStream,
+    readonly body: Stream<never, HttpResponseError, Uint8Array>,
   ) {}
 }
 
@@ -136,7 +143,7 @@ export const searchParams = (
  * @tsplus static effect-http/Response.Ops stream
  */
 export const stream = (
-  value: ReadableStream,
+  value: Stream<never, HttpResponseError, Uint8Array>,
   {
     headers,
     status = 200,
@@ -246,7 +253,7 @@ export const toStandard = (
       if (self.contentLength._tag === "Some") {
         headers.set("content-length", self.contentLength.toString())
       }
-      body = self.body
+      body = toReadableStream(self.body)
       break
   }
 

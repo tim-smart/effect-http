@@ -6,6 +6,16 @@ import type { Effect } from "@effect/io/Effect"
 /**
  * @tsplus global
  */
+import type { Exit } from "@effect/io/Exit"
+
+/**
+ * @tsplus global
+ */
+import type { Scope, CloseableScope } from "@effect/io/Scope"
+
+/**
+ * @tsplus global
+ */
 import type { Stream } from "@effect/stream/Stream"
 
 /**
@@ -32,6 +42,11 @@ import type { ParseError } from "@fp-ts/schema/ParseError"
  * @tsplus global
  */
 import type { Schema } from "@fp-ts/schema/Schema"
+
+/**
+ * @tsplus global
+ */
+import { Chunk } from "@fp-ts/data/Chunk"
 
 /**
  * @tsplus global

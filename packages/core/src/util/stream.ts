@@ -60,3 +60,39 @@ const readChunk = (reader: ReadableStreamBYOBReader, size: number) => {
     }),
   )
 }
+
+export const toReadableStream = <E, A>(source: Stream<never, E, A>) => {
+  let pull: Effect<never, never, void>
+  let scope: CloseableScope
+
+  return new ReadableStream<A>({
+    start(controller) {
+      scope = Scope.make().unsafeRunSync
+      pull = source.toPull
+        .use(scope)
+        .unsafeRunSync.tap((_) =>
+          Effect(() => {
+            _.forEach((_) => {
+              controller.enqueue(_)
+            })
+          }),
+        )
+        .catchTag("None", () =>
+          Effect(() => {
+            controller.close()
+          }),
+        )
+        .catchTag("Some", (e) =>
+          Effect(() => {
+            controller.error(e.value)
+          }),
+        ).asUnit
+    },
+    pull() {
+      return pull.unsafeRunPromise
+    },
+    cancel() {
+      return scope.close(Exit.unit()).unsafeRunPromise
+    },
+  })
+}
