@@ -77,6 +77,7 @@ export const toReadableStream = <E, A>(source: Stream<never, E, A>) => {
             })
           }),
         )
+        .tapErrorCause(() => scope.close(Exit.unit()))
         .catchTag("None", () =>
           Effect(() => {
             controller.close()
