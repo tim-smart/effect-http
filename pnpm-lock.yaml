@@ -67,7 +67,7 @@ importers:
 
   packages/node:
     specifiers:
-      '@effect-http/core': ^0.1.19
+      '@effect-http/core': workspace:*
       '@effect/io': ~0.0.66
       '@effect/stream': ^0.0.13
       '@fp-ts/data': ~0.0.40
@@ -81,7 +81,7 @@ importers:
       raw-body: ^2.5.1
       typescript: https://cdn.jsdelivr.net/npm/@tsplus/installer@0.0.164/compiler/typescript.tgz
     dependencies:
-      '@effect-http/core': 0.1.27
+      '@effect-http/core': link:../core
       '@effect/io': 0.0.66
       '@effect/stream': 0.0.13
       '@fp-ts/data': 0.0.40
@@ -97,19 +97,6 @@ importers:
       typescript: '@cdn.jsdelivr.net/npm/@tsplus/installer@0.0.164/compiler/typescript.tgz'
 
 packages:
-
-  /@effect-http/core/0.1.27:
-    resolution: {integrity: sha512-hcBspQQ9K/vwRquWSzgDM4bT+h464rD79w1Tn//y8GkE1PkEPKP/zE0C0uWXRbMuSV1gsaDwNRoz0WrgLmjOAQ==}
-    dependencies:
-      '@effect/io': 0.0.66
-      '@effect/stream': 0.0.13
-      '@fp-ts/data': 0.0.40
-      '@fp-ts/schema': 0.0.8
-      '@types/route-parser': 0.1.4
-      find-my-way: 7.4.0
-      mime-types: 2.1.35
-      range-parser: 1.2.1
-    dev: false
 
   /@effect/io/0.0.66:
     resolution: {integrity: sha512-aRrVm4+hqT4VFVpBXEh8Ecrzgz0lHOOp4ArwvmF2sqMUhoVlKmMPCfHB6ccDYtQbsjKU9QkQrTA8OCdrMEndpQ==}
