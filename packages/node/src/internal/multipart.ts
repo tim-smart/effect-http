@@ -15,6 +15,7 @@ import * as NS from "stream/promises"
 import * as Path from "path"
 import * as NFS from "fs"
 import * as Crypto from "crypto"
+import { readableToString } from "./stream.js"
 
 export const fromRequest = (source: IncomingMessage, limits: BB.Limits) => {
   const make = Effect(BB({ headers: source.headers, limits }))
@@ -60,11 +61,20 @@ export const fromRequest = (source: IncomingMessage, limits: BB.Limits) => {
   return Stream.unwrapScoped(make)
 }
 
+const toFieldContentTypes = ["application/json"]
+
 export const formData = flow(fromRequest, (_) =>
   _.runFoldEffect(new FormData(), (formData, part) => {
     if (part._tag === "FormDataField") {
       formData.append(part.key, part.value)
       return Effect.succeed(formData)
+    } else if (toFieldContentTypes.some((_) => part.contentType.includes(_))) {
+      return readableToString(part.source as any)
+        .map((_) => {
+          formData.append(part.key, _)
+          return formData
+        })
+        .mapError((_) => new RequestBodyError(_))
     }
 
     return Do(($) => {

@@ -51,7 +51,9 @@ export class NodeHttpRequest implements HttpRequest {
   }
 
   get stream() {
-    return fromReadable(this.source).mapError((_) => new RequestBodyError(_))
+    return fromReadable<Uint8Array>(this.source).mapError(
+      (_) => new RequestBodyError(_),
+    )
   }
 
   get webStream() {

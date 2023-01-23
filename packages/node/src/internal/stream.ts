@@ -10,7 +10,7 @@ export class ReadableError {
   constructor(readonly reason: Error) {}
 }
 
-export const fromReadable = (evaluate: LazyArg<Readable>) =>
+export const fromReadable = <A>(evaluate: LazyArg<Readable>) =>
   pipe(
     Effect(evaluate)
       .acquireRelease((stream) =>
@@ -42,12 +42,12 @@ export const fromReadable = (evaluate: LazyArg<Readable>) =>
         }, 0),
       ),
     Stream.unwrapScoped,
-  ).flatMap((_) => Stream.repeatEffectOption(readChunk(_)))
+  ).flatMap((_) => Stream.repeatEffectOption(readChunk<A>(_)))
 
-const readChunk = (
+const readChunk = <A>(
   stream: Readable,
-): Effect<never, Option.Option<never>, Uint8Array> =>
-  Effect(() => stream.read() as Uint8Array | null).flatMap((a) =>
+): Effect<never, Option.Option<never>, A> =>
+  Effect(() => stream.read() as A | null).flatMap((a) =>
     a ? Effect.succeed(a) : Effect.fail(Option.none),
   )
 
@@ -99,3 +99,8 @@ const write =
         }
       })
     })
+
+export const readableToString = (stream: Readable) => {
+  stream.setEncoding("utf-8")
+  return fromReadable<string>(stream).runFold("", (a, b) => `${a}${b}`)
+}
