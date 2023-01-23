@@ -16,7 +16,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@effect-http/core": "^0.1.19",
+    "@effect-http/core": "^0.1.24",
     "@effect/io": "~0.0.66",
     "@fp-ts/data": "~0.0.40"
   },

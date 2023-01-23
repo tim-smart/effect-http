@@ -1,6 +1,10 @@
 import type { HttpApp } from "@effect-http/core"
 import type { HttpRequest } from "@effect-http/core/Request"
-import { EarlyResponse, HttpResponse } from "@effect-http/core/Response"
+import {
+  EarlyResponse,
+  FileResponse,
+  HttpResponse,
+} from "@effect-http/core/Response"
 import type { Effect } from "@effect/io/Effect"
 import type { GenericServeOptions } from "bun"
 
@@ -20,8 +24,11 @@ export const make =
                 HttpRequest.fromStandard(request, request.method, request.url),
               )
                 .catchTag("EarlyResponse", (e) => Effect.succeed(e.response))
-                .map(HttpResponse.toStandard),
+                .map((_) => HttpResponse.toStandard(_, fileResponse)),
             )
+          },
+          error(req) {
+            req.cause
           },
         })
 
@@ -30,3 +37,19 @@ export const make =
         })
       }),
     )
+
+const fileResponse = (response: FileResponse): Response => {
+  let file = Bun.file(response.path, {
+    type: response.contentType,
+  })
+
+  if (response.range._tag === "Some") {
+    file = file.slice(response.range.value[0], response.range.value[1])
+  }
+
+  return new Response(file, {
+    status: response.status,
+    headers:
+      response.headers._tag === "Some" ? response.headers.value : undefined,
+  })
+}
