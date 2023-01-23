@@ -1,12 +1,15 @@
 import type { HttpApp } from "@effect-http/core"
 import type { HttpRequest } from "@effect-http/core/Request"
+import { EarlyResponse, HttpResponse } from "@effect-http/core/Response"
 import {
-  EarlyResponse,
-  FileResponse,
-  HttpResponse,
-} from "@effect-http/core/Response"
+  HttpFs,
+  HttpFsError,
+  HttpFsNotFound,
+} from "@effect-http/core/internal/HttpFs"
 import type { Effect } from "@effect/io/Effect"
-import type { GenericServeOptions } from "bun"
+import type { Layer } from "@effect/io/Layer"
+import { GenericServeOptions, SystemError } from "bun"
+import * as Fs from "node:fs"
 
 /**
  * @tsplus pipeable effect-http/HttpApp serveBun
@@ -24,11 +27,8 @@ export const make =
                 HttpRequest.fromStandard(request, request.method, request.url),
               )
                 .catchTag("EarlyResponse", (e) => Effect.succeed(e.response))
-                .map((_) => HttpResponse.toStandard(_, fileResponse)),
+                .map(HttpResponse.toStandard),
             )
-          },
-          error(req) {
-            req.cause
           },
         })
 
@@ -38,18 +38,32 @@ export const make =
       }),
     )
 
-const fileResponse = (response: FileResponse): Response => {
-  let file = Bun.file(response.path, {
-    type: response.contentType,
-  })
+const bunHttpFsImpl: HttpFs = {
+  toResponse(path, { status, contentType, range } = {}) {
+    return Effect.async<never, SystemError, Fs.Stats>((resume) => {
+      Fs.stat(path, (err, stats) => {
+        if (err) {
+          resume(Effect.fail(err))
+        } else {
+          resume(Effect.succeed(stats))
+        }
+      })
+    })
+      .map(() => {
+        let file = Bun.file(path, {
+          type: contentType,
+        })
 
-  if (response.range._tag === "Some") {
-    file = file.slice(response.range.value[0], response.range.value[1])
-  }
+        if (range) {
+          file = file.slice(range[0], range[1])
+        }
 
-  return new Response(file, {
-    status: response.status,
-    headers:
-      response.headers._tag === "Some" ? response.headers.value : undefined,
-  })
+        return HttpResponse.raw(file, { status })
+      })
+      .mapError((_) =>
+        _.code === "ENOENT" ? new HttpFsNotFound(path, _) : new HttpFsError(_),
+      )
+  },
 }
+
+export const BunHttpFsLive = Layer.succeed(HttpFs, bunHttpFsImpl)
