@@ -1,6 +1,6 @@
 {
   "name": "@effect-http/core",
-  "version": "0.1.27",
+  "version": "0.2.0",
   "type": "module",
   "publishConfig": {
     "access": "public"
