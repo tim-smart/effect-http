@@ -4,15 +4,16 @@ import type { ListenOptions } from "net"
 import {
   EarlyResponse,
   HttpResponse,
-  HttpResponseError,
+  HttpStreamError,
 } from "@effect-http/core/Response"
 import * as Http from "http"
 import { Readable } from "stream"
 import { LazyArg } from "@fp-ts/data/Function"
-import { NodeHttpRequest } from "./Request.js"
+import { NodeHttpRequest } from "./internal/Request.js"
 import * as BB from "busboy"
-import * as Fs from "./fs.js"
-import * as S from "./stream.js"
+import * as S from "./internal/stream.js"
+
+export * from "./internal/HttpFs.js"
 
 /**
  * @tsplus pipeable effect-http/HttpApp serveNode
@@ -34,19 +35,8 @@ export const make =
         server.on("request", (request, response) => {
           rt.unsafeRun(
             httpApp(convertRequest(request, options))
-              .flatMap((_) => handleResponse(_, response))
-              .catchTag("EarlyResponse", (_) =>
-                handleResponse(_.response, response),
-              )
-              .catchTag("HttpResponseError", (e) =>
-                Effect(() => {
-                  if (options.debug) {
-                    console.error("@effect-http/node", e)
-                  }
-                  response.writeHead(e.status)
-                  response.end()
-                }),
-              ),
+              .catchTag("EarlyResponse", (_) => Effect.succeed(_.response))
+              .flatMap((_) => handleResponse(_, response)),
             (exit) => {
               if (exit.isFailure()) {
                 console.error("@effect-http/node", exit.cause.pretty())
@@ -76,18 +66,18 @@ const convertRequest = (
 const handleResponse = (
   source: HttpResponse,
   dest: Http.ServerResponse,
-): Effect<never, HttpResponseError, void> => {
+): Effect<never, HttpStreamError, void> => {
   const headers: Record<string, string> =
     source.headers._tag === "Some"
       ? Object.fromEntries(source.headers.value.entries())
       : {}
-  let body: string | null = null
+  let body: unknown = undefined
 
   switch (source._tag) {
     case "TextResponse":
       headers["content-type"] = source.contentType
       body = source.body
-      headers["content-length"] = Buffer.byteLength(body).toString()
+      headers["content-length"] = Buffer.byteLength(source.body).toString()
       break
 
     case "FormDataResponse":
@@ -108,45 +98,11 @@ const handleResponse = (
         dest.writeHead(source.status, headers)
       })
         .tap(() => source.body.run(S.sink(dest)))
-        .catchTag("WritableError", (e) =>
-          Effect.fail(new HttpResponseError(500, e)),
-        )
+        .catchTag("WritableError", (e) => Effect.fail(new HttpStreamError(e)))
 
-    case "FileResponse":
-      return Do(($) => {
-        const stats = $(Fs.stat(source.path))
-
-        headers["content-type"] = source.contentType
-        if (source.range._tag === "Some") {
-          const [start, end] = source.range.value
-          headers["content-length"] = `${end - start}`
-        } else {
-          headers["content-length"] = `${stats.size}`
-        }
-
-        dest.writeHead(source.status, headers)
-
-        $(
-          Fs.stream(source.path, {
-            offset:
-              source.range._tag === "Some" ? source.range.value[0] : undefined,
-            bytesToRead:
-              source.range._tag === "Some"
-                ? source.range.value[1] - source.range.value[0]
-                : undefined,
-          }).run(S.sink(dest)),
-        )
-      })
-        .catchTag("ErrnoError", (e) =>
-          Effect.fail(
-            e.error.code === "ENOENT"
-              ? new HttpResponseError(404, e)
-              : new HttpResponseError(500, e),
-          ),
-        )
-        .mapError((e) =>
-          e._tag !== "HttpResponseError" ? new HttpResponseError(500, e) : e,
-        )
+    case "RawResponse":
+      body = source.body
+      break
   }
 
   return Effect(() => {
