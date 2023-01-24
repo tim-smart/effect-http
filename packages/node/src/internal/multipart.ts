@@ -26,7 +26,7 @@ export interface MultipartOptions {
 
 export const fromRequest = (
   source: IncomingMessage,
-  { limits }: MultipartOptions,
+  { limits, multipartFieldTypes }: MultipartOptions,
 ) => {
   const make = Effect(BB({ headers: source.headers, limits }))
     .acquireRelease((_) =>
@@ -65,7 +65,16 @@ export const fromRequest = (
         })
 
         source.pipe(bb)
-      }),
+      }).mapEffect((part) =>
+        part._tag === "FormDataFile" &&
+        multipartFieldTypes.some((_) => part.contentType.includes(_))
+          ? readableToString(part.source as any)
+              .map(
+                (body) => new FormDataField(part.key, part.contentType, body),
+              )
+              .mapError((_) => new RequestBodyError(_))
+          : Effect.succeed(part),
+      ),
     )
 
   return Stream.unwrapScoped(make)
@@ -76,15 +85,6 @@ export const formData = (source: IncomingMessage, opts: MultipartOptions) =>
     if (part._tag === "FormDataField") {
       formData.append(part.key, part.value)
       return Effect.succeed(formData)
-    } else if (
-      opts.multipartFieldTypes.some((_) => part.contentType.includes(_))
-    ) {
-      return readableToString(part.source as any)
-        .map((_) => {
-          formData.append(part.key, _)
-          return formData
-        })
-        .mapError((_) => new RequestBodyError(_))
     }
 
     return Do(($) => {
