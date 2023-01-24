@@ -65,7 +65,7 @@ export class ConcatWithPrefix<R, E> {
 
 export interface RouteContext {
   readonly request: HttpRequest
-  readonly params: Record<string, string | undefined>
-  readonly searchParams: Record<string, string>
+  readonly params: Readonly<Record<string, string | undefined>>
+  readonly searchParams: Readonly<Record<string, string>>
 }
 export const RouteContext = Tag<RouteContext>()
