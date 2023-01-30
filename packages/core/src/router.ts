@@ -33,31 +33,32 @@ export class Router<R = never, E = never, EnvR = never, ReqR = never> {
     )
   }
 
-  provideService<A>(tag: Tag<A>) {
-    return (service: A) =>
-      this.provideServiceEffect(tag)(Effect.succeed(service))
+  provideService<T extends Tag<any>>(tag: T, service: Tag.Service<T>) {
+    return this.provideServiceEffect(tag, Effect.succeed(service))
   }
 
-  provideServiceEffect<A>(tag: Tag<A>) {
-    return <R2, E2>(service: Effect<R2, E2, A>) =>
-      new Router<
-        Exclude<R, A> | Exclude<R2, RouteContext | ReqR>,
-        E | E2,
-        EnvR | Exclude<R2, RouteContext | ReqR>,
-        ReqR | A
-      >(
-        this.routes as any,
-        this.env
-          .map((prevEnv) =>
-            prevEnv.flatMap((ctx) =>
-              service
-                .contramapContext((a) => a.merge(ctx))
-                .map((a) => pipe(ctx, Context.add(tag)(a))),
-            ),
-          )
-          .orElseSucceed(() => service.map((a) => Context.make(tag)(a))) as any,
-        this.mounts as any,
-      )
+  provideServiceEffect<T extends Tag<any>, R2, E2>(
+    tag: T,
+    service: Effect<R2, E2, Tag.Service<T>>,
+  ) {
+    return new Router<
+      Exclude<R, Tag.Service<T>> | Exclude<R2, RouteContext | ReqR>,
+      E | E2,
+      EnvR | Exclude<R2, RouteContext | ReqR>,
+      ReqR | Tag.Service<T>
+    >(
+      this.routes as any,
+      this.env
+        .map((prevEnv) =>
+          prevEnv.flatMap((ctx) =>
+            service
+              .contramapContext((a) => a.merge(ctx))
+              .map((a) => ctx.add(tag, a)),
+          ),
+        )
+        .orElseSucceed(() => service.map((a) => Context.make(tag, a))) as any,
+      this.mounts as any,
+    )
   }
 
   mount<R2, E2>(path: string, handler: HttpApp<R2, E2>) {

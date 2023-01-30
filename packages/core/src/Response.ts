@@ -245,8 +245,6 @@ export const toStandard = (self: HttpResponse): Response => {
       }
       body = toReadableStream(self.body)
       break
-
-    case "RawResponse":
   }
 
   return new Response(body, {
