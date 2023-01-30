@@ -1,17 +1,18 @@
-import type { Effect } from "@effect/io/Effect"
 import type { HttpApp } from "@effect-http/core"
-import type { ListenOptions } from "net"
 import {
   EarlyResponse,
   HttpResponse,
   HttpStreamError,
 } from "@effect-http/core/Response"
+import type { Effect } from "@effect/io/Effect"
+import * as Runtime from "@effect/io/Runtime"
+import { LazyArg } from "@fp-ts/core/Function"
 import * as Http from "http"
+import type { ListenOptions } from "net"
 import { Readable } from "stream"
-import { LazyArg } from "@fp-ts/data/Function"
 import { NodeHttpRequest } from "./internal/Request.js"
-import * as S from "./internal/stream.js"
 import { MultipartOptions } from "./internal/multipart.js"
+import * as S from "./internal/stream.js"
 
 export * from "./internal/HttpFs.js"
 
@@ -33,13 +34,13 @@ export const make =
         const server = makeServer()
 
         server.on("request", (request, response) => {
-          rt.unsafeRun(
+          Runtime.runCallback(rt)(
             httpApp(convertRequest(request, options))
               .catchTag("EarlyResponse", (_) => Effect.succeed(_.response))
               .flatMap((_) => handleResponse(_, response)),
             (exit) => {
               if (exit.isFailure()) {
-                console.error("@effect-http/node", exit.cause.pretty())
+                console.error("@effect-http/node", exit.cause.pretty)
                 response.writeHead(500)
                 response.end()
               }

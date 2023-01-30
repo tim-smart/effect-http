@@ -1,8 +1,8 @@
 import type { Effect } from "@effect/io/Effect"
-import * as Stream from "@effect/stream/Stream"
-import { LazyArg, pipe } from "@fp-ts/data/Function"
 import * as Sink from "@effect/stream/Sink"
-import * as Option from "@fp-ts/data/Option"
+import * as Stream from "@effect/stream/Stream"
+import { LazyArg, pipe } from "@fp-ts/core/Function"
+import * as Option from "@fp-ts/core/Option"
 import { Readable, Writable } from "stream"
 
 export class ReadableError {
@@ -48,7 +48,7 @@ const readChunk = <A>(
   stream: Readable,
 ): Effect<never, Option.Option<never>, A> =>
   Effect(() => stream.read() as A | null).flatMap((a) =>
-    a ? Effect.succeed(a) : Effect.fail(Option.none),
+    a ? Effect.succeed(a) : Effect.fail(Option.none()),
   )
 
 export type WritableSink<A> = Sink.Sink<never, WritableError, A, never, void>

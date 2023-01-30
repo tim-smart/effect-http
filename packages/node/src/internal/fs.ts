@@ -1,8 +1,8 @@
 import * as Effect from "@effect/io/Effect"
 import * as Sink from "@effect/stream/Sink"
 import * as Stream from "@effect/stream/Stream"
-import { pipe } from "@fp-ts/data/Function"
-import * as Option from "@fp-ts/data/Option"
+import { pipe } from "@fp-ts/core/Function"
+import * as Option from "@fp-ts/core/Option"
 import * as NFS from "fs"
 
 export class ErrnoError {
@@ -88,7 +88,7 @@ export const allocAndRead = (
         read(fd, buf, 0, size, position),
         Effect.map((bytesRead) => {
           if (bytesRead === 0) {
-            return Option.none
+            return Option.none()
           }
 
           if (bytesRead === size) {
