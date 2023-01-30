@@ -8,7 +8,7 @@ export const unsafeRunSyncOrPromise = <R, E, A>(
   runtime: Runtime<R>,
   effect: Effect<R, E, A>,
 ) => {
-  const exit = runtime.unsafeRunSyncExit(effect)
+  const exit = effect.runSyncExit(runtime)
 
   if (
     exit._tag === "Failure" &&
