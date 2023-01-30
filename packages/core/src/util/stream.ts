@@ -10,7 +10,7 @@ export const fromReadableStream = <A = Uint8Array>(
             () => reader.read(),
             (reason) => Maybe.some(new ReadableStreamError(reason)),
           ).flatMap(({ value, done }) =>
-            done ? Effect.fail(Maybe.none) : Effect.succeed(value),
+            done ? Effect.fail(Maybe.none()) : Effect.succeed(value),
           ),
         ),
       ),
@@ -55,7 +55,9 @@ const readChunk = (reader: ReadableStreamBYOBReader, size: number) => {
       const newOffset = offset + value.byteLength
       return Effect.succeed([
         value,
-        newOffset >= buffer.byteLength ? Maybe.none : Maybe.some(newOffset),
+        newOffset >= buffer.byteLength
+          ? Maybe.none<number>()
+          : Maybe.some(newOffset),
       ])
     }),
   )
@@ -67,10 +69,10 @@ export const toReadableStream = <E, A>(source: Stream<never, E, A>) => {
 
   return new ReadableStream<A>({
     start(controller) {
-      scope = Scope.make().unsafeRunSync
+      scope = Scope.make().runSync
       pull = source.toPull
         .use(scope)
-        .unsafeRunSync.tap((_) =>
+        .runSync.tap((_) =>
           Effect(() => {
             _.forEach((_) => {
               controller.enqueue(_)
@@ -90,10 +92,10 @@ export const toReadableStream = <E, A>(source: Stream<never, E, A>) => {
         ).asUnit
     },
     pull() {
-      return pull.unsafeRunPromise
+      return pull.runPromise
     },
     cancel() {
-      return scope.close(Exit.unit()).unsafeRunPromise
+      return scope.close(Exit.unit()).runPromise
     },
   })
 }

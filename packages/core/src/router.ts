@@ -7,7 +7,7 @@ export class Router<R = never, E = never, EnvR = never, ReqR = never> {
     readonly routes: ReadonlyArray<
       Route<R, E> | Concat<R, E> | ConcatWithPrefix<R, E>
     > = [],
-    readonly env: Maybe<Effect<R, E, Context<ReqR>>> = Maybe.none,
+    readonly env: Maybe<Effect<R, E, Context<ReqR>>> = Maybe.none(),
     readonly mounts: HashMap<string, HttpApp<R, E>> = HashMap.empty(),
   ) {}
 

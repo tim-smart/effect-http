@@ -65,7 +65,7 @@ export class RawResponse {
  * @tsplus static effect-http/Response.Ops empty
  */
 export const empty = ({
-  headers = Maybe.none,
+  headers = Maybe.none(),
   status = 204,
 }: {
   status?: number
@@ -78,7 +78,7 @@ export const empty = ({
 export const json = (
   value: unknown,
   {
-    headers = Maybe.none,
+    headers = Maybe.none(),
     status = 200,
   }: {
     status?: number
@@ -93,7 +93,7 @@ export const json = (
 export const text = (
   value: string,
   {
-    headers = Maybe.none,
+    headers = Maybe.none(),
     status = 200,
     contentType = "text/plain",
   }: {
@@ -109,7 +109,7 @@ export const text = (
 export const html = (
   value: string,
   {
-    headers = Maybe.none,
+    headers = Maybe.none(),
     status = 200,
   }: {
     status?: number
@@ -124,7 +124,7 @@ export const html = (
 export const searchParams = (
   value: URLSearchParams,
   {
-    headers = Maybe.none,
+    headers = Maybe.none(),
     status = 200,
   }: {
     status?: number

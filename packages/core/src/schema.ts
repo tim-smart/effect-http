@@ -98,7 +98,7 @@ export const parseBody = (request: HttpRequest) => {
     return queryStringBody(request).asSome
   }
 
-  return Effect.succeed(Maybe.none)
+  return Effect.succeed(Maybe.none())
 }
 
 export const queryStringBody = (request: HttpRequest) =>

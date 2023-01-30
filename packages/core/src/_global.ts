@@ -26,7 +26,7 @@ import type { Maybe } from "@effect-http/core/_common"
 /**
  * @tsplus global
  */
-import type { NonEmptyReadonlyArray } from "@fp-ts/data/ReadonlyArray"
+import type { NonEmptyReadonlyArray } from "@fp-ts/core/ReadonlyArray"
 
 /**
  * @tsplus global
@@ -36,7 +36,7 @@ import type { Parser } from "@fp-ts/schema/Parser"
 /**
  * @tsplus global
  */
-import type { ParseError } from "@fp-ts/schema/ParseError"
+import type { ParseError } from "@fp-ts/schema/ParseResult"
 
 /**
  * @tsplus global
@@ -56,7 +56,7 @@ import { Context, Tag } from "@fp-ts/data/Context"
 /**
  * @tsplus global
  */
-import { Either } from "@fp-ts/data/Either"
+import { Either } from "@fp-ts/core/Either"
 
 /**
  * @tsplus global
@@ -66,7 +66,7 @@ import type { HashMap } from "@fp-ts/data/HashMap"
 /**
  * @tsplus global
  */
-import { flow, pipe, identity, LazyArg } from "@fp-ts/data/Function"
+import { flow, pipe, identity, LazyArg } from "@fp-ts/core/Function"
 
 /**
  * @tsplus global

@@ -28,14 +28,16 @@ importers:
 
   packages/core:
     specifiers:
-      '@effect/io': ~0.0.66
-      '@effect/stream': ~0.0.13
-      '@fp-ts/data': ~0.0.40
-      '@fp-ts/schema': ^0.0.8
-      '@tsplus-types/effect__io': 0.0.66-f715d9e
-      '@tsplus-types/effect__stream': 0.0.13-f715d9e
-      '@tsplus-types/fp-ts__data': 0.0.40-f715d9e
-      '@tsplus-types/fp-ts__schema': 0.0.8-f715d9e
+      '@effect/io': ~0.1.3
+      '@effect/stream': ~0.1.0
+      '@fp-ts/core': ^0.1.1
+      '@fp-ts/data': ~0.1.0
+      '@fp-ts/schema': ^0.1.3
+      '@tsplus-types/effect__io': 0.1.3-4e9791d
+      '@tsplus-types/effect__stream': 0.1.0-4e9791d
+      '@tsplus-types/fp-ts__core': 0.1.1-4e9791d
+      '@tsplus-types/fp-ts__data': 0.1.0-4e9791d
+      '@tsplus-types/fp-ts__schema': 0.1.3-4e9791d
       '@types/mime-types': ^2.1.1
       '@types/node': ^18.11.18
       '@types/range-parser': ^1.2.4
@@ -44,26 +46,28 @@ importers:
       mime-types: ^2.1.35
       prettier: ^2.8.3
       range-parser: ^1.2.1
-      typescript: https://cdn.jsdelivr.net/npm/@tsplus/installer@0.0.164/compiler/typescript.tgz
+      typescript: https://cdn.jsdelivr.net/npm/@tsplus/installer@0.0.168/compiler/typescript.tgz
     dependencies:
-      '@effect/io': 0.0.66
-      '@effect/stream': 0.0.13
-      '@fp-ts/data': 0.0.40
-      '@fp-ts/schema': 0.0.8
+      '@effect/io': 0.1.3
+      '@effect/stream': 0.1.0
+      '@fp-ts/core': 0.1.1
+      '@fp-ts/data': 0.1.0
+      '@fp-ts/schema': 0.1.3
       '@types/route-parser': 0.1.4
       find-my-way: 7.4.0
       mime-types: 2.1.35
       range-parser: 1.2.1
     devDependencies:
-      '@tsplus-types/effect__io': 0.0.66-f715d9e_@effect+io@0.0.66
-      '@tsplus-types/effect__stream': 0.0.13-f715d9e_@effect+stream@0.0.13
-      '@tsplus-types/fp-ts__data': 0.0.40-f715d9e_@fp-ts+data@0.0.40
-      '@tsplus-types/fp-ts__schema': 0.0.8-f715d9e_@fp-ts+schema@0.0.8
+      '@tsplus-types/effect__io': 0.1.3-4e9791d_@effect+io@0.1.3
+      '@tsplus-types/effect__stream': 0.1.0-4e9791d_@effect+stream@0.1.0
+      '@tsplus-types/fp-ts__core': 0.1.1-4e9791d_@fp-ts+core@0.1.1
+      '@tsplus-types/fp-ts__data': 0.1.0-4e9791d_@fp-ts+data@0.1.0
+      '@tsplus-types/fp-ts__schema': 0.1.3-4e9791d_@fp-ts+schema@0.1.3
       '@types/mime-types': 2.1.1
       '@types/node': 18.11.18
       '@types/range-parser': 1.2.4
       prettier: 2.8.3
-      typescript: '@cdn.jsdelivr.net/npm/@tsplus/installer@0.0.164/compiler/typescript.tgz'
+      typescript: '@cdn.jsdelivr.net/npm/@tsplus/installer@0.0.168/compiler/typescript.tgz'
 
   packages/node:
     specifiers:
@@ -104,6 +108,12 @@ packages:
       '@fp-ts/core': 0.0.11
       '@fp-ts/data': 0.0.40
 
+  /@effect/io/0.1.3:
+    resolution: {integrity: sha512-rGarnEP9VfXGbDvIw/EVXiPNcyUWJU8YNd5bFZRQAjkL+omBde6H/VZcYlQylS67B81MSQnRe4+1enEypaxB9A==}
+    dependencies:
+      '@fp-ts/core': 0.1.1
+      '@fp-ts/data': 0.1.0
+
   /@effect/stream/0.0.13:
     resolution: {integrity: sha512-2he8h0uUIwlfGpyeX9M/ZDAd8qQv/GD9wK7IWLr6G2kzZRT3YD9mB9PQMAtkxkt35qbc8EyfiFK3T8Gs9oWMVQ==}
     dependencies:
@@ -111,20 +121,35 @@ packages:
       '@fp-ts/core': 0.0.11
       '@fp-ts/data': 0.0.40
 
+  /@effect/stream/0.1.0:
+    resolution: {integrity: sha512-GeJNY5WKV6h/aLynZpJTR/xmvTD1JQq8hk9bt+Z2OxHLwyBZ+YSQetA9YsxQsZGLUZl+h1twSdkI0n7d0mx3Lw==}
+    dependencies:
+      '@effect/io': 0.1.3
+      '@fp-ts/core': 0.1.1
+      '@fp-ts/data': 0.1.0
+
   /@fp-ts/core/0.0.11:
     resolution: {integrity: sha512-BCAJBYzghwoJpcUOARJ1tui50HoYJFlV2pJlVMlsEkDFhD8MTtq8xQVpZCRF66RmtkxtGBYINCQ+5H1lRaL35Q==}
+
+  /@fp-ts/core/0.1.1:
+    resolution: {integrity: sha512-7vQnrnvJAMrXgIwt0qQNhXkPDtm4l8vwql8EvXeY47v/FwnWpDvt1HISoO9Kq3am5SZ0A8Av+4NqPab2FRdKxw==}
 
   /@fp-ts/data/0.0.40:
     resolution: {integrity: sha512-Wo/2KNO3n6TdUuX+vFEkK1hkQ3EDWp/5Uha8ZLtIvurndQxlDcF4kpU20c0CKJL8g5DpnRHiKN/cni5yyb09eQ==}
     dependencies:
       '@fp-ts/core': 0.0.11
 
-  /@fp-ts/schema/0.0.8:
-    resolution: {integrity: sha512-+osZGEnfVO4jaoBnjMRmZT/yoYhu+DoN3eCn0HjWMnDF6ZDUuWahtSTp4HpBwd2lL0+FkulAywvM8WRpy4lZiw==}
+  /@fp-ts/data/0.1.0:
+    resolution: {integrity: sha512-T4PbFVo2fzy2XaUHbFmEc24TJSPzTl/xUHC+1qCXZZfb3MaIKdKHS10aUt+9zcQ75KpiZbHL8hBfoP9fHOI6Mg==}
     dependencies:
-      '@fp-ts/core': 0.0.11
-      '@fp-ts/data': 0.0.40
-      fast-check: 3.6.0
+      '@fp-ts/core': 0.1.1
+
+  /@fp-ts/schema/0.1.3:
+    resolution: {integrity: sha512-rdyqwodZPqbY96mAUg3cAEKK7WsJ3JqZWDfBShSoPvxwB+fnFw1Rjhg3tsTpBhBN1oGlSHatIRJQ+QcoaAU+uA==}
+    dependencies:
+      '@fp-ts/core': 0.1.1
+      '@fp-ts/data': 0.1.0
+      fast-check: 3.6.2
 
   /@tsplus-types/effect__io/0.0.66-f715d9e_@effect+io@0.0.66:
     resolution: {integrity: sha512-+KjTUlbG3fEu1wZ4ceR1rmg5rpgf3cuuxfaOSo0It2a94hu05kKa6GhlEDcymA9+Tk3F14BYxJPUADyHxr6j5w==}
@@ -132,6 +157,14 @@ packages:
       '@effect/io': 0.0.66
     dependencies:
       '@effect/io': 0.0.66
+    dev: true
+
+  /@tsplus-types/effect__io/0.1.3-4e9791d_@effect+io@0.1.3:
+    resolution: {integrity: sha512-ckLZrTqWMoj/O8Z7V8ZHZ6/2yzGqIbf3UE8gfSGqkIhJJiPayoroxwiWpV9qaSoN1FMO+LPJKLCqh3h3d8Hc7Q==}
+    peerDependencies:
+      '@effect/io': 0.1.3
+    dependencies:
+      '@effect/io': 0.1.3
     dev: true
 
   /@tsplus-types/effect__stream/0.0.13-f715d9e_@effect+stream@0.0.13:
@@ -142,6 +175,22 @@ packages:
       '@effect/stream': 0.0.13
     dev: true
 
+  /@tsplus-types/effect__stream/0.1.0-4e9791d_@effect+stream@0.1.0:
+    resolution: {integrity: sha512-TTbDMTx+Yr6Dgwsnyqdvrd0fvMpymeu9xLMsRZtFsigg5jOJymTSeO8lcf1m/GeJyzcRV6srBFB1f2ZzV0rKRQ==}
+    peerDependencies:
+      '@effect/stream': 0.1.0
+    dependencies:
+      '@effect/stream': 0.1.0
+    dev: true
+
+  /@tsplus-types/fp-ts__core/0.1.1-4e9791d_@fp-ts+core@0.1.1:
+    resolution: {integrity: sha512-wU7jH9SukYRpgnt51jHFnKL+SNdjr3JNo0pHe5syhYypYJYoya9YT0jAXZp4xaVWQlEh/78NIIANnEGmwObR1A==}
+    peerDependencies:
+      '@fp-ts/core': 0.1.1
+    dependencies:
+      '@fp-ts/core': 0.1.1
+    dev: true
+
   /@tsplus-types/fp-ts__data/0.0.40-f715d9e_@fp-ts+data@0.0.40:
     resolution: {integrity: sha512-UOViOvnFYIURxVpcTiz6OO5NvxfZ0s/Aklb7MIFtH70dEpbSngW3qtT64iCRqLdE7F7IewU+SBWBb3yDVmOPRA==}
     peerDependencies:
@@ -150,12 +199,20 @@ packages:
       '@fp-ts/data': 0.0.40
     dev: true
 
-  /@tsplus-types/fp-ts__schema/0.0.8-f715d9e_@fp-ts+schema@0.0.8:
-    resolution: {integrity: sha512-I3frhlWBK8lo589Z0O4RISXdBz87Je7Vdan88PKFVuXMz4IELUctn6TUmVNEpBjLo3r2ovkJaI+k//iZONKb/g==}
+  /@tsplus-types/fp-ts__data/0.1.0-4e9791d_@fp-ts+data@0.1.0:
+    resolution: {integrity: sha512-3ZEYKOHr4e9MwDl6mJcYDmvdS0HXJfQqk17W6Xfkjsm999VGL6VJoNoxuoOLZ+WOMzNkptc71qsPparYgl1TlA==}
     peerDependencies:
-      '@fp-ts/schema': 0.0.8
+      '@fp-ts/data': 0.1.0
     dependencies:
-      '@fp-ts/schema': 0.0.8
+      '@fp-ts/data': 0.1.0
+    dev: true
+
+  /@tsplus-types/fp-ts__schema/0.1.3-4e9791d_@fp-ts+schema@0.1.3:
+    resolution: {integrity: sha512-bOiF5eWbAyr7tX8xDI7+mXnY6faDgNiezxeQF5gZq0fIRhPqjKb7Ik78gEBeCrfms5TJsBy3Zp0lVetmD13UPA==}
+    peerDependencies:
+      '@fp-ts/schema': 0.1.3
+    dependencies:
+      '@fp-ts/schema': 0.1.3
     dev: true
 
   /@types/busboy/1.5.0:
@@ -200,8 +257,8 @@ packages:
     engines: {node: '>= 0.8'}
     dev: false
 
-  /fast-check/3.6.0:
-    resolution: {integrity: sha512-T4fVjMD2HKKLMkmfG3obN7xkhQdL+ZxKoS3Asj6dOsUwWhqEqB1FRaWIiFrGD1575sGA6npQn8pMtcbsRpw+3g==}
+  /fast-check/3.6.2:
+    resolution: {integrity: sha512-htRkbkw8B1yVfvrLNiJTnpcvpXrdcgpwZUQdC07dsiUGXaHHWK38t6VCnTmAUf68atyos1+XXXY60VUbSgorAQ==}
     engines: {node: '>=8.0.0'}
     dependencies:
       pure-rand: 6.0.0
@@ -330,6 +387,14 @@ packages:
     resolution: {tarball: https://cdn.jsdelivr.net/npm/@tsplus/installer@0.0.164/compiler/typescript.tgz}
     name: typescript
     version: 5.0.0-tsplus.20230113
+    engines: {node: '>=4.2.0'}
+    hasBin: true
+    dev: true
+
+  '@cdn.jsdelivr.net/npm/@tsplus/installer@0.0.168/compiler/typescript.tgz':
+    resolution: {tarball: https://cdn.jsdelivr.net/npm/@tsplus/installer@0.0.168/compiler/typescript.tgz}
+    name: typescript
+    version: 5.0.0-tsplus.20230128
     engines: {node: '>=4.2.0'}
     hasBin: true
     dev: true
