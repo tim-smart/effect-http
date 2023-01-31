@@ -1,6 +1,7 @@
 import FindMyWay, { HTTPMethod } from "find-my-way"
 import type { HttpRequest } from "./Request.js"
 import type { HttpResponse } from "./Response.js"
+import { Context, Tag, add } from "@fp-ts/data/Context"
 
 export class Router<R = never, E = never, EnvR = never, ReqR = never> {
   constructor(
@@ -53,7 +54,7 @@ export class Router<R = never, E = never, EnvR = never, ReqR = never> {
           prevEnv.flatMap((ctx) =>
             service
               .contramapContext((a) => a.merge(ctx))
-              .map((a) => ctx.add(tag, a)),
+              .map((a) => add(tag, a)(ctx)),
           ),
         )
         .orElseSucceed(() => service.map((a) => Context.make(tag, a))) as any,
