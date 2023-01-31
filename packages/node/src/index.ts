@@ -16,18 +16,16 @@ import * as S from "./internal/stream.js"
 
 export * from "./internal/HttpFs.js"
 
+export type MakeOptions = ListenOptions & {
+  port: number
+  debug?: boolean
+} & Partial<MultipartOptions>
+
 /**
  * @tsplus pipeable effect-http/HttpApp serveNode
  */
 export const make =
-  (
-    makeServer: LazyArg<Http.Server>,
-    options: ListenOptions &
-      MultipartOptions & {
-        port: number
-        debug?: boolean
-      },
-  ) =>
+  (makeServer: LazyArg<Http.Server>, options: MakeOptions) =>
   <R>(httpApp: HttpApp<R, EarlyResponse>): Effect<R, never, never> =>
     Effect.runtime<R>().flatMap((rt) =>
       Effect.asyncInterrupt<never, never, never>(() => {
@@ -62,7 +60,7 @@ const convertRequest = (
     port,
     limits = {},
     multipartFieldTypes = ["application/json"],
-  }: { port: number } & MultipartOptions,
+  }: { port: number } & Partial<MultipartOptions>,
 ) => {
   const url = requestUrl(source, port)
   return new NodeHttpRequest(source, url, url, {
