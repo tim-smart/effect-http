@@ -10,22 +10,24 @@
     "./*": "./dist/*.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepublishOnly": "make tsc"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@effect-http/core": "^0.3.0",
-    "@effect/io": "~0.1.4",
+    "@effect/io": "~0.1.6",
     "@fp-ts/core": "^0.1.1",
     "@fp-ts/data": "~0.1.1"
   },
   "devDependencies": {
-    "@tsplus-types/effect__io": "0.1.4-4e9791d",
-    "@tsplus-types/fp-ts__core": "0.1.1-4e9791d",
-    "@tsplus-types/fp-ts__data": "0.1.1-4e9791d",
-    "bun-types": "^0.5.0",
+    "@changesets/cli": "^2.26.0",
+    "@tsplus-types/effect__io": "0.1.6-af168bc",
+    "@tsplus-types/fp-ts__core": "0.1.1-af168bc",
+    "@tsplus-types/fp-ts__data": "0.1.1-af168bc",
+    "bun-types": "^0.5.4",
     "prettier": "^2.8.3",
     "typescript": "https://cdn.jsdelivr.net/npm/@tsplus/installer@0.0.168/compiler/typescript.tgz"
   },
