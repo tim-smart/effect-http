@@ -1,6 +1,6 @@
 .PHONY: clean
 clean:
-	rm -rf dist tsconfig.tsbuildinfo
+	rm -rf dist *.tsbuildinfo
 
 .PHONY: tsc
 tsc: clean
