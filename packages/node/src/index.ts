@@ -22,9 +22,9 @@ export type MakeOptions = ListenOptions & {
 } & Partial<MultipartOptions>
 
 /**
- * @tsplus pipeable effect-http/HttpApp serveNode
+ * @tsplus pipeable effect-http/HttpApp serve
  */
-export const make =
+export const serve =
   (makeServer: LazyArg<Http.Server>, options: MakeOptions) =>
   <R>(httpApp: HttpApp<R, EarlyResponse>): Effect<R, never, never> =>
     Effect.runtime<R>().flatMap((rt) =>
