@@ -1,6 +1,6 @@
 {
   "name": "@effect-http/node",
-  "version": "0.3.3",
+  "version": "0.4.0",
   "type": "module",
   "publishConfig": {
     "access": "public"
@@ -33,7 +33,7 @@
     "@tsplus-types/fp-ts__core": "0.1.1-cf9876a",
     "@types/node": "^18.11.19",
     "prettier": "^2.8.3",
-    "typescript": "https://cdn.jsdelivr.net/npm/@tsplus/installer@0.0.168/compiler/typescript.tgz"
+    "typescript": "https://cdn.jsdelivr.net/npm/@tsplus/installer@0.0.170/compiler/typescript.tgz"
   },
   "sideEffects": false
 }

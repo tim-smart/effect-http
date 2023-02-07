@@ -40,7 +40,7 @@
     "@types/node": "^18.11.19",
     "@types/range-parser": "^1.2.4",
     "prettier": "^2.8.3",
-    "typescript": "https://cdn.jsdelivr.net/npm/@tsplus/installer@0.0.168/compiler/typescript.tgz"
+    "typescript": "https://cdn.jsdelivr.net/npm/@tsplus/installer@0.0.170/compiler/typescript.tgz"
   },
   "sideEffects": false
 }
