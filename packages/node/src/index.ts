@@ -40,21 +40,23 @@ export const serve =
         })
 
         server.on("request", (request, response) => {
-          Runtime.runFork(runtime)(
+          Runtime.runCallback(runtime)(
             httpApp(convertRequest(request, options))
               .catchTag("EarlyResponse", _ => Effect.succeed(_.response))
-              .flatMap(_ => handleResponse(_, response))
-              .catchAllCause(cause =>
-                Do($ => {
-                  if (!response.headersSent) {
-                    response.writeHead(500)
-                  }
-                  if (!response.writableEnded) {
-                    response.end()
-                  }
-                  $(cause.logErrorCause)
-                }),
-              ),
+              .flatMap(_ => handleResponse(_, response)),
+
+            exit => {
+              if (exit.isFailure()) {
+                if (!response.headersSent) {
+                  response.writeHead(500)
+                }
+                if (!response.writableEnded) {
+                  response.end()
+                }
+
+                exit.cause.logErrorCause.runFork
+              }
+            },
           )
         })
 
@@ -92,13 +94,11 @@ const handleResponse = (
 
   switch (source._tag) {
     case "TextResponse":
-      return Effect.async<never, never, void>(resume => {
+      return Effect(() => {
         headers["content-type"] = source.contentType
         headers["content-length"] = Buffer.byteLength(source.body).toString()
         dest.writeHead(source.status, headers)
-        dest.end(source.body, () => {
-          resume(Effect.unit())
-        })
+        dest.end(source.body)
       })
 
     case "FormDataResponse":
@@ -126,19 +126,15 @@ const handleResponse = (
         .catchTag("WritableError", _ => Effect.fail(new HttpStreamError(_)))
 
     case "RawResponse":
-      return Effect.async<never, never, void>(resume => {
+      return Effect(() => {
         dest.writeHead(source.status, headers)
-        dest.end(source.body, () => {
-          resume(Effect.unit())
-        })
+        dest.end(source.body)
       })
 
     case "EmptyResponse":
-      return Effect.async<never, never, void>(resume => {
+      return Effect(() => {
         dest.writeHead(source.status, headers)
-        dest.end(() => {
-          resume(Effect.unit())
-        })
+        dest.end()
       })
   }
 }
