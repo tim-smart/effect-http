@@ -16,39 +16,51 @@ import * as S from "./internal/stream.js"
 
 export * from "./internal/HttpFs.js"
 
-export type MakeOptions = ListenOptions & {
+export type ServeOptions = ListenOptions & {
   port: number
-  debug?: boolean
 } & Partial<MultipartOptions>
+
+export class NodeHttpError {
+  readonly _tag = "NodeHttpError"
+  constructor(readonly error: Error) {}
+}
 
 /**
  * @tsplus pipeable effect-http/HttpApp serve
  */
 export const serve =
-  (makeServer: LazyArg<Http.Server>, options: MakeOptions) =>
-  <R>(httpApp: HttpApp<R, EarlyResponse>): Effect<R, never, never> =>
-    Effect.runtime<R>().flatMap((rt) =>
-      Effect.asyncInterrupt<never, never, never>(() => {
+  (makeServer: LazyArg<Http.Server>, options: ServeOptions) =>
+  <R>(httpApp: HttpApp<R, EarlyResponse>) =>
+    Effect.runtime<R>().flatMap(runtime =>
+      Effect.asyncInterrupt<never, NodeHttpError, never>(resume => {
         const server = makeServer()
 
+        server.once("error", err => {
+          resume(Effect.fail(new NodeHttpError(err)))
+        })
+
         server.on("request", (request, response) => {
-          Runtime.runCallback(rt)(
+          Runtime.runFork(runtime)(
             httpApp(convertRequest(request, options))
-              .catchTag("EarlyResponse", (_) => Effect.succeed(_.response))
-              .flatMap((_) => handleResponse(_, response)),
-            (exit) => {
-              if (exit.isFailure()) {
-                console.error("@effect-http/node", exit.cause.pretty)
-                response.writeHead(500)
-                response.end()
-              }
-            },
+              .catchTag("EarlyResponse", _ => Effect.succeed(_.response))
+              .flatMap(_ => handleResponse(_, response))
+              .catchAllCause(cause =>
+                Do($ => {
+                  if (!response.headersSent) {
+                    response.writeHead(500)
+                  }
+                  if (!response.writableEnded) {
+                    response.end()
+                  }
+                  $(cause.logErrorCause)
+                }),
+              ),
           )
         })
 
         server.listen(options)
 
-        return Effect.async((resume) => {
+        return Effect.async(resume => {
           server.close(() => resume(Effect.unit()))
         })
       }),
@@ -77,21 +89,28 @@ const handleResponse = (
     source.headers._tag === "Some"
       ? Object.fromEntries(source.headers.value.entries())
       : {}
-  let body: unknown = undefined
 
   switch (source._tag) {
     case "TextResponse":
-      headers["content-type"] = source.contentType
-      body = source.body
-      headers["content-length"] = Buffer.byteLength(source.body).toString()
-      break
+      return Effect.async<never, never, void>(resume => {
+        headers["content-type"] = source.contentType
+        headers["content-length"] = Buffer.byteLength(source.body).toString()
+        dest.writeHead(source.status, headers)
+        dest.end(source.body, () => {
+          resume(Effect.unit())
+        })
+      })
 
     case "FormDataResponse":
-      return Effect(() => {
+      return Effect.async<never, never, void>(resume => {
         const r = new Response(source.body)
         headers["content-type"] = r.headers.get("content-type")!
         dest.writeHead(source.status, headers)
-        Readable.fromWeb(r.body as any).pipe(dest)
+        Readable.fromWeb(r.body as any)
+          .pipe(dest)
+          .once("finish", () => {
+            resume(Effect.unit())
+          })
       })
 
     case "StreamResponse":
@@ -104,17 +123,24 @@ const handleResponse = (
         dest.writeHead(source.status, headers)
       })
         .tap(() => source.body.run(S.sink(dest)))
-        .catchTag("WritableError", (e) => Effect.fail(new HttpStreamError(e)))
+        .catchTag("WritableError", _ => Effect.fail(new HttpStreamError(_)))
 
     case "RawResponse":
-      body = source.body
-      break
-  }
+      return Effect.async<never, never, void>(resume => {
+        dest.writeHead(source.status, headers)
+        dest.end(source.body, () => {
+          resume(Effect.unit())
+        })
+      })
 
-  return Effect(() => {
-    dest.writeHead(source.status, headers)
-    dest.end(body)
-  })
+    case "EmptyResponse":
+      return Effect.async<never, never, void>(resume => {
+        dest.writeHead(source.status, headers)
+        dest.end(() => {
+          resume(Effect.unit())
+        })
+      })
+  }
 }
 
 const requestUrl = (source: Http.IncomingMessage, port: number) => {
