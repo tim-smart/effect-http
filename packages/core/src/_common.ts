@@ -1,6 +1,6 @@
 export type { Effect } from "@effect/io/Effect"
 export type { Stream } from "@effect/stream/Stream"
-export { Context, Tag } from "@fp-ts/data/Context"
+export { Context, Tag } from "@effect/data/Context"
 export type { LazyArg } from "@fp-ts/core/Function"
 export type { Option as Maybe } from "@fp-ts/core/Option"
 export type { Schema } from "@fp-ts/schema/Schema"

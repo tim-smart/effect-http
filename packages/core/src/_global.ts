@@ -46,12 +46,12 @@ import type { Schema } from "@fp-ts/schema/Schema"
 /**
  * @tsplus global
  */
-import { Chunk } from "@fp-ts/data/Chunk"
+import { Chunk } from "@effect/data/Chunk"
 
 /**
  * @tsplus global
  */
-import { Context, Tag } from "@fp-ts/data/Context"
+import { Context, Tag } from "@effect/data/Context"
 
 /**
  * @tsplus global
@@ -61,7 +61,7 @@ import { Either } from "@fp-ts/core/Either"
 /**
  * @tsplus global
  */
-import type { HashMap } from "@fp-ts/data/HashMap"
+import type { HashMap } from "@effect/data/HashMap"
 
 /**
  * @tsplus global
@@ -94,11 +94,6 @@ import { HttpRequest, RequestBodyError } from "@effect-http/core/Request"
  * @tsplus global
  */
 import { Router, RouteNotFound } from "@effect-http/core/router"
-
-/**
- * @tsplus global
- */
-import type { EffectAspects } from "@tsplus-types/effect__io/Aspects"
 
 /**
  * @tsplus global

@@ -133,13 +133,15 @@ export const formData = RouteContext.accessWithEffect((_) => _.request.formData)
 /**
  * @tsplus static effect-http/Request.Ops formDataStream
  */
-export const formDataStream = Stream.serviceWithStream(RouteContext)(
+export const formDataStream = Stream.serviceWithStream(
+  RouteContext,
   (_) => _.request.formDataStream,
 )
 
 /**
  * @tsplus static effect-http/Request.Ops stream
  */
-export const stream = Stream.serviceWithStream(RouteContext)(
+export const stream = Stream.serviceWithStream(
+  RouteContext,
   (_) => _.request.stream,
 )
