@@ -8,26 +8,26 @@ importers:
   packages/bun:
     specifiers:
       '@changesets/cli': ^2.26.0
-      '@effect-http/core': ^0.3.0
-      '@effect/io': ~0.1.6
+      '@effect-http/core': workspace:^0.4.0
+      '@effect/data': ^0.0.1
+      '@effect/io': ~0.1.10
       '@fp-ts/core': ^0.1.1
-      '@fp-ts/data': ~0.1.1
-      '@tsplus-types/effect__io': 0.1.6-af168bc
-      '@tsplus-types/fp-ts__core': 0.1.1-af168bc
-      '@tsplus-types/fp-ts__data': 0.1.1-af168bc
+      '@tsplus-types/effect__data': 0.0.1-cf9876a
+      '@tsplus-types/effect__io': 0.1.10-cf9876a
+      '@tsplus-types/fp-ts__core': 0.1.1-cf9876a
       bun-types: ^0.5.4
       prettier: ^2.8.3
       typescript: https://cdn.jsdelivr.net/npm/@tsplus/installer@0.0.168/compiler/typescript.tgz
     dependencies:
       '@effect-http/core': link:../core
-      '@effect/io': 0.1.6
+      '@effect/data': 0.0.1
+      '@effect/io': 0.1.10
       '@fp-ts/core': 0.1.1
-      '@fp-ts/data': 0.1.1
     devDependencies:
       '@changesets/cli': 2.26.0
-      '@tsplus-types/effect__io': 0.1.6-af168bc_@effect+io@0.1.6
-      '@tsplus-types/fp-ts__core': 0.1.1-af168bc_@fp-ts+core@0.1.1
-      '@tsplus-types/fp-ts__data': 0.1.1-af168bc_@fp-ts+data@0.1.1
+      '@tsplus-types/effect__data': 0.0.1-cf9876a_@effect+data@0.0.1
+      '@tsplus-types/effect__io': 0.1.10-cf9876a_@effect+io@0.1.10
+      '@tsplus-types/fp-ts__core': 0.1.1-cf9876a_@fp-ts+core@0.1.1
       bun-types: 0.5.4
       prettier: 2.8.3
       typescript: '@cdn.jsdelivr.net/npm/@tsplus/installer@0.0.168/compiler/typescript.tgz'
@@ -349,7 +349,7 @@ packages:
   /@effect/stream/0.1.0:
     resolution: {integrity: sha512-GeJNY5WKV6h/aLynZpJTR/xmvTD1JQq8hk9bt+Z2OxHLwyBZ+YSQetA9YsxQsZGLUZl+h1twSdkI0n7d0mx3Lw==}
     dependencies:
-      '@effect/io': 0.1.6
+      '@effect/io': 0.1.10
       '@fp-ts/core': 0.1.1
       '@fp-ts/data': 0.1.1
 
