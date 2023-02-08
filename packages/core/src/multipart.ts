@@ -10,6 +10,17 @@ export class FormDataField {
   ) {}
 }
 
+export class FormDataFileError {
+  readonly _tag = "FormDataFileError"
+
+  constructor(
+    readonly key: string,
+    readonly name: string,
+    readonly contentType: string,
+    readonly error: unknown,
+  ) {}
+}
+
 export class FormDataFile {
   readonly _tag = "FormDataFile"
 
@@ -17,7 +28,7 @@ export class FormDataFile {
     readonly key: string,
     readonly name: string,
     readonly contentType: string,
-    readonly content: Stream<never, ReadableStreamError, Uint8Array>,
+    readonly content: Stream<never, FormDataFileError, Uint8Array>,
     readonly source?: unknown,
   ) {}
 }
