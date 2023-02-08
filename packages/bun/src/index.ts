@@ -17,7 +17,7 @@ import * as Fs from "node:fs"
 export const make =
   (options: Exclude<GenericServeOptions, "error"> = {}) =>
   <R>(httpApp: HttpApp<R, EarlyResponse>): Effect<R, never, void> =>
-    Effect.runtime<R>().flatMap((rt) =>
+    Effect.runtime<R>().flatMap(rt =>
       Effect.asyncInterrupt<never, never, void>(() => {
         const server = Bun.serve({
           ...options,
@@ -26,7 +26,7 @@ export const make =
               httpApp(
                 HttpRequest.fromStandard(request, request.method, request.url),
               )
-                .catchTag("EarlyResponse", (e) => Effect.succeed(e.response))
+                .catchTag("EarlyResponse", e => Effect.succeed(e.response))
                 .map(HttpResponse.toStandard),
             )
           },
@@ -39,8 +39,8 @@ export const make =
     )
 
 const bunHttpFsImpl: HttpFs = {
-  toResponse(path, { status, contentType, range } = {}) {
-    return Effect.async<never, SystemError, Fs.Stats>((resume) => {
+  toResponse(path, { status, contentType, range }) {
+    return Effect.async<never, SystemError, Fs.Stats>(resume => {
       Fs.stat(path, (err, stats) => {
         if (err) {
           resume(Effect.fail(err))
@@ -60,7 +60,7 @@ const bunHttpFsImpl: HttpFs = {
 
         return HttpResponse.raw(file, { status })
       })
-      .mapError((_) =>
+      .mapError(_ =>
         _.code === "ENOENT" ? new HttpFsNotFound(path, _) : new HttpFsError(_),
       )
   },
