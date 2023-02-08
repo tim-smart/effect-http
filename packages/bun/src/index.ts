@@ -12,31 +12,39 @@ import { GenericServeOptions, SystemError } from "bun"
 import * as Fs from "node:fs"
 
 /**
- * @tsplus pipeable effect-http/HttpApp serveBun
+ * @tsplus pipeable effect-http/HttpApp serve
  */
-export const make =
+export const serve =
   (options: Exclude<GenericServeOptions, "error"> = {}) =>
-  <R>(httpApp: HttpApp<R, EarlyResponse>): Effect<R, never, void> =>
-    Effect.runtime<R>().flatMap(rt =>
-      Effect.asyncInterrupt<never, never, void>(() => {
-        const server = Bun.serve({
-          ...options,
-          fetch(request) {
-            return rt.unsafeRunSyncOrPromise(
-              httpApp(
-                HttpRequest.fromStandard(request, request.method, request.url),
+  <R>(
+    httpApp: HttpApp<R, EarlyResponse>,
+  ): Effect<Exclude<R, HttpFs>, never, void> =>
+    Effect.runtime<R>()
+      .flatMap(rt =>
+        Effect.asyncInterrupt<never, never, void>(() => {
+          const server = Bun.serve({
+            ...options,
+            fetch(request) {
+              return rt.unsafeRunSyncOrPromise(
+                httpApp(
+                  HttpRequest.fromStandard(
+                    request,
+                    request.method,
+                    request.url,
+                  ),
+                )
+                  .catchTag("EarlyResponse", e => Effect.succeed(e.response))
+                  .map(HttpResponse.toStandard),
               )
-                .catchTag("EarlyResponse", e => Effect.succeed(e.response))
-                .map(HttpResponse.toStandard),
-            )
-          },
-        })
+            },
+          })
 
-        return Effect(() => {
-          server.stop()
-        })
-      }),
-    )
+          return Effect(() => {
+            server.stop()
+          })
+        }),
+      )
+      .provideService(HttpFs, bunHttpFsImpl)
 
 const bunHttpFsImpl: HttpFs = {
   toResponse(path, { status, contentType, range }) {
