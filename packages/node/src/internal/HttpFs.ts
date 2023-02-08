@@ -8,8 +8,8 @@ import * as Fs from "./fs.js"
 import type { Layer } from "@effect/io/Layer"
 
 export const nodeHttpFsImpl: HttpFs = {
-  toResponse: (path, { status = 200, range, contentType } = {}) =>
-    Do(($) => {
+  toResponse: (path, { status, range, contentType }) =>
+    Do($ => {
       const headers = new Headers()
       const stats = $(Fs.stat(path))
 
@@ -23,14 +23,14 @@ export const nodeHttpFsImpl: HttpFs = {
       const stream = Fs.stream(path, {
         offset: range ? range[0] : undefined,
         bytesToRead: range ? range[1] - range[0] : undefined,
-      }).mapError((e) => new HttpStreamError(e))
+      }).mapError(e => new HttpStreamError(e))
 
       return HttpResponse.stream(stream, {
         status,
         headers,
         contentType,
       })
-    }).mapError((e) =>
+    }).mapError(e =>
       e.error.code === "ENOENT"
         ? new HttpFsNotFound(path, e)
         : new HttpFsError(e),

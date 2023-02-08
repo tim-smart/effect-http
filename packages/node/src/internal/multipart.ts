@@ -2,11 +2,11 @@ import BB from "busboy"
 import type { Effect } from "@effect/io/Effect"
 import { RequestBodyError } from "@effect-http/core/Request"
 import { IncomingMessage } from "http"
-import { Readable } from "stream"
 import * as Stream from "@effect/stream/Stream"
 import {
   FormDataField,
   FormDataFile,
+  FormDataFileError,
   FormDataPart,
 } from "@effect-http/core/multipart"
 import * as OS from "os"
@@ -14,7 +14,7 @@ import * as NS from "stream/promises"
 import * as Path from "path"
 import * as NFS from "fs"
 import * as Crypto from "crypto"
-import { readableToString } from "./stream.js"
+import { fromReadable, readableToString } from "./stream.js"
 
 export interface MultipartOptions {
   limits: BB.Limits
@@ -29,7 +29,7 @@ export const fromRequest = (
   { limits, multipartFieldTypes }: MultipartOptions,
 ) => {
   const make = Effect(BB({ headers: source.headers, limits }))
-    .acquireRelease((_) =>
+    .acquireRelease(_ =>
       Effect(() => {
         _.removeAllListeners()
 
@@ -38,8 +38,8 @@ export const fromRequest = (
         }
       }),
     )
-    .map((bb) =>
-      Stream.async<never, RequestBodyError, FormDataPart>((emit) => {
+    .map(bb =>
+      Stream.async<never, RequestBodyError, FormDataPart>(emit => {
         bb.on("field", (name, value, info) => {
           emit.single(new FormDataField(name, info.mimeType, value))
         })
@@ -50,13 +50,16 @@ export const fromRequest = (
               name,
               info.filename,
               info.mimeType,
-              () => Readable.toWeb(stream) as any,
+              fromReadable<Uint8Array>(() => stream).mapError(
+                _ =>
+                  new FormDataFileError(name, info.filename, info.mimeType, _),
+              ),
               stream,
             ),
           )
         })
 
-        bb.on("error", (_) => {
+        bb.on("error", _ => {
           emit.fail(new RequestBodyError(_))
         })
 
@@ -65,14 +68,12 @@ export const fromRequest = (
         })
 
         source.pipe(bb)
-      }).mapEffect((part) =>
+      }).mapEffect(part =>
         part._tag === "FormDataFile" &&
-        multipartFieldTypes.some((_) => part.contentType.includes(_))
+        multipartFieldTypes.some(_ => part.contentType.includes(_))
           ? readableToString(part.source as any)
-              .map(
-                (body) => new FormDataField(part.key, part.contentType, body),
-              )
-              .mapError((_) => new RequestBodyError(_))
+              .map(body => new FormDataField(part.key, part.contentType, body))
+              .mapError(_ => new RequestBodyError(_))
           : Effect.succeed(part),
       ),
     )
@@ -87,8 +88,8 @@ export const formData = (source: IncomingMessage, opts: MultipartOptions) =>
       return Effect.succeed(formData)
     }
 
-    return Do(($) => {
-      const dir = $(randomTmpDir.mapError((e) => new RequestBodyError(e)))
+    return Do($ => {
+      const dir = $(randomTmpDir.mapError(e => new RequestBodyError(e)))
       const path = Path.join(dir, part.name)
 
       formData.append(part.key, new Blob(), path)
@@ -96,18 +97,18 @@ export const formData = (source: IncomingMessage, opts: MultipartOptions) =>
       return $(
         Effect.tryCatchPromise(
           () => NS.pipeline(part.source as any, NFS.createWriteStream(path)),
-          (reason) => new RequestBodyError(reason),
+          reason => new RequestBodyError(reason),
         ).as(formData),
       )
     })
   })
 
 const randomTmpDir = Effect.async<never, NodeJS.ErrnoException, string>(
-  (resume) => {
+  resume => {
     const random = Crypto.randomBytes(10).toString("hex")
     const dir = Path.join(OS.tmpdir(), random)
 
-    NFS.mkdir(dir, (err) => {
+    NFS.mkdir(dir, err => {
       if (err) {
         resume(Effect.fail(err))
       } else {

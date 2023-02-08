@@ -13,6 +13,8 @@ import { Readable } from "stream"
 import { NodeHttpRequest } from "./internal/Request.js"
 import { MultipartOptions } from "./internal/multipart.js"
 import * as S from "./internal/stream.js"
+import { HttpFs } from "@effect-http/core/internal/HttpFs"
+import { nodeHttpFsImpl } from "./internal/HttpFs.js"
 
 export * from "./internal/HttpFs.js"
 
@@ -31,42 +33,44 @@ export class NodeHttpError {
 export const serve =
   (makeServer: LazyArg<Http.Server>, options: ServeOptions) =>
   <R>(httpApp: HttpApp<R, EarlyResponse>) =>
-    Effect.runtime<R>().flatMap(runtime =>
-      Effect.asyncInterrupt<never, NodeHttpError, never>(resume => {
-        const server = makeServer()
+    Effect.runtime<R>()
+      .flatMap(runtime =>
+        Effect.asyncInterrupt<never, NodeHttpError, never>(resume => {
+          const server = makeServer()
 
-        server.once("error", err => {
-          resume(Effect.fail(new NodeHttpError(err)))
-        })
+          server.once("error", err => {
+            resume(Effect.fail(new NodeHttpError(err)))
+          })
 
-        server.on("request", (request, response) => {
-          Runtime.runCallback(runtime)(
-            httpApp(convertRequest(request, options))
-              .catchTag("EarlyResponse", _ => Effect.succeed(_.response))
-              .flatMap(_ => handleResponse(_, response)),
+          server.on("request", (request, response) => {
+            Runtime.runCallback(runtime)(
+              httpApp(convertRequest(request, options))
+                .catchTag("EarlyResponse", _ => Effect.succeed(_.response))
+                .flatMap(_ => handleResponse(_, response)),
 
-            exit => {
-              if (exit.isFailure()) {
-                if (!response.headersSent) {
-                  response.writeHead(500)
+              exit => {
+                if (exit.isFailure()) {
+                  if (!response.headersSent) {
+                    response.writeHead(500)
+                  }
+                  if (!response.writableEnded) {
+                    response.end()
+                  }
+
+                  exit.cause.logErrorCause.runFork
                 }
-                if (!response.writableEnded) {
-                  response.end()
-                }
+              },
+            )
+          })
 
-                exit.cause.logErrorCause.runFork
-              }
-            },
-          )
-        })
+          server.listen(options)
 
-        server.listen(options)
-
-        return Effect.async(resume => {
-          server.close(() => resume(Effect.unit()))
-        })
-      }),
-    )
+          return Effect.async(resume => {
+            server.close(() => resume(Effect.unit()))
+          })
+        }),
+      )
+      .provideService(HttpFs, nodeHttpFsImpl)
 
 const convertRequest = (
   source: Http.IncomingMessage,
@@ -87,23 +91,13 @@ const handleResponse = (
   source: HttpResponse,
   dest: Http.ServerResponse,
 ): Effect<never, HttpStreamError, void> => {
-  const headers: Record<string, string> =
-    source.headers._tag === "Some"
-      ? Object.fromEntries(source.headers.value.entries())
-      : {}
-
   switch (source._tag) {
-    case "TextResponse":
-      return Effect(() => {
-        headers["content-type"] = source.contentType
-        headers["content-length"] = Buffer.byteLength(source.body).toString()
-        dest.writeHead(source.status, headers)
-        dest.end(source.body)
-      })
-
     case "FormDataResponse":
       return Effect.async<never, never, void>(resume => {
         const r = new Response(source.body)
+        const headers = source.headers
+          ? Object.fromEntries(source.headers.entries())
+          : {}
         headers["content-type"] = r.headers.get("content-type")!
         dest.writeHead(source.status, headers)
         Readable.fromWeb(r.body as any)
@@ -114,26 +108,36 @@ const handleResponse = (
       })
 
     case "StreamResponse":
-      headers["content-type"] = source.contentType
-      if (source.contentLength._tag === "Some") {
-        headers["content-length"] = source.contentLength.value.toString()
-      }
-
       return Effect(() => {
-        dest.writeHead(source.status, headers)
+        dest.writeHead(
+          source.status,
+          Object.fromEntries(source.headers.entries()),
+        )
       })
         .tap(() => source.body.run(S.sink(dest)))
         .catchTag("WritableError", _ => Effect.fail(new HttpStreamError(_)))
 
     case "RawResponse":
       return Effect(() => {
-        dest.writeHead(source.status, headers)
+        if (source.headers) {
+          dest.writeHead(
+            source.status,
+            Object.fromEntries(source.headers.entries()),
+          )
+        } else {
+          dest.writeHead(source.status)
+        }
         dest.end(source.body)
       })
 
     case "EmptyResponse":
       return Effect(() => {
-        dest.writeHead(source.status, headers)
+        dest.writeHead(
+          source.status,
+          source.headers
+            ? Object.fromEntries(source.headers.entries())
+            : undefined,
+        )
         dest.end()
       })
   }
