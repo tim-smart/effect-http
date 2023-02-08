@@ -31,6 +31,43 @@ export const catchTag =
     self(request).catchTag(tag, onError)
 
 /**
+ * @tsplus pipeable effect-http/HttpApp catchTags
+ */
+export const catchTags =
+  <
+    E extends { _tag: string },
+    Cases extends {
+      [K in E["_tag"]]?: (
+        error: Extract<E, { _tag: K }>,
+      ) => Effect<any, any, HttpResponse>
+    },
+  >(
+    cases: Cases,
+  ) =>
+  <R>(
+    self: HttpApp<R, E>,
+  ): HttpApp<
+    | R
+    | {
+        [K in keyof Cases]: Cases[K] extends (
+          ...args: Array<any>
+        ) => Effect<infer R, any, any>
+          ? R
+          : never
+      }[keyof Cases],
+    | Exclude<E, { _tag: keyof Cases }>
+    | {
+        [K in keyof Cases]: Cases[K] extends (
+          ...args: Array<any>
+        ) => Effect<any, infer E, any>
+          ? E
+          : never
+      }[keyof Cases]
+  > =>
+  request =>
+    self(request).catchTags(cases as any) as any
+
+/**
  * @tsplus pipeable effect-http/HttpApp catchAll
  */
 export const catchAll =
