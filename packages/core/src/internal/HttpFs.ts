@@ -18,7 +18,7 @@ export class HttpFsNotFound {
 export interface HttpFs {
   toResponse: (
     path: string,
-    opts?: ToResponseOptions,
+    opts: ToResponseOptions,
   ) => Effect<never, HttpFsNotFound | HttpFsError, HttpResponse>
 }
 
