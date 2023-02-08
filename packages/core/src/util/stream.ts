@@ -3,12 +3,12 @@ export const fromReadableStream = <A = Uint8Array>(
 ) =>
   Stream.unwrapScoped(
     Effect(() => evaluate().getReader())
-      .acquireRelease((reader) => Effect.promise(reader.cancel()))
-      .map((reader) =>
+      .acquireRelease(reader => Effect.promise(reader.cancel()))
+      .map(reader =>
         Stream.repeatEffectOption(
           Effect.tryCatchPromise(
             () => reader.read(),
-            (reason) => Maybe.some(new ReadableStreamError(reason)),
+            reason => Maybe.some(new ReadableStreamError(reason)),
           ).flatMap(({ value, done }) =>
             done ? Effect.fail(Maybe.none()) : Effect.succeed(value),
           ),
@@ -22,9 +22,9 @@ export const fromReadableStreamByob = (
 ) =>
   Stream.unwrapScoped(
     Effect(() => evaluate().getReader({ mode: "byob" }))
-      .acquireRelease((reader) => Effect.promise(reader.cancel()))
-      .map((reader) =>
-        readChunk(reader, allocSize).forever.catchAll((e) =>
+      .acquireRelease(reader => Effect.promise(reader.cancel()))
+      .map(reader =>
+        readChunk(reader, allocSize).forever.catchAll(e =>
           e._tag === "EOF" ? Stream.empty : Stream.fail(e),
         ),
       ),
@@ -42,11 +42,11 @@ class EOF {
 const readChunk = (reader: ReadableStreamBYOBReader, size: number) => {
   const buffer = new ArrayBuffer(size)
 
-  return Stream.paginateEffect(0, (offset) =>
+  return Stream.paginateEffect(0, offset =>
     Effect.tryCatchPromise(
       () =>
         reader.read(new Uint8Array(buffer, offset, buffer.byteLength - offset)),
-      (reason) => new ReadableStreamError(reason),
+      reason => new ReadableStreamError(reason),
     ).flatMap(({ done, value }) => {
       if (done) {
         return Effect.fail(new EOF())
@@ -72,9 +72,9 @@ export const toReadableStream = <E, A>(source: Stream<never, E, A>) => {
       scope = Scope.make().runSync
       pull = source.toPull
         .use(scope)
-        .runSync.tap((_) =>
+        .runSync.tap(_ =>
           Effect(() => {
-            _.forEach((_) => {
+            _.forEach(_ => {
               controller.enqueue(_)
             })
           }),
@@ -85,7 +85,7 @@ export const toReadableStream = <E, A>(source: Stream<never, E, A>) => {
             controller.close()
           }),
         )
-        .catchTag("Some", (e) =>
+        .catchTag("Some", e =>
           Effect(() => {
             controller.error(e.value)
           }),

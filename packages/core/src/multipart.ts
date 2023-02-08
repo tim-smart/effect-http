@@ -17,11 +17,7 @@ export class FormDataFile {
     readonly key: string,
     readonly name: string,
     readonly contentType: string,
-    readonly content: LazyArg<ReadableStream<Uint8Array>>,
+    readonly content: Stream<never, ReadableStreamError, Uint8Array>,
     readonly source?: unknown,
   ) {}
-
-  get stream() {
-    return fromReadableStream(this.content)
-  }
 }

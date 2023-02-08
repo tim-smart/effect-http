@@ -6,7 +6,7 @@ import type { HttpResponse } from "./Response.js"
 export const map =
   (f: (r: HttpResponse) => HttpResponse) =>
   <R, E>(self: HttpApp<R, E>): HttpApp<R, E> =>
-  (request) =>
+  request =>
     self(request).map(f)
 
 /**
@@ -15,7 +15,7 @@ export const map =
 export const mapEffect =
   <R2, E2>(f: (r: HttpResponse) => Effect<R2, E2, HttpResponse>) =>
   <R, E>(self: HttpApp<R, E>): HttpApp<R | R2, E | E2> =>
-  (request) =>
+  request =>
     self(request).flatMap(f)
 
 /**
@@ -27,7 +27,7 @@ export const catchTag =
     onError: (e: Extract<E, { _tag: K }>) => Effect<R1, E1, HttpResponse>,
   ) =>
   <R>(self: HttpApp<R, E>): HttpApp<R | R1, E1 | Exclude<E, { _tag: K }>> =>
-  (request) =>
+  request =>
     self(request).catchTag(tag, onError)
 
 /**
@@ -36,7 +36,7 @@ export const catchTag =
 export const catchAll =
   <E, R1, E1>(onError: (e: E) => Effect<R1, E1, HttpResponse>) =>
   <R>(self: HttpApp<R, E>): HttpApp<R | R1, E1> =>
-  (request) =>
+  request =>
     self(request).catchAll(onError)
 
 /**

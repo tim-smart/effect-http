@@ -12,14 +12,14 @@ export class DecodeSchemaError {
 export const decode = <A>(schema: Schema<A>) => {
   const decode = Parser.decode(schema)
 
-  return Do(($) => {
+  return Do($ => {
     const ctx = $(Effect.service(RouteContext))
     const params = $(parseBodyWithParams(ctx))
 
     return $(
       Effect.fromEither(
         decode(params).mapLeft(
-          (errors) => new DecodeSchemaError(errors, ctx.request, params),
+          errors => new DecodeSchemaError(errors, ctx.request, params),
         ),
       ),
     )
@@ -29,7 +29,7 @@ export const decode = <A>(schema: Schema<A>) => {
 export const decodeParams = <A>(schema: Schema<A>) => {
   const decode = Parser.decode(schema)
 
-  return Do(($) => {
+  return Do($ => {
     const { request, params, searchParams } = $(Effect.service(RouteContext))
 
     return $(
@@ -37,10 +37,15 @@ export const decodeParams = <A>(schema: Schema<A>) => {
         decode({
           ...params,
           ...searchParams,
-        }).mapLeft((errors) => new DecodeSchemaError(errors, request, params)),
+        }).mapLeft(errors => new DecodeSchemaError(errors, request, params)),
       ),
     )
   })
+}
+
+export class FormDataKeyNotFound {
+  readonly _tag = "FormDataKeyNotFound"
+  constructor(readonly key: string) {}
 }
 
 export const decodeJsonFromFormData =
@@ -48,25 +53,25 @@ export const decodeJsonFromFormData =
   (key: string, formData?: FormData) => {
     const decode = Parser.decode(schema)
 
-    return Do(($) => {
+    return Do($ => {
       const { request } = $(Effect.service(RouteContext))
       const data = $(formData ? Effect.succeed(formData) : request.formData)
 
       const result = Either.fromNullable(
-        new RequestBodyError(`decodeFormData: ${key} not found`),
+        new RequestBodyError(new FormDataKeyNotFound(key)),
       )(data.get(key))
-        .flatMap((a) =>
+        .flatMap(a =>
           Either.fromThrowable(
             () => JSON.parse(a.toString()) as unknown,
-            (reason) => new RequestBodyError(reason),
+            reason => new RequestBodyError(reason),
           ),
         )
-        .flatMap((a) =>
+        .flatMap(a =>
           decode(a).mapLeft(
-            (errors) => new DecodeSchemaError(errors, request, a),
+            errors => new DecodeSchemaError(errors, request, a),
           ),
         )
-        .map((value) => [value, data] as const)
+        .map(value => [value, data] as const)
 
       return $(Effect.fromEither(result))
     })
@@ -102,9 +107,9 @@ export const parseBody = (request: HttpRequest) => {
 }
 
 export const queryStringBody = (request: HttpRequest) =>
-  request.text.flatMap((a) =>
+  request.text.flatMap(a =>
     Effect.tryCatch(
       () => Object.fromEntries(new URLSearchParams(a).entries()),
-      (reason) => new RequestBodyError(reason),
+      reason => new RequestBodyError(reason),
     ),
   )

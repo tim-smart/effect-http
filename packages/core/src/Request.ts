@@ -59,21 +59,21 @@ class HttpRequestImpl implements HttpRequest {
   get json() {
     return Effect.tryCatchPromise(
       () => this.source.json(),
-      (reason) => new RequestBodyError(reason),
+      reason => new RequestBodyError(reason),
     )
   }
 
   get text() {
     return Effect.tryCatchPromise(
       () => this.source.text(),
-      (reason) => new RequestBodyError(reason),
+      reason => new RequestBodyError(reason),
     )
   }
 
   get formData() {
     return Effect.tryCatchPromise(
       () => this.source.formData(),
-      (reason) => new RequestBodyError(reason),
+      reason => new RequestBodyError(reason),
     )
   }
 
@@ -84,7 +84,7 @@ class HttpRequestImpl implements HttpRequest {
   get stream() {
     return this.source.body
       ? fromReadableStream(this.source.body).mapError(
-          (_) => new RequestBodyError(_),
+          _ => new RequestBodyError(_),
         )
       : Stream.fail(new RequestBodyError("no body"))
   }
@@ -118,24 +118,24 @@ export const params = RouteContext.accessWith(
 /**
  * @tsplus static effect-http/Request.Ops json
  */
-export const json = RouteContext.accessWithEffect((_) => _.request.json)
+export const json = RouteContext.accessWithEffect(_ => _.request.json)
 
 /**
  * @tsplus static effect-http/Request.Ops text
  */
-export const text = RouteContext.accessWithEffect((_) => _.request.text)
+export const text = RouteContext.accessWithEffect(_ => _.request.text)
 
 /**
  * @tsplus static effect-http/Request.Ops formData
  */
-export const formData = RouteContext.accessWithEffect((_) => _.request.formData)
+export const formData = RouteContext.accessWithEffect(_ => _.request.formData)
 
 /**
  * @tsplus static effect-http/Request.Ops formDataStream
  */
 export const formDataStream = Stream.serviceWithStream(
   RouteContext,
-  (_) => _.request.formDataStream,
+  _ => _.request.formDataStream,
 )
 
 /**
@@ -143,5 +143,5 @@ export const formDataStream = Stream.serviceWithStream(
  */
 export const stream = Stream.serviceWithStream(
   RouteContext,
-  (_) => _.request.stream,
+  _ => _.request.stream,
 )

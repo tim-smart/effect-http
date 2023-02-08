@@ -50,14 +50,14 @@ export class Router<R = never, E = never, EnvR = never, ReqR = never> {
     >(
       this.routes as any,
       this.env
-        .map((prevEnv) =>
-          prevEnv.flatMap((ctx) =>
+        .map(prevEnv =>
+          prevEnv.flatMap(ctx =>
             service
-              .contramapContext((a) => a.merge(ctx))
-              .map((a) => add(tag, a)(ctx)),
+              .contramapContext(a => a.merge(ctx))
+              .map(a => add(tag, a)(ctx)),
           ),
         )
-        .orElseSucceed(() => service.map((a) => Context.make(tag, a))) as any,
+        .orElseSucceed(() => service.map(a => Context.make(tag, a))) as any,
       this.mounts as any,
     )
   }
@@ -86,7 +86,7 @@ export class Router<R = never, E = never, EnvR = never, ReqR = never> {
   routesWithEnv(
     prefix?: string,
   ): (readonly [Route<R, E>, Maybe<Effect<R, E, Context<ReqR>>>])[] {
-    let allRoutes = this.routes.flatMap((a) =>
+    let allRoutes = this.routes.flatMap(a =>
       a._tag === "Route"
         ? [[a, this.env] as const]
         : a._tag === "ConcatWithPrefix"
@@ -109,15 +109,15 @@ export class Router<R = never, E = never, EnvR = never, ReqR = never> {
       route,
       this.env.match(
         () => env,
-        (selfEnv) =>
+        selfEnv =>
           env.match(
             () => Maybe.some(selfEnv),
-            (prevEnv) =>
+            prevEnv =>
               Maybe.some(
-                selfEnv.flatMap((selfCtx) =>
+                selfEnv.flatMap(selfCtx =>
                   prevEnv
                     .contramapContext((a: Context<any>) => a.merge(selfCtx))
-                    .map((prevCtx) => selfCtx.merge(prevCtx)),
+                    .map(prevCtx => selfCtx.merge(prevCtx)),
                 ),
               ),
           ),
@@ -132,10 +132,8 @@ export class Router<R = never, E = never, EnvR = never, ReqR = never> {
     for (const [route, env] of routes) {
       const handler = env.match(
         () => route.handler,
-        (env) =>
-          env.flatMap((ctx) =>
-            route.handler.contramapContext((a) => a.merge(ctx)),
-          ),
+        env =>
+          env.flatMap(ctx => route.handler.contramapContext(a => a.merge(ctx))),
       )
       router.on(route.method, route.path, () => handler)
     }
@@ -144,7 +142,7 @@ export class Router<R = never, E = never, EnvR = never, ReqR = never> {
     const mounts = [...this.mounts]
     const mountsLength = mounts.length
 
-    return (request) => {
+    return request => {
       if (hasMounts) {
         const urlObj = new URL(request.url)
 
