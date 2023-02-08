@@ -190,6 +190,7 @@ export const raw = (
 export const file = (path: string, opts: Partial<ToResponseOptions> = {}) => {
   const options: ToResponseOptions = {
     ...opts,
+    status: opts.status || 200,
     contentType: Mime.lookup(path) || "application/octet-stream",
   }
 

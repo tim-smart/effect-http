@@ -1,5 +1,5 @@
 export interface ToResponseOptions {
-  readonly status?: number
+  readonly status: number
   readonly contentType: string
   readonly range?: readonly [start: number, end: number]
   readonly headers?: Headers
