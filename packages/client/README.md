@@ -49,17 +49,15 @@ const userResponseExecutor = pipe(
   Http.executor.mapEffect(_ => _.decode(User)),
 )
 
-export const createUser: (
-  user: User,
-) => Effect.Effect<never, Http.HttpClientError, User> = pipe(
+export const createUser = pipe(
   Http.post("/users"),
-  Http.withSchema(User_, userResponseExecutor),
+  Http.withSchema(User, userResponseExecutor),
 )
 
 export const updateUser = (user: User) =>
   pipe(
     Http.patch(`/users/${user.id}`),
-    Http.withSchema(User_, userResponseExecutor),
+    Http.withSchema(User, userResponseExecutor),
     run => run(user),
   )
 ```
