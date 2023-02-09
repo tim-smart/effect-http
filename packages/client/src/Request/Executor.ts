@@ -22,6 +22,15 @@ export interface RequestExecutorOptions<O> {
 }
 
 /**
+ * @tsplus pipeable effect-http/client/RequestExecutor contramap
+ */
+export const contramap =
+  (f: (a: Request) => Request) =>
+  <A>(self: RequestExecutor<A>): RequestExecutor<A> =>
+  request =>
+    self(f(request))
+
+/**
  * @tsplus pipeable effect-http/client/RequestExecutor map
  */
 export const map =
