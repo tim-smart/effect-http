@@ -81,7 +81,7 @@ export const make =
     }
 
     if (options.body) {
-      request = withBody(options.body)(request)
+      request = setBody(options.body)(request)
     }
 
     return request
@@ -192,9 +192,9 @@ export const appendParams = (params: Record<string, any>) => (self: Request) =>
   )
 
 /**
- * @tsplus pipeable effect-http/client/Request withBody
+ * @tsplus pipeable effect-http/client/Request setBody
  */
-export const withBody = (body: RequestBody) => (self: Request) => {
+export const setBody = (body: RequestBody) => (self: Request) => {
   let request: Request = {
     ...self,
     headers: self.headers.append(["content-type", body.contentType]),
@@ -212,6 +212,12 @@ export const withBody = (body: RequestBody) => (self: Request) => {
 }
 
 /**
+ * @tsplus pipeable effect-http/client/Request json
+ */
+export const json = (value: unknown) => (self: Request) =>
+  self.setBody(body.json(value)).acceptJson
+
+/**
  * @tsplus pipeable effect-http/client/Request withSchema
  */
 export const withSchema = <A>(
@@ -227,6 +233,6 @@ export const withSchema = <A>(
 
       return encoded._tag === "Left"
         ? Effect.fail(new SchemaEncodeError(encoded.left, self))
-        : run(withBody(body.json(encoded.right))(self))
+        : run(self.json(encoded.right))
     }
 }
