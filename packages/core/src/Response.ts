@@ -229,7 +229,7 @@ export const toStandard = (self: HttpResponse): Response => {
       })
 
     case "FormDataResponse":
-      return new Response(self.body as any, {
+      return new Response(self.body, {
         status: self.status,
         headers: self.headers,
       })

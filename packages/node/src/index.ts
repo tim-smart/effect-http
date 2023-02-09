@@ -92,6 +92,30 @@ const handleResponse = (
   dest: Http.ServerResponse,
 ): Effect<never, HttpStreamError, void> => {
   switch (source._tag) {
+    case "EmptyResponse":
+      return Effect(() => {
+        dest.writeHead(
+          source.status,
+          source.headers
+            ? Object.fromEntries(source.headers.entries())
+            : undefined,
+        )
+        dest.end()
+      })
+
+    case "RawResponse":
+      return Effect(() => {
+        if (source.headers) {
+          dest.writeHead(
+            source.status,
+            Object.fromEntries(source.headers.entries()),
+          )
+        } else {
+          dest.writeHead(source.status)
+        }
+        dest.end(source.body)
+      })
+
     case "FormDataResponse":
       return Effect.async<never, never, void>(resume => {
         const r = new Response(source.body)
@@ -116,30 +140,6 @@ const handleResponse = (
       })
         .tap(() => source.body.run(S.sink(dest)))
         .catchTag("WritableError", _ => Effect.fail(new HttpStreamError(_)))
-
-    case "RawResponse":
-      return Effect(() => {
-        if (source.headers) {
-          dest.writeHead(
-            source.status,
-            Object.fromEntries(source.headers.entries()),
-          )
-        } else {
-          dest.writeHead(source.status)
-        }
-        dest.end(source.body)
-      })
-
-    case "EmptyResponse":
-      return Effect(() => {
-        dest.writeHead(
-          source.status,
-          source.headers
-            ? Object.fromEntries(source.headers.entries())
-            : undefined,
-        )
-        dest.end()
-      })
   }
 }
 
