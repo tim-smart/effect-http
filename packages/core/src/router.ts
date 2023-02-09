@@ -57,7 +57,7 @@ export class Router<R = never, E = never, EnvR = never, ReqR = never> {
               .map(a => add(tag, a)(ctx)),
           ),
         )
-        .orElseSucceed(() => service.map(a => Context.make(tag, a))) as any,
+        .orElse(() => Maybe.some(service.map(a => Context.make(tag, a)))) as any,
       this.mounts as any,
     )
   }

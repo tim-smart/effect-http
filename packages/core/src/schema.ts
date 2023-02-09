@@ -9,37 +9,35 @@ export class DecodeSchemaError {
   ) {}
 }
 
-export const decode = <A>(schema: Schema<A>) => {
+const decodeEffect = <A>(schema: Schema<A>) => {
   const decode = Parser.decode(schema)
+
+  return (input: unknown, request: HttpRequest) => {
+    const result = decode(input)
+
+    return result._tag === "Left"
+      ? Effect.fail(new DecodeSchemaError(result.left, request, input))
+      : Effect.succeed(result.right)
+  }
+}
+
+export const decode = <A>(schema: Schema<A>) => {
+  const decode = decodeEffect(schema)
 
   return Do($ => {
     const ctx = $(Effect.service(RouteContext))
     const params = $(parseBodyWithParams(ctx))
 
-    return $(
-      Effect.fromEither(
-        decode(params).mapLeft(
-          errors => new DecodeSchemaError(errors, ctx.request, params),
-        ),
-      ),
-    )
+    return $(decode(params, ctx.request))
   })
 }
 
 export const decodeParams = <A>(schema: Schema<A>) => {
-  const decode = Parser.decode(schema)
+  const decode = decodeEffect(schema)
 
   return Do($ => {
     const { request, params, searchParams } = $(Effect.service(RouteContext))
-
-    return $(
-      Effect.fromEither(
-        decode({
-          ...params,
-          ...searchParams,
-        }).mapLeft(errors => new DecodeSchemaError(errors, request, params)),
-      ),
-    )
+    return $(decode({ ...params, ...searchParams }, request))
   })
 }
 
@@ -47,6 +45,11 @@ export class FormDataKeyNotFound {
   readonly _tag = "FormDataKeyNotFound"
   constructor(readonly key: string) {}
 }
+
+const jsonParse = Either.liftThrowable(
+  (_: string) => JSON.parse(_) as unknown,
+  _ => new RequestBodyError(_),
+)
 
 export const decodeJsonFromFormData =
   <A>(schema: Schema<A>) =>
@@ -58,19 +61,16 @@ export const decodeJsonFromFormData =
       const data = $(formData ? Effect.succeed(formData) : request.formData)
 
       const result = Either.fromNullable(
-        new RequestBodyError(new FormDataKeyNotFound(key)),
-      )(data.get(key))
-        .flatMap(a =>
-          Either.fromThrowable(
-            () => JSON.parse(a.toString()) as unknown,
-            reason => new RequestBodyError(reason),
-          ),
-        )
-        .flatMap(a =>
-          decode(a).mapLeft(
-            errors => new DecodeSchemaError(errors, request, a),
-          ),
-        )
+        data.get(key),
+        () => new RequestBodyError(new FormDataKeyNotFound(key)),
+      )
+        .flatMap(_ => jsonParse(_.toString()))
+        .flatMap(_ => {
+          const result = decode(_)
+          return result._tag === "Left"
+            ? Either.left(new DecodeSchemaError(result.left, request, _))
+            : Either.right(result.right)
+        })
         .map(value => [value, data] as const)
 
       return $(Effect.fromEither(result))
