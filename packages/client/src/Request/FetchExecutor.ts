@@ -1,18 +1,19 @@
-import { RequestError } from "../Error.js"
+import { HttpClientError, RequestError } from "../Error.js"
+import { Request } from "../Request.js"
 import * as response from "../Response.js"
 import { toReadableStream } from "../util/stream.js"
 import { RequestBody } from "./Body.js"
-import { RequestExecutorFactory } from "./Executor.js"
+import { RequestExecutorOptions } from "./Executor.js"
 
 /**
  * @tsplus pipeable effect-http/client/Request fetch
  */
-export const fetch: RequestExecutorFactory<RequestInit, response.Response> =
+export const fetch =
   ({
     executorOptions = {},
     validateResponse = response.defaultValidator,
-  } = {}) =>
-  request =>
+  }: RequestExecutorOptions<RequestInit> = {}) =>
+  (request: Request): Effect<never, HttpClientError, response.Response> =>
     Do($ => {
       const url = $(
         Effect.tryCatch(
@@ -44,6 +45,8 @@ export const fetch: RequestExecutorFactory<RequestInit, response.Response> =
           .flatMap(validateResponse),
       )
     })
+
+// const _typeCheck: RequestExecutorFactory<RequestInit, response.Response> = fetch
 
 const convertBody = (body: RequestBody): BodyInit => {
   switch (body._tag) {
