@@ -133,16 +133,20 @@ export const addHeaders =
 /**
  * @tsplus pipeable effect-http/client/Request updateUrl
  */
-export const updateUrl = (f: (url: string) => string) => (self: Request) => ({
-  ...self,
-  url: f(self.url),
-})
+export const updateUrl =
+  (f: (url: string) => string) =>
+  (self: Request): Request => ({
+    ...self,
+    url: f(self.url),
+  })
 
 /**
  * @tsplus pipeable effect-http/client/Request accept
  */
-export const accept = (value: string) => (self: Request) =>
-  addHeader("Accept", value)(self)
+export const accept =
+  (value: string) =>
+  (self: Request): Request =>
+    addHeader("Accept", value)(self)
 
 /**
  * @tsplus getter effect-http/client/Request acceptJson
@@ -178,37 +182,43 @@ export const appendParam =
 /**
  * @tsplus pipeable effect-http/client/Request appendParams
  */
-export const appendParams = (params: Record<string, any>) => (self: Request) =>
-  Object.entries(params).reduce(
-    (acc, [key, value]) => appendParam(key, value)(acc),
-    self,
-  )
+export const appendParams =
+  (params: Record<string, any>) =>
+  (self: Request): Request =>
+    Object.entries(params).reduce(
+      (acc, [key, value]) => appendParam(key, value)(acc),
+      self,
+    )
 
 /**
  * @tsplus pipeable effect-http/client/Request setBody
  */
-export const setBody = (body: RequestBody) => (self: Request) => {
-  let request: Request = {
-    ...self,
-    headers: self.headers.append(["content-type", body.contentType]),
-    body: Maybe.some(body),
-  }
+export const setBody =
+  (body: RequestBody) =>
+  (self: Request): Request => {
+    let request: Request = {
+      ...self,
+      headers: self.headers.append(["content-type", body.contentType]),
+      body: Maybe.some(body),
+    }
 
-  if ("contentLength" in body && body.contentLength._tag === "Some") {
-    request = addHeader(
-      "content-length",
-      body.contentLength.value.toString(),
-    )(request)
-  }
+    if ("contentLength" in body && body.contentLength._tag === "Some") {
+      request = addHeader(
+        "content-length",
+        body.contentLength.value.toString(),
+      )(request)
+    }
 
-  return request
-}
+    return request
+  }
 
 /**
  * @tsplus pipeable effect-http/client/Request json
  */
-export const json = (value: unknown) => (self: Request) =>
-  self.setBody(body.json(value)).acceptJson
+export const json =
+  (value: unknown) =>
+  (self: Request): Request =>
+    self.setBody(body.json(value)).acceptJson
 
 /**
  * @tsplus pipeable effect-http/client/Request withSchema
