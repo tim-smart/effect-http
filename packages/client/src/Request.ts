@@ -1,5 +1,7 @@
-import { HttpClientError } from "./Error.js"
-import { RequestBody } from "./Request/Body.js"
+import { ParseOptions } from "@fp-ts/schema/AST"
+import { HttpClientError, SchemaEncodeError } from "./Error.js"
+import * as body from "./Request/Body.js"
+import type { RequestBody } from "./Request/Body.js"
 import { Response } from "./Response.js"
 
 export type HttpMethod =
@@ -12,9 +14,11 @@ export type HttpMethod =
   | "OPTIONS"
 
 export interface RequestExecutor<A> {
-  (options?: RequestExecutorOptions<A>): (
-    self: Request,
-  ) => Effect<never, HttpClientError, Response>
+  (options?: RequestExecutorOptions<A>): RequestExecutorRun
+}
+
+export interface RequestExecutorRun {
+  (request: Request): Effect<never, HttpClientError, Response>
 }
 
 export interface RequestExecutorOptions<A> {
@@ -205,4 +209,24 @@ export const withBody = (body: RequestBody) => (self: Request) => {
   }
 
   return request
+}
+
+/**
+ * @tsplus pipeable effect-http/client/Request withSchema
+ */
+export const withSchema = <A>(
+  schema: Schema<A>,
+  run: RequestExecutorRun,
+  options?: ParseOptions,
+) => {
+  const encode = schema.encode
+
+  return (self: Request) =>
+    (input: A): Effect<never, HttpClientError, Response> => {
+      const encoded = encode(input, options)
+
+      return encoded._tag === "Left"
+        ? Effect.fail(new SchemaEncodeError(encoded.left, self))
+        : run(withBody(body.json(encoded.right))(self))
+    }
 }

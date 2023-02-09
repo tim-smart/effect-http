@@ -11,6 +11,7 @@ export type HttpClientError =
   | StatusCodeError
   | ResponseDecodeError
   | SchemaDecodeError
+  | SchemaEncodeError
 
 export abstract class BaseFetchError {
   readonly [HttpClientErrorTypeId] = HttpClientErrorTypeId
@@ -44,6 +45,16 @@ export class ResponseDecodeError extends BaseFetchError {
       | "arrayBuffer"
       | "formData"
       | "stream",
+  ) {
+    super()
+  }
+}
+
+export class SchemaEncodeError extends BaseFetchError {
+  readonly _tag = "SchemaEncodeError"
+  constructor(
+    readonly errors: NonEmptyReadonlyArray<ParseError>,
+    readonly request: Request,
   ) {
     super()
   }
