@@ -5,43 +5,45 @@ import { toReadableStream } from "../util/stream.js"
 import { RequestBody } from "./Body.js"
 
 /**
- * @tsplus fluent effect-http/client/Request fetch
+ * @tsplus pipeable effect-http/client/Request fetch
  */
-export const fetch: RequestExecutor<RequestInit> = (
-  request,
-  { executorOptions = {}, validateResponse = response.defaultValidator } = {},
-) =>
-  Do($ => {
-    const url = $(
-      Effect.tryCatch(
-        () => new URL(request.url),
-        _ => new RequestError(request, _),
-      ),
-    )
-
-    request.urlParams.forEach(([key, value]) => {
-      url.searchParams.append(key, value)
-    })
-
-    const headers = new Headers(request.headers.toReadonlyArray() as any)
-    const body = request.body.map(convertBody).getOrUndefined
-
-    return $(
-      Effect.tryCatchPromiseInterrupt(
-        signal =>
-          globalThis.fetch(url, {
-            ...executorOptions,
-            method: request.method,
-            headers,
-            body,
-            signal,
-          }),
-        _ => new RequestError(request, _),
+export const fetch: RequestExecutor<RequestInit> =
+  ({
+    executorOptions = {},
+    validateResponse = response.defaultValidator,
+  } = {}) =>
+  request =>
+    Do($ => {
+      const url = $(
+        Effect.tryCatch(
+          () => new URL(request.url),
+          _ => new RequestError(request, _),
+        ),
       )
-        .map(response.fromWeb)
-        .flatMap(validateResponse),
-    )
-  })
+
+      request.urlParams.forEach(([key, value]) => {
+        url.searchParams.append(key, value)
+      })
+
+      const headers = new Headers(request.headers.toReadonlyArray() as any)
+      const body = request.body.map(convertBody).getOrUndefined
+
+      return $(
+        Effect.tryCatchPromiseInterrupt(
+          signal =>
+            globalThis.fetch(url, {
+              ...executorOptions,
+              method: request.method,
+              headers,
+              body,
+              signal,
+            }),
+          _ => new RequestError(request, _),
+        )
+          .map(response.fromWeb)
+          .flatMap(validateResponse),
+      )
+    })
 
 const convertBody = (body: RequestBody): BodyInit => {
   switch (body._tag) {

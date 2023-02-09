@@ -12,11 +12,9 @@ export type HttpMethod =
   | "OPTIONS"
 
 export interface RequestExecutor<A> {
-  (request: Request, options?: RequestExecutorOptions<A>): Effect<
-    never,
-    HttpClientError,
-    Response
-  >
+  (options?: RequestExecutorOptions<A>): (
+    self: Request,
+  ) => Effect<never, HttpClientError, Response>
 }
 
 export interface RequestExecutorOptions<A> {
