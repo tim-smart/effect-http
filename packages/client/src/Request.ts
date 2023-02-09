@@ -131,6 +131,14 @@ export const addHeaders =
   })
 
 /**
+ * @tsplus pipeable effect-http/client/Request updateUrl
+ */
+export const updateUrl = (f: (url: string) => string) => (self: Request) => ({
+  ...self,
+  url: f(self.url),
+})
+
+/**
  * @tsplus pipeable effect-http/client/Request accept
  */
 export const accept = (value: string) => (self: Request) =>

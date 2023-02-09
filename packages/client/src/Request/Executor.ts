@@ -31,6 +31,15 @@ export const contramap =
     self(f(request))
 
 /**
+ * @tsplus pipeable effect-http/client/RequestExecutor contramapEffect
+ */
+export const contramapEffect =
+  (f: (a: Request) => Effect<never, HttpClientError, Request>) =>
+  <A>(self: RequestExecutor<A>): RequestExecutor<A> =>
+  request =>
+    f(request).flatMap(_ => self(_))
+
+/**
  * @tsplus pipeable effect-http/client/RequestExecutor map
  */
 export const map =
