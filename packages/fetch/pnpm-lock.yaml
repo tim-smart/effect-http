@@ -1,0 +1,135 @@
+lockfileVersion: 5.4
+
+specifiers:
+  '@effect/io': ~0.0.64
+  '@fp-ts/data': ~0.0.39
+  '@fp-ts/schema': ^0.0.8
+  '@tsplus-types/effect__io': 0.0.64-44b6108
+  '@tsplus-types/fp-ts__data': 0.0.39-44b6108
+  '@tsplus-types/fp-ts__schema': 0.0.8-44b6108
+  '@types/route-parser': ^0.1.4
+  find-my-way: ^7.4.0
+  prettier: ^2.8.2
+  typescript: https://cdn.jsdelivr.net/npm/@tsplus/installer@0.0.164/compiler/typescript.tgz
+
+dependencies:
+  '@effect/io': 0.0.64
+  '@fp-ts/data': 0.0.39
+  '@fp-ts/schema': 0.0.8
+  '@types/route-parser': 0.1.4
+  find-my-way: 7.4.0
+
+devDependencies:
+  '@tsplus-types/effect__io': 0.0.64-44b6108_@effect+io@0.0.64
+  '@tsplus-types/fp-ts__data': 0.0.39-44b6108_@fp-ts+data@0.0.39
+  '@tsplus-types/fp-ts__schema': 0.0.8-44b6108_@fp-ts+schema@0.0.8
+  prettier: 2.8.2
+  typescript: '@cdn.jsdelivr.net/npm/@tsplus/installer@0.0.164/compiler/typescript.tgz'
+
+packages:
+
+  /@effect/io/0.0.64:
+    resolution: {integrity: sha512-E3dQSlHVY2D3m7tUOmDxmPmBaQJ3mFl3YRndgm+Pl0Zog8DVlWH0lEuZyUEa8XiKlAHqIMq6c0VN82C2xuyNOQ==}
+    dependencies:
+      '@fp-ts/core': 0.0.11
+      '@fp-ts/data': 0.0.39
+
+  /@fp-ts/core/0.0.11:
+    resolution: {integrity: sha512-BCAJBYzghwoJpcUOARJ1tui50HoYJFlV2pJlVMlsEkDFhD8MTtq8xQVpZCRF66RmtkxtGBYINCQ+5H1lRaL35Q==}
+
+  /@fp-ts/data/0.0.39:
+    resolution: {integrity: sha512-dNw1LWjQmChmdenrDuxPct+ycucgKQQboVtWqov8rkAGY3DULznoSDJZam6l2kaLdq1ScPv810N4mzLLT+cBBw==}
+    dependencies:
+      '@fp-ts/core': 0.0.11
+
+  /@fp-ts/schema/0.0.8:
+    resolution: {integrity: sha512-+osZGEnfVO4jaoBnjMRmZT/yoYhu+DoN3eCn0HjWMnDF6ZDUuWahtSTp4HpBwd2lL0+FkulAywvM8WRpy4lZiw==}
+    dependencies:
+      '@fp-ts/core': 0.0.11
+      '@fp-ts/data': 0.0.39
+      fast-check: 3.5.0
+
+  /@tsplus-types/effect__io/0.0.64-44b6108_@effect+io@0.0.64:
+    resolution: {integrity: sha512-wG0g/7eiZpR3MVOG/ETAbaikiFXYgfeHH5HVGBm79/08VNvKWlBJHGGpxBxFa+au35nYPq0Yl1/JYTTin8vuvw==}
+    peerDependencies:
+      '@effect/io': 0.0.64
+    dependencies:
+      '@effect/io': 0.0.64
+    dev: true
+
+  /@tsplus-types/fp-ts__data/0.0.39-44b6108_@fp-ts+data@0.0.39:
+    resolution: {integrity: sha512-nw6e9oje1eWUANSFcdCmzQSOdBoG/lFeS4JaZqrQbdzAMAddlF2l/T9rhbDo8nkixbB7fIYmLZ6J1RG1flqmvg==}
+    peerDependencies:
+      '@fp-ts/data': 0.0.39
+    dependencies:
+      '@fp-ts/data': 0.0.39
+    dev: true
+
+  /@tsplus-types/fp-ts__schema/0.0.8-44b6108_@fp-ts+schema@0.0.8:
+    resolution: {integrity: sha512-MOL1gpXGUnefNTdWnXSwU7mdyX/1Qo8U4xR72HR5lNBBHubElmhxmKvD/9/lpL8+ch8slhqXkbLefKZeHrYD9w==}
+    peerDependencies:
+      '@fp-ts/schema': 0.0.8
+    dependencies:
+      '@fp-ts/schema': 0.0.8
+    dev: true
+
+  /@types/route-parser/0.1.4:
+    resolution: {integrity: sha512-lwH3SeyKwCAwP7oUoJNryPDdbW3Bx5lrB6mhV5iebqzOJHIut6wlaSxpQR4Lsk6j7wC08pGenr/xE8I/A4J3Fg==}
+    dev: false
+
+  /fast-check/3.5.0:
+    resolution: {integrity: sha512-5Yk9kfPy1DR8+9nl+wgRbXGM+p7e25nDRuZ/4b3TjIaWu53p/KkwS4uyKFc+Ek2Ft5nF40KRCbPYGrWYp0SjPw==}
+    engines: {node: '>=8.0.0'}
+    dependencies:
+      pure-rand: 5.0.5
+
+  /fast-decode-uri-component/1.0.1:
+    resolution: {integrity: sha512-WKgKWg5eUxvRZGwW8FvfbaH7AXSh2cL+3j5fMGzUMCxWBJ3dV3a7Wz8y2f/uQ0e3B6WmodD3oS54jTQ9HVTIIg==}
+    dev: false
+
+  /fast-deep-equal/3.1.3:
+    resolution: {integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==}
+    dev: false
+
+  /fast-querystring/1.1.0:
+    resolution: {integrity: sha512-LWkjBCZlxjnSanuPpZ6mHswjy8hQv3VcPJsQB3ltUF2zjvrycr0leP3TSTEEfvQ1WEMSRl5YNsGqaft9bjLqEw==}
+    dependencies:
+      fast-decode-uri-component: 1.0.1
+    dev: false
+
+  /find-my-way/7.4.0:
+    resolution: {integrity: sha512-JFT7eURLU5FumlZ3VBGnveId82cZz7UR7OUu+THQJOwdQXxmS/g8v0KLoFhv97HreycOrmAbqjXD/4VG2j0uMQ==}
+    engines: {node: '>=14'}
+    dependencies:
+      fast-deep-equal: 3.1.3
+      fast-querystring: 1.1.0
+      safe-regex2: 2.0.0
+    dev: false
+
+  /prettier/2.8.2:
+    resolution: {integrity: sha512-BtRV9BcncDyI2tsuS19zzhzoxD8Dh8LiCx7j7tHzrkz8GFXAexeWFdi22mjE1d16dftH2qNaytVxqiRTGlMfpw==}
+    engines: {node: '>=10.13.0'}
+    hasBin: true
+    dev: true
+
+  /pure-rand/5.0.5:
+    resolution: {integrity: sha512-BwQpbqxSCBJVpamI6ydzcKqyFmnd5msMWUGvzXLm1aXvusbbgkbOto/EUPM00hjveJEaJtdbhUjKSzWRhQVkaw==}
+
+  /ret/0.2.2:
+    resolution: {integrity: sha512-M0b3YWQs7R3Z917WRQy1HHA7Ba7D8hvZg6UE5mLykJxQVE2ju0IXbGlaHPPlkY+WN7wFP+wUMXmBFA0aV6vYGQ==}
+    engines: {node: '>=4'}
+    dev: false
+
+  /safe-regex2/2.0.0:
+    resolution: {integrity: sha512-PaUSFsUaNNuKwkBijoAPHAK6/eM6VirvyPWlZ7BAQy4D+hCvh4B6lIG+nPdhbFfIbP+gTGBcrdsOaUs0F+ZBOQ==}
+    dependencies:
+      ret: 0.2.2
+    dev: false
+
+  '@cdn.jsdelivr.net/npm/@tsplus/installer@0.0.164/compiler/typescript.tgz':
+    resolution: {tarball: https://cdn.jsdelivr.net/npm/@tsplus/installer@0.0.164/compiler/typescript.tgz}
+    name: typescript
+    version: 5.0.0-tsplus.20230113
+    engines: {node: '>=4.2.0'}
+    hasBin: true
+    dev: true

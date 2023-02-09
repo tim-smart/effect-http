@@ -1,0 +1,8 @@
+{
+  "importMap": {
+    "^(.*)/src/(.*)\\.(ts|js)$": "@effect-http/fetch/$2"
+  },
+  "traceMap": {
+    "^(.*)/src/(.*)\\.(ts|js)$": "(@effect-http/fetch) $2"
+  }
+}
