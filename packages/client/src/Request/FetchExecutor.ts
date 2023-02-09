@@ -3,17 +3,14 @@ import { Request } from "../Request.js"
 import * as response from "../Response.js"
 import { toReadableStream } from "../util/stream.js"
 import { RequestBody } from "./Body.js"
-import { RequestExecutorOptions } from "./Executor.js"
+import { RequestExecutorFactory, RequestExecutorOptions } from "./Executor.js"
 
-/**
- * @tsplus pipeable effect-http/client/Request fetch
- */
-export const fetch =
+export const fetch: RequestExecutorFactory<RequestInit, response.Response> =
   ({
     executorOptions = {},
     validateResponse = response.defaultValidator,
-  }: RequestExecutorOptions<RequestInit> = {}) =>
-  (request: Request): Effect<never, HttpClientError, response.Response> =>
+  } = {}) =>
+  request =>
     Do($ => {
       const url = $(
         Effect.tryCatch(
@@ -46,7 +43,13 @@ export const fetch =
       )
     })
 
-// const _typeCheck: RequestExecutorFactory<RequestInit, response.Response> = fetch
+/**
+ * @tsplus pipeable effect-http/client/Request fetch
+ */
+export const fetch_: (
+  options?: RequestExecutorOptions<RequestInit>,
+) => (request: Request) => Effect<never, HttpClientError, response.Response> =
+  fetch
 
 const convertBody = (body: RequestBody): BodyInit => {
   switch (body._tag) {
