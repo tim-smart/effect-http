@@ -51,6 +51,25 @@ export const fetch_: (
 ) => (request: Request) => Effect<never, HttpClientError, response.Response> =
   fetch
 
+/**
+ * @tsplus pipeable effect-http/client/Request fetchJson
+ */
+export const fetchJson: (
+  options?: RequestExecutorOptions<RequestInit>,
+) => (request: Request) => Effect<never, HttpClientError, unknown> = options =>
+  fetch(options).mapEffect(_ => _.json)
+
+/**
+ * @tsplus pipeable effect-http/client/Request fetchDecode
+ */
+export const fetchDecode: <A>(
+  schema: Schema<A>,
+  options?: RequestExecutorOptions<RequestInit>,
+) => (request: Request) => Effect<never, HttpClientError, A> = (
+  schema,
+  options,
+) => fetch(options).mapEffect(_ => _.decode(schema))
+
 const convertBody = (body: RequestBody): BodyInit => {
   switch (body._tag) {
     case "RawBody":
