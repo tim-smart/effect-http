@@ -26,7 +26,7 @@ import type { Stream } from "@effect/stream/Stream"
 /**
  * @tsplus global
  */
-import type { Maybe } from "@effect-http/fetch/_common"
+import type { Maybe } from "@effect-http/client/_common"
 
 /**
  * @tsplus global
