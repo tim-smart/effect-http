@@ -1,6 +1,11 @@
 /**
  * @tsplus global
  */
+import type { Cause } from "@effect/io/Cause"
+
+/**
+ * @tsplus global
+ */
 import type { Effect } from "@effect/io/Effect"
 
 /**

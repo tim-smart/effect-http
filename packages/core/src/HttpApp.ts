@@ -77,6 +77,24 @@ export const catchAll =
     self(request).catchAll(onError)
 
 /**
+ * @tsplus pipeable effect-http/HttpApp tapErrorCause
+ */
+export const tapErrorCause =
+  <E, R1, E1, X>(onError: (e: Cause<E>) => Effect<R1, E1, X>) =>
+  <R>(self: HttpApp<R, E>): HttpApp<R | R1, E | E1> =>
+  request =>
+    self(request).tapErrorCause(onError)
+
+/**
+ * @tsplus pipeable effect-http/HttpApp catchAllCause
+ */
+export const catchAllCause =
+  <E, R1, E1>(onError: (e: Cause<E>) => Effect<R1, E1, HttpResponse>) =>
+  <R>(self: HttpApp<R, E>): HttpApp<R | R1, E1> =>
+  request =>
+    self(request).catchAllCause(onError)
+
+/**
  * @tsplus pipeable effect-http/HttpApp applyMiddleware
  * @tsplus pipeable-operator effect-http/HttpApp >>
  */

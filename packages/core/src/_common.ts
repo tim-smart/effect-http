@@ -1,3 +1,4 @@
+export type { Cause } from "@effect/io/Cause"
 export type { Effect } from "@effect/io/Effect"
 export type { Stream } from "@effect/stream/Stream"
 export { Context, Tag } from "@effect/data/Context"
