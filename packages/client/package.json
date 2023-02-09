@@ -1,12 +1,13 @@
 {
   "name": "@effect-http/client",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "type": "module",
   "publishConfig": {
     "access": "public"
   },
   "exports": {
-    ".": "./dist/index.js"
+    ".": "./dist/index.js",
+    "./*": "./dist/*.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
