@@ -1,8 +1,8 @@
 import { ParseOptions } from "@fp-ts/schema/AST"
 import { HttpClientError, SchemaEncodeError } from "./Error.js"
-import * as body from "./Request/Body.js"
 import type { RequestBody } from "./Request/Body.js"
-import { Response } from "./Response.js"
+import * as body from "./Request/Body.js"
+import { RequestExecutor } from "./Request/Executor.js"
 
 export type HttpMethod =
   | "GET"
@@ -12,21 +12,6 @@ export type HttpMethod =
   | "PATCH"
   | "HEAD"
   | "OPTIONS"
-
-export interface RequestExecutor<A> {
-  (options?: RequestExecutorOptions<A>): RequestExecutorRun
-}
-
-export interface RequestExecutorRun {
-  (request: Request): Effect<never, HttpClientError, Response>
-}
-
-export interface RequestExecutorOptions<A> {
-  readonly validateResponse?: (
-    response: Response,
-  ) => Effect<never, HttpClientError, Response>
-  readonly executorOptions?: A
-}
 
 /**
  * @tsplus type effect-http/client/Request
@@ -220,15 +205,15 @@ export const json = (value: unknown) => (self: Request) =>
 /**
  * @tsplus pipeable effect-http/client/Request withSchema
  */
-export const withSchema = <A>(
+export const withSchema = <A, R>(
   schema: Schema<A>,
-  run: RequestExecutorRun,
+  run: RequestExecutor<R>,
   options?: ParseOptions,
 ) => {
   const encode = schema.encode
 
   return (self: Request) =>
-    (input: A): Effect<never, HttpClientError, Response> => {
+    (input: A): Effect<never, HttpClientError, R> => {
       const encoded = encode(input, options)
 
       return encoded._tag === "Left"

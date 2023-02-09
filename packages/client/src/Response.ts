@@ -1,3 +1,4 @@
+import { Effect, succeed } from "@effect/io/Effect"
 import {
   HttpClientError,
   ResponseDecodeError,
@@ -66,6 +67,10 @@ class ResponseImpl implements Response {
 }
 
 export const fromWeb = (_: globalThis.Response): Response => new ResponseImpl(_)
+
+export const defaultTransform = (
+  response: Response,
+): Effect<never, HttpClientError, Response> => succeed(response)
 
 export const defaultValidator = (
   response: Response,

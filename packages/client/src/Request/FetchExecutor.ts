@@ -1,13 +1,13 @@
 import { RequestError } from "../Error.js"
-import { RequestExecutor } from "../Request.js"
 import * as response from "../Response.js"
 import { toReadableStream } from "../util/stream.js"
 import { RequestBody } from "./Body.js"
+import { RequestExecutorFactory } from "./Executor.js"
 
 /**
  * @tsplus pipeable effect-http/client/Request fetch
  */
-export const fetch: RequestExecutor<RequestInit> =
+export const fetch: RequestExecutorFactory<RequestInit, response.Response> =
   ({
     executorOptions = {},
     validateResponse = response.defaultValidator,
