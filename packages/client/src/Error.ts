@@ -1,23 +1,24 @@
-export const FetchErrorTypeId = Symbol.for("@effect-http/fetch/FetchError")
-export type FetchErrorTypeId = typeof FetchErrorTypeId
+import { Request } from "./Request.js"
+import { Response } from "./Response.js"
 
-export type FetchError =
-  | FetchFailure
+export const HttpClientErrorTypeId = Symbol.for(
+  "@effect-http/client/HttpClientError",
+)
+export type HttpClientErrorTypeId = typeof HttpClientErrorTypeId
+
+export type HttpClientError =
+  | RequestError
   | StatusCodeError
   | ResponseDecodeError
   | SchemaDecodeError
 
 export abstract class BaseFetchError {
-  readonly [FetchErrorTypeId] = FetchErrorTypeId
+  readonly [HttpClientErrorTypeId] = HttpClientErrorTypeId
 }
 
-export class FetchFailure extends BaseFetchError {
+export class RequestError extends BaseFetchError {
   readonly _tag = "FetchFailure"
-  constructor(
-    readonly error: unknown,
-    readonly url: RequestInfo,
-    readonly init?: RequestInit,
-  ) {
+  constructor(readonly request: Request, readonly error: unknown) {
     super()
   }
 }
@@ -35,7 +36,7 @@ export class ResponseDecodeError extends BaseFetchError {
   readonly _tag = "ResponseDecodeError"
   constructor(
     readonly error: unknown,
-    readonly response: Response,
+    readonly source: Response,
     readonly kind:
       | "json"
       | "text"

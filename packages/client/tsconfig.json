@@ -16,8 +16,8 @@
     "incremental": true,
     "tsPlusConfig": "./tsplus.config.json",
     "paths": {
-      "@effect-http/fetch": ["./src/index.js"],
-      "@effect-http/fetch/*": ["./src/*.js"]
+      "@effect-http/client": ["./src/index.js"],
+      "@effect-http/client/*": ["./src/*.js"]
     },
     "tsBuildInfoFile": "./tsconfig.tsbuildinfo"
   },

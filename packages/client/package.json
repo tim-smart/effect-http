@@ -1,5 +1,5 @@
 {
-  "name": "@effect-http/fetch",
+  "name": "@effect-http/client",
   "version": "0.1.0",
   "type": "module",
   "publishConfig": {
