@@ -3,7 +3,7 @@ export type RequestBody = RawBody | StreamBody
 export class RawBody {
   readonly _tag = "RawBody"
   constructor(
-    readonly contentType: string,
+    readonly contentType: Maybe<string>,
     readonly contentLength: Maybe<number>,
     readonly value: unknown,
   ) {}
@@ -12,23 +12,36 @@ export class RawBody {
 export class StreamBody {
   readonly _tag = "StreamBody"
   constructor(
+    readonly contentType: Maybe<string>,
+    readonly contentLength: Maybe<number>,
     readonly value: Stream<never, unknown, Uint8Array>,
-    readonly contentType: string,
   ) {}
 }
 
 const rawFromString = (contentType: string, value: string): RawBody => {
   const body = new TextEncoder().encode(value)
-  return new RawBody(contentType, Maybe.some(body.length), body)
+  return new RawBody(Maybe.some(contentType), Maybe.some(body.length), body)
 }
 
-export const text = (value: string): RequestBody =>
-  rawFromString("text/plain", value)
+export const text = (value: string, contentType = "text/plain"): RequestBody =>
+  rawFromString(contentType, value)
 
 export const json = (value: unknown): RequestBody =>
   rawFromString("application/json", JSON.stringify(value))
 
+export const searchParams = (value: URLSearchParams): RequestBody =>
+  rawFromString("application/x-www-form-urlencoded", value.toString())
+
+export const formData = (value: FormData): RequestBody =>
+  new RawBody(Maybe.none(), Maybe.none(), value)
+
 export const stream = (
   value: Stream<never, unknown, Uint8Array>,
   contentType = "application/octet-stream",
-): RequestBody => new StreamBody(value, contentType)
+  contentLength?: number,
+): RequestBody =>
+  new StreamBody(
+    Maybe.some(contentType),
+    Maybe.fromNullable(contentLength),
+    value,
+  )

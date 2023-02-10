@@ -198,19 +198,30 @@ export const setBody =
   (self: Request): Request => {
     let request: Request = {
       ...self,
-      headers: self.headers.append(["content-type", body.contentType]),
       body: Maybe.some(body),
     }
 
-    if ("contentLength" in body && body.contentLength._tag === "Some") {
-      request = addHeader(
-        "content-length",
-        body.contentLength.value.toString(),
-      )(request)
-    }
+    request = body.contentType.match(
+      () => request,
+      contentType => addHeader("content-type", contentType)(request),
+    )
+
+    request = body.contentLength.match(
+      () => request,
+      contentLength =>
+        addHeader("content-length", contentLength.toString())(request),
+    )
 
     return request
   }
+
+/**
+ * @tsplus pipeable effect-http/client/Request text
+ */
+export const text =
+  (value: string, contentType?: string) =>
+  (self: Request): Request =>
+    self.setBody(body.text(value, contentType))
 
 /**
  * @tsplus pipeable effect-http/client/Request json
@@ -219,6 +230,22 @@ export const json =
   (value: unknown) =>
   (self: Request): Request =>
     self.setBody(body.json(value)).acceptJson
+
+/**
+ * @tsplus pipeable effect-http/client/Request searchParams
+ */
+export const searchParams =
+  (value: URLSearchParams) =>
+  (self: Request): Request =>
+    self.setBody(body.searchParams(value))
+
+/**
+ * @tsplus pipeable effect-http/client/Request formData
+ */
+export const formData =
+  (value: FormData) =>
+  (self: Request): Request =>
+    self.setBody(body.formData(value))
 
 /**
  * @tsplus pipeable effect-http/client/Request withSchema
