@@ -65,7 +65,8 @@ export const updateUser = (user: User) =>
 Here is an example using tsplus:
 
 ```ts
-import { HttpClientError } from "@effect-http/client"
+import * as Http from "@effect-http/client"
+import type { HttpClientError } from "@effect-http/client"
 import * as S from "@fp-ts/schema"
 
 const Post_ = S.struct({
@@ -123,4 +124,9 @@ export const createPost: (post: {
  */
 export const listPosts: Effect<never, HttpClientError, readonly Post[]> =
   Http.get("/posts").fetchPosts
+
+/**
+ * Here we use the fetchPost tsplus getter.
+ */
+export const getPost = (id: number) => Http.get(`/posts/${id}`).fetchPost
 ```
