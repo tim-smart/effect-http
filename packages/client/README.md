@@ -61,3 +61,66 @@ export const updateUser = (user: User) =>
     run => run(user),
   )
 ```
+
+Here is an example using tsplus:
+
+```ts
+import { HttpClientError } from "@effect-http/client"
+import * as S from "@fp-ts/schema"
+
+const Post_ = S.struct({
+  id: S.number,
+  title: S.string,
+  body: S.string,
+  userId: S.number,
+})
+interface Post extends S.Infer<typeof Post_> {}
+const Post: S.Schema<Post> = Post_
+
+const Posts = S.array(Post)
+const CreatePost = pipe(Post, S.omit("id"))
+
+/**
+ * Here is a jsonplaceholder request executor, which adds a base url and an
+ * Accept header.
+ */
+const jsonplaceholder = Http.fetch().contramap(
+  _ => _.updateUrl(_ => `https://jsonplaceholder.typicode.com${_}`).acceptJson,
+)
+
+/**
+ * We further refine the jsonplaceholder request executor by adding a Post
+ * decoder.
+ *
+ * @tsplus getter effect-http/client/Request fetchPost
+ */
+export const jsonplaceholderPost = jsonplaceholder.mapEffect(_ =>
+  _.decode(Post),
+)
+
+/**
+ * @tsplus getter effect-http/client/Request fetchPosts
+ */
+export const jsonplaceholderPosts = jsonplaceholder.mapEffect(_ =>
+  _.decode(Posts),
+)
+
+/**
+ * We can now use the jsonplaceholderPost executor to send a POST request that
+ * creates a new post.
+ */
+export const createPost: (post: {
+  readonly title: string
+  readonly body: string
+  readonly userId: number
+}) => Effect<never, HttpClientError, Post> = Http.post("/posts").withSchema(
+  CreatePost,
+  jsonplaceholderPost,
+)
+
+/**
+ * Here we use the fetchPosts tsplus getter to create a listPosts effect.
+ */
+export const listPosts: Effect<never, HttpClientError, readonly Post[]> =
+  Http.get("/posts").fetchPosts
+```
