@@ -3,7 +3,11 @@ import { Request } from "../Request.js"
 import * as response from "../Response.js"
 import { toReadableStream } from "../util/stream.js"
 import { RequestBody } from "./Body.js"
-import { RequestExecutorFactory, RequestExecutorOptions } from "./Executor.js"
+import {
+  RequestExecutor,
+  RequestExecutorFactory,
+  RequestExecutorOptions,
+} from "./Executor.js"
 
 export const fetch: RequestExecutorFactory<RequestInit, response.Response> =
   ({
@@ -51,29 +55,36 @@ export const fetch_: (
 ) => (request: Request) => Effect<never, HttpClientError, response.Response> =
   fetch
 
-/**
- * @tsplus pipeable effect-http/client/Request fetchJson
- */
-export const fetchJson: (
-  options?: RequestExecutorOptions<RequestInit>,
-) => (request: Request) => Effect<never, HttpClientError, unknown> = options =>
+export const fetchJson: RequestExecutorFactory<
+  RequestInit,
+  unknown
+> = options =>
   fetch(options)
     .contramap(_ => _.acceptJson)
     .mapEffect(_ => _.json)
 
 /**
- * @tsplus pipeable effect-http/client/Request fetchDecode
+ * @tsplus pipeable effect-http/client/Request fetchJson
  */
-export const fetchDecode: <A>(
+export const fetchJson_: (
+  options?: RequestExecutorOptions<RequestInit>,
+) => (request: Request) => Effect<never, HttpClientError, unknown> = fetchJson
+
+export const fetchDecode = <A>(
   schema: Schema<A>,
   options?: RequestExecutorOptions<RequestInit>,
-) => (request: Request) => Effect<never, HttpClientError, A> = (
-  schema,
-  options,
-) =>
+): RequestExecutor<A> =>
   fetch(options)
     .contramap(_ => _.acceptJson)
     .mapEffect(_ => _.decode(schema))
+
+/**
+ * @tsplus pipeable effect-http/client/Request fetchDecode
+ */
+export const fetchDecode_: <A>(
+  schema: Schema<A>,
+  options?: RequestExecutorOptions<RequestInit>,
+) => (request: Request) => Effect<never, HttpClientError, A> = fetchDecode
 
 const convertBody = (body: RequestBody): BodyInit => {
   switch (body._tag) {
