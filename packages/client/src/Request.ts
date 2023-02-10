@@ -1,5 +1,5 @@
 import { ParseOptions } from "@fp-ts/schema/AST"
-import { HttpClientError, SchemaEncodeError } from "./Error.js"
+import { SchemaEncodeError } from "./Error.js"
 import type { RequestBody } from "./Request/Body.js"
 import * as body from "./Request/Body.js"
 import { RequestExecutor } from "./Request/Executor.js"
@@ -35,7 +35,7 @@ export interface MakeOptions {
 }
 
 /**
- * @tsplus static effect-http/client/Request make
+ * @tsplus static effect-http/client/Request.Ops make
  */
 export const make =
   (method: HttpMethod) =>
@@ -73,37 +73,37 @@ export const make =
   }
 
 /**
- * @tsplus static effect-http/client/Request get
+ * @tsplus static effect-http/client/Request.Ops get
  */
 export const get = make("GET")
 
 /**
- * @tsplus static effect-http/client/Request post
+ * @tsplus static effect-http/client/Request.Ops post
  */
 export const post = make("POST")
 
 /**
- * @tsplus static effect-http/client/Request put
+ * @tsplus static effect-http/client/Request.Ops put
  */
 export const put = make("PUT")
 
 /**
- * @tsplus static effect-http/client/Request del
+ * @tsplus static effect-http/client/Request.Ops del
  */
 export const del = make("DELETE")
 
 /**
- * @tsplus static effect-http/client/Request patch
+ * @tsplus static effect-http/client/Request.Ops patch
  */
 export const patch = make("PATCH")
 
 /**
- * @tsplus static effect-http/client/Request head
+ * @tsplus static effect-http/client/Request.Ops head
  */
 export const head = make("HEAD")
 
 /**
- * @tsplus static effect-http/client/Request options
+ * @tsplus static effect-http/client/Request.Ops options
  */
 export const options = make("OPTIONS")
 
