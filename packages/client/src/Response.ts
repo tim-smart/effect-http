@@ -1,20 +1,17 @@
-import { Effect, succeed } from "@effect/io/Effect"
-import {
-  HttpClientError,
-  ResponseDecodeError,
-  SchemaDecodeError,
-  StatusCodeError,
-} from "./Error.js"
+import { Effect } from "@effect/io/Effect"
+import { ResponseDecodeError, SchemaDecodeError } from "./Error.js"
 import { fromReadableStream } from "./util/stream.js"
 
 export interface Response {
   readonly status: number
   readonly headers: Headers
-  readonly stream: Stream<never, HttpClientError, Uint8Array>
-  readonly json: Effect<never, HttpClientError, unknown>
-  readonly text: Effect<never, HttpClientError, string>
-  readonly blob: Effect<never, HttpClientError, Blob>
-  readonly decode: <A>(schema: Schema<A>) => Effect<never, HttpClientError, A>
+  readonly stream: Stream<never, ResponseDecodeError, Uint8Array>
+  readonly json: Effect<never, ResponseDecodeError, unknown>
+  readonly text: Effect<never, ResponseDecodeError, string>
+  readonly blob: Effect<never, ResponseDecodeError, Blob>
+  readonly decode: <A>(
+    schema: Schema<A>,
+  ) => Effect<never, ResponseDecodeError | SchemaDecodeError, A>
 }
 
 class ResponseImpl implements Response {
@@ -28,7 +25,7 @@ class ResponseImpl implements Response {
     return this.source.headers
   }
 
-  get stream(): Stream<never, HttpClientError, Uint8Array> {
+  get stream(): Stream<never, ResponseDecodeError, Uint8Array> {
     return this.source.body
       ? fromReadableStream(this.source.body).mapError(
           _ => new ResponseDecodeError(_, this, "stream"),
@@ -36,28 +33,30 @@ class ResponseImpl implements Response {
       : Stream.fail(new ResponseDecodeError("no body", this, "stream"))
   }
 
-  get json(): Effect<never, HttpClientError, unknown> {
+  get json(): Effect<never, ResponseDecodeError, unknown> {
     return Effect.tryCatchPromise(
       () => this.source.json(),
       _ => new ResponseDecodeError(_, this, "json"),
     )
   }
 
-  get text(): Effect<never, HttpClientError, string> {
+  get text(): Effect<never, ResponseDecodeError, string> {
     return Effect.tryCatchPromise(
       () => this.source.text(),
       _ => new ResponseDecodeError(_, this, "text"),
     )
   }
 
-  get blob(): Effect<never, HttpClientError, Blob> {
+  get blob(): Effect<never, ResponseDecodeError, Blob> {
     return Effect.tryCatchPromise(
       () => this.source.blob(),
       _ => new ResponseDecodeError(_, this, "blob"),
     )
   }
 
-  decode<A>(schema: Schema<A>): Effect<never, HttpClientError, A> {
+  decode<A>(
+    schema: Schema<A>,
+  ): Effect<never, ResponseDecodeError | SchemaDecodeError, A> {
     return this.json.flatMap(_ =>
       Effect.fromEither(schema.decode(_)).mapError(
         _ => new SchemaDecodeError(_, this),
