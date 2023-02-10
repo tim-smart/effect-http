@@ -58,8 +58,7 @@ export const updateUser = (user: User) =>
   pipe(
     Http.patch(`/users/${user.id}`),
     Http.withSchema(User, userResponseExecutor),
-    run => run(user),
-  )
+  )(user)
 ```
 
 Here is an example using tsplus:
