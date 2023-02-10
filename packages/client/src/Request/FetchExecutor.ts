@@ -95,6 +95,7 @@ export const fetchDecode_: <A>(
 
 const convertBody = (body: RequestBody): BodyInit => {
   switch (body._tag) {
+    case "FormDataBody":
     case "RawBody":
       return body.value as any
 

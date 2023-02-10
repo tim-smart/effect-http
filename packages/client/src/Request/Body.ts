@@ -1,4 +1,4 @@
-export type RequestBody = RawBody | StreamBody
+export type RequestBody = RawBody | FormDataBody | StreamBody
 
 export class RawBody {
   readonly _tag = "RawBody"
@@ -7,6 +7,11 @@ export class RawBody {
     readonly contentLength: Maybe<number>,
     readonly value: unknown,
   ) {}
+}
+
+export class FormDataBody {
+  readonly _tag = "FormDataBody"
+  constructor(readonly value: FormData) {}
 }
 
 export class StreamBody {
@@ -33,7 +38,7 @@ export const searchParams = (value: URLSearchParams): RequestBody =>
   rawFromString("application/x-www-form-urlencoded", value.toString())
 
 export const formData = (value: FormData): RequestBody =>
-  new RawBody(Maybe.none(), Maybe.none(), value)
+  new FormDataBody(value)
 
 export const stream = (
   value: Stream<never, unknown, Uint8Array>,

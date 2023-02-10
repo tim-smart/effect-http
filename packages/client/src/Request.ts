@@ -201,6 +201,10 @@ export const setBody =
       body: Maybe.some(body),
     }
 
+    if (body._tag === "FormDataBody") {
+      return request
+    }
+
     request = body.contentType.match(
       () => request,
       contentType => addHeader("content-type", contentType)(request),
