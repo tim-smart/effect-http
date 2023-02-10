@@ -223,15 +223,15 @@ export const json =
 /**
  * @tsplus pipeable effect-http/client/Request withSchema
  */
-export const withSchema = <A, R>(
+export const withSchema = <A, R, E, RA>(
   schema: Schema<A>,
-  run: RequestExecutor<R>,
+  run: RequestExecutor<R, E, RA>,
   options?: ParseOptions,
 ) => {
   const encode = schema.encode
 
   return (self: Request) =>
-    (input: A): Effect<never, HttpClientError, R> => {
+    (input: A): Effect<R, E | SchemaEncodeError, RA> => {
       const encoded = encode(input, options)
 
       return encoded._tag === "Left"

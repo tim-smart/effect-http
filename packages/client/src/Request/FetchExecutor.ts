@@ -9,7 +9,12 @@ import {
   RequestExecutorOptions,
 } from "./Executor.js"
 
-export const fetch: RequestExecutorFactory<RequestInit, response.Response> =
+export const fetch: RequestExecutorFactory<
+  RequestInit,
+  never,
+  HttpClientError,
+  response.Response
+> =
   ({
     executorOptions = {},
     validateResponse = response.defaultValidator,
@@ -57,6 +62,8 @@ export const fetch_: (
 
 export const fetchJson: RequestExecutorFactory<
   RequestInit,
+  never,
+  HttpClientError,
   unknown
 > = options =>
   fetch(options)
@@ -73,7 +80,7 @@ export const fetchJson_: (
 export const fetchDecode = <A>(
   schema: Schema<A>,
   options?: RequestExecutorOptions<RequestInit>,
-): RequestExecutor<A> =>
+): RequestExecutor<never, HttpClientError, A> =>
   fetch(options)
     .contramap(_ => _.acceptJson)
     .mapEffect(_ => _.decode(schema))

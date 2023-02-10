@@ -18,7 +18,7 @@ export abstract class BaseFetchError {
 }
 
 export class RequestError extends BaseFetchError {
-  readonly _tag = "FetchFailure"
+  readonly _tag = "RequestError"
   constructor(readonly request: Request, readonly error: unknown) {
     super()
   }
