@@ -67,17 +67,3 @@ class ResponseImpl implements Response {
 }
 
 export const fromWeb = (_: globalThis.Response): Response => new ResponseImpl(_)
-
-export const defaultTransform = (
-  response: Response,
-): Effect<never, HttpClientError, Response> => succeed(response)
-
-export const defaultValidator = (
-  response: Response,
-): Effect<never, HttpClientError, Response> => {
-  if (response.status >= 300) {
-    return Effect.fail(new StatusCodeError(response))
-  }
-
-  return Effect.succeed(response)
-}

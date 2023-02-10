@@ -3,22 +3,13 @@ import { Request } from "../Request.js"
 import * as response from "../Response.js"
 import { toReadableStream } from "../util/stream.js"
 import { RequestBody } from "./Body.js"
-import {
-  RequestExecutor,
-  RequestExecutorFactory,
-  RequestExecutorOptions,
-} from "./Executor.js"
+import type { RequestExecutor } from "./Executor.js"
+import * as executor from "./Executor.js"
 
-export const fetch: RequestExecutorFactory<
-  RequestInit,
-  never,
-  HttpClientError,
-  response.Response
-> =
-  ({
-    executorOptions = {},
-    validateResponse = response.defaultValidator,
-  } = {}) =>
+export const fetchRaw =
+  (
+    options: RequestInit = {},
+  ): RequestExecutor<never, HttpClientError, response.Response> =>
   request =>
     Do($ => {
       const url = $(
@@ -39,47 +30,46 @@ export const fetch: RequestExecutorFactory<
         Effect.tryCatchPromiseInterrupt(
           signal =>
             globalThis.fetch(url, {
-              ...executorOptions,
+              ...options,
               method: request.method,
               headers,
               body,
               signal,
             }),
           _ => new RequestError(request, _),
-        )
-          .map(response.fromWeb)
-          .flatMap(validateResponse),
+        ).map(response.fromWeb),
       )
     })
+
+export const fetch = flow(
+  fetchRaw,
+  executor.filterStatus(_ => _ >= 200 && _ < 300),
+)
 
 /**
  * @tsplus pipeable effect-http/client/Request fetch
  */
 export const fetch_: (
-  options?: RequestExecutorOptions<RequestInit>,
+  options?: RequestInit,
 ) => (request: Request) => Effect<never, HttpClientError, response.Response> =
   fetch
 
-export const fetchJson: RequestExecutorFactory<
-  RequestInit,
-  never,
-  HttpClientError,
-  unknown
-> = options =>
-  fetch(options)
-    .contramap(_ => _.acceptJson)
-    .mapEffect(_ => _.json)
+export const fetchJson = flow(
+  fetch,
+  executor.contramap(_ => _.acceptJson),
+  executor.mapEffect(_ => _.json),
+)
 
 /**
  * @tsplus pipeable effect-http/client/Request fetchJson
  */
 export const fetchJson_: (
-  options?: RequestExecutorOptions<RequestInit>,
+  options?: RequestInit,
 ) => (request: Request) => Effect<never, HttpClientError, unknown> = fetchJson
 
 export const fetchDecode = <A>(
   schema: Schema<A>,
-  options?: RequestExecutorOptions<RequestInit>,
+  options?: RequestInit,
 ): RequestExecutor<never, HttpClientError, A> =>
   fetch(options)
     .contramap(_ => _.acceptJson)
@@ -90,7 +80,7 @@ export const fetchDecode = <A>(
  */
 export const fetchDecode_: <A>(
   schema: Schema<A>,
-  options?: RequestExecutorOptions<RequestInit>,
+  options?: RequestInit,
 ) => (request: Request) => Effect<never, HttpClientError, A> = fetchDecode
 
 const convertBody = (body: RequestBody): BodyInit => {

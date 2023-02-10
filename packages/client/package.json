@@ -23,11 +23,11 @@
     "@fp-ts/schema": "^0.1.3"
   },
   "devDependencies": {
-    "@tsplus-types/effect__data": "0.1.0-cf9876a",
-    "@tsplus-types/effect__io": "0.1.11-cf9876a",
-    "@tsplus-types/effect__stream": "0.3.0-cf9876a",
-    "@tsplus-types/fp-ts__core": "0.2.1-cf9876a",
-    "@tsplus-types/fp-ts__schema": "0.1.3-cf9876a",
+    "@tsplus-types/effect__data": "0.1.0-d3bfa07",
+    "@tsplus-types/effect__io": "0.1.11-d3bfa07",
+    "@tsplus-types/effect__stream": "0.3.0-d3bfa07",
+    "@tsplus-types/fp-ts__core": "0.2.1-d3bfa07",
+    "@tsplus-types/fp-ts__schema": "0.1.3-d3bfa07",
     "prettier": "^2.8.4",
     "typescript": "https://cdn.jsdelivr.net/npm/@tsplus/installer@0.0.170/compiler/typescript.tgz"
   },

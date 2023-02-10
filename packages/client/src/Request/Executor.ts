@@ -1,24 +1,13 @@
-import { HttpClientError } from "../Error.js"
+import { Predicate } from "@fp-ts/core/Predicate"
+import { HttpClientError, StatusCodeError } from "../Error.js"
 import { Request } from "../Request.js"
 import { Response } from "../Response.js"
-
-export interface RequestExecutorFactory<O, R, E, A> {
-  (options?: RequestExecutorOptions<O>): RequestExecutor<R, E, A>
-}
 
 /**
  * @tsplus type effect-http/client/RequestExecutor
  */
 export interface RequestExecutor<R, E, A> {
   (request: Request): Effect<R, E, A>
-}
-
-export interface RequestExecutorOptions<O> {
-  readonly validateResponse?: (
-    response: Response,
-  ) => Effect<never, HttpClientError, Response>
-
-  readonly executorOptions?: O
 }
 
 /**
@@ -60,6 +49,31 @@ export const mapEffect =
   ): RequestExecutor<R1 | R2, E1 | E2, B> =>
   request =>
     self(request).flatMap(f)
+
+/**
+ * @tsplus pipeable effect-http/client/RequestExecutor filterStatus
+ */
+export const filterStatus =
+  (f: (status: number) => boolean) =>
+  <R, E>(
+    self: RequestExecutor<R, E, Response>,
+  ): RequestExecutor<R, E | StatusCodeError, Response> =>
+  request =>
+    self(request).filterOrElseWith(
+      _ => f(_.status),
+      _ => Effect.fail(new StatusCodeError(_)),
+    )
+
+/**
+ * @tsplus pipeable effect-http/client/RequestExecutor filterOrElseWith
+ */
+export const filterOrElseWith =
+  <A, R2, E2, B>(f: Predicate<A>, orElse: (a: A) => Effect<R2, E2, B>) =>
+  <R, E>(
+    self: RequestExecutor<R, E, A>,
+  ): RequestExecutor<R2 | R, E2 | E, A | B> =>
+  request =>
+    self(request).filterOrElseWith(f, orElse)
 
 /**
  * @tsplus pipeable effect-http/client/RequestExecutor catchTag
