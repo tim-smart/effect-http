@@ -6,6 +6,13 @@ import { RequestBody } from "./Body.js"
 import type { RequestExecutor } from "./Executor.js"
 import * as executor from "./Executor.js"
 
+/**
+ * A request executor that uses the global fetch function.
+ *
+ * It performs no validation on the response status code.
+ *
+ * @since 1.0.0
+ */
 export const fetchRaw =
   (
     options: RequestInit = {},
@@ -41,12 +48,20 @@ export const fetchRaw =
       )
     })
 
+/**
+ * A request executor that uses the global fetch function.
+ *
+ * It filters out responses with a status code outside the range 200-299.
+ *
+ * @since 1.0.0
+ */
 export const fetch = flow(
   fetchRaw,
   executor.filterStatus(_ => _ >= 200 && _ < 300),
 )
 
 /**
+ * @since 1.0.0
  * @tsplus pipeable effect-http/client/Request fetch
  */
 export const fetch_: (
@@ -54,6 +69,14 @@ export const fetch_: (
 ) => (request: Request) => Effect<never, HttpClientError, response.Response> =
   fetch
 
+/**
+ * A request executor that uses the global fetch function.
+ *
+ * It sets the Accept header to "application/json" and decodes the response
+ * body.
+ *
+ * @since 1.0.0
+ */
 export const fetchJson = flow(
   fetch,
   executor.contramap(_ => _.acceptJson),
@@ -67,6 +90,13 @@ export const fetchJson_: (
   options?: RequestInit,
 ) => (request: Request) => Effect<never, HttpClientError, unknown> = fetchJson
 
+/**
+ * A request executor that uses the global fetch function.
+ *
+ * It decodes the response body using the given schema.
+ *
+ * @since 1.0.0
+ */
 export const fetchDecode = <A>(
   schema: Schema<A>,
   options?: RequestInit,
