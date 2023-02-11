@@ -22,7 +22,7 @@ export interface Request {
   readonly url: string
   readonly urlParams: Chunk<[string, string]>
   readonly method: HttpMethod
-  readonly headers: Chunk<[string, string]>
+  readonly headers: HashMap<string, string>
   readonly body: Maybe<RequestBody>
 }
 
@@ -45,7 +45,7 @@ export const make =
       method,
       url,
       urlParams: Chunk.empty(),
-      headers: Chunk.empty(),
+      headers: HashMap.empty(),
       body: Maybe.fromNullable(options.body),
     }
 
@@ -58,7 +58,7 @@ export const make =
     }
 
     if (options.headers) {
-      request = addHeaders(options.headers)(request)
+      request = setHeaders(options.headers)(request)
     }
 
     if (options.params) {
@@ -108,27 +108,25 @@ export const head = make("HEAD")
 export const options = make("OPTIONS")
 
 /**
- * @tsplus pipeable effect-http/client/Request addHeader
+ * @tsplus pipeable effect-http/client/Request setHeader
  */
-export const addHeader =
+export const setHeader =
   (name: string, value: string) =>
   (self: Request): Request => ({
     ...self,
-    headers: self.headers.append([name.toLowerCase(), value]),
+    headers: self.headers.set(name.toLowerCase(), value),
   })
 
 /**
- * @tsplus pipeable effect-http/client/Request addHeaders
+ * @tsplus pipeable effect-http/client/Request setHeaders
  */
-export const addHeaders =
+export const setHeaders =
   (headers: Record<string, string>) =>
-  (self: Request): Request => ({
-    ...self,
-    headers: Object.entries(headers).reduce(
-      (acc, [key, value]) => acc.append([key.toLowerCase(), value]),
-      self.headers,
-    ),
-  })
+  (self: Request): Request =>
+    Object.entries(headers).reduce(
+      (acc, [key, value]) => setHeader(key, value)(acc),
+      self,
+    )
 
 /**
  * @tsplus pipeable effect-http/client/Request updateUrl
@@ -143,10 +141,9 @@ export const updateUrl =
 /**
  * @tsplus pipeable effect-http/client/Request accept
  */
-export const accept =
-  (value: string) =>
-  (self: Request): Request =>
-    addHeader("Accept", value)(self)
+export const accept: (value: string) => (self: Request) => Request = (
+  value: string,
+) => setHeader("Accept", value)
 
 /**
  * @tsplus getter effect-http/client/Request acceptJson
@@ -207,46 +204,46 @@ export const setBody =
 
     request = body.contentType.match(
       () => request,
-      contentType => addHeader("content-type", contentType)(request),
+      contentType => setHeader("content-type", contentType)(request),
     )
 
     request = body.contentLength.match(
       () => request,
       contentLength =>
-        addHeader("content-length", contentLength.toString())(request),
+        setHeader("content-length", contentLength.toString())(request),
     )
 
     return request
   }
 
 /**
- * @tsplus pipeable effect-http/client/Request text
+ * @tsplus pipeable effect-http/client/Request textBody
  */
-export const text =
+export const textBody =
   (value: string, contentType?: string) =>
   (self: Request): Request =>
     self.setBody(body.text(value, contentType))
 
 /**
- * @tsplus pipeable effect-http/client/Request json
+ * @tsplus pipeable effect-http/client/Request jsonBody
  */
-export const json =
+export const jsonBody =
   (value: unknown) =>
   (self: Request): Request =>
     self.setBody(body.json(value)).acceptJson
 
 /**
- * @tsplus pipeable effect-http/client/Request searchParams
+ * @tsplus pipeable effect-http/client/Request searchParamsBody
  */
-export const searchParams =
+export const searchParamsBody =
   (value: URLSearchParams) =>
   (self: Request): Request =>
     self.setBody(body.searchParams(value))
 
 /**
- * @tsplus pipeable effect-http/client/Request formData
+ * @tsplus pipeable effect-http/client/Request formDataBody
  */
-export const formData =
+export const formDataBody =
   (value: FormData) =>
   (self: Request): Request =>
     self.setBody(body.formData(value))
@@ -267,6 +264,6 @@ export const withSchema = <A, R, E, RA>(
 
       return encoded._tag === "Left"
         ? Effect.fail(new SchemaEncodeError(encoded.left, self))
-        : run(self.json(encoded.right))
+        : run(self.jsonBody(encoded.right))
     }
 }

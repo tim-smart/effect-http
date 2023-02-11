@@ -8,6 +8,7 @@ export interface Response {
   readonly stream: Stream<never, ResponseDecodeError, Uint8Array>
   readonly json: Effect<never, ResponseDecodeError, unknown>
   readonly text: Effect<never, ResponseDecodeError, string>
+  readonly formData: Effect<never, ResponseDecodeError, FormData>
   readonly blob: Effect<never, ResponseDecodeError, Blob>
   readonly decode: <A>(
     schema: Schema<A>,
@@ -43,6 +44,13 @@ class ResponseImpl implements Response {
   get text(): Effect<never, ResponseDecodeError, string> {
     return Effect.tryCatchPromise(
       () => this.source.text(),
+      _ => new ResponseDecodeError(_, this, "text"),
+    )
+  }
+
+  get formData(): Effect<never, ResponseDecodeError, FormData> {
+    return Effect.tryCatchPromise(
+      () => this.source.formData(),
       _ => new ResponseDecodeError(_, this, "text"),
     )
   }

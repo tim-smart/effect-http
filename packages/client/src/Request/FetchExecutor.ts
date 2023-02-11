@@ -30,7 +30,7 @@ export const fetchRaw =
         url.searchParams.append(key, value)
       })
 
-      const headers = new Headers(request.headers.toReadonlyArray() as any)
+      const headers = new Headers([...request.headers] as any)
       const body = request.body.map(convertBody).getOrUndefined
 
       return $(
