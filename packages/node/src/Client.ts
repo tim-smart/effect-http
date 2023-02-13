@@ -1,5 +1,6 @@
 import * as Http from "@effect-http/client"
 import type { Effect } from "@effect/io/Effect"
+import type { Layer } from "@effect/io/Layer"
 import type { Stream } from "@effect/stream/Stream"
 import type { Option } from "@fp-ts/core/Option"
 import * as S from "@fp-ts/schema"
@@ -8,7 +9,7 @@ import * as NodeHttp from "node:http"
 import * as NodeHttps from "node:https"
 import { Readable } from "node:stream"
 import { pipeline } from "node:stream/promises"
-import { NodeAgent } from "./internal/Agent.js"
+import { LiveNodeAgent, NodeAgent } from "./internal/Agent.js"
 import * as IS from "./internal/stream.js"
 
 export const executeRaw: Http.executor.RequestExecutor<
@@ -62,6 +63,21 @@ export const executeDecode_: <A>(
   schema: S.Schema<A>,
 ) => (request: Http.Request) => Effect<NodeAgent, Http.HttpClientError, A> =
   executeDecode
+
+export const LiveNodeRequestExecutor = Layer.effect(
+  Http.executor.HttpRequestExecutor,
+  Do($ => {
+    const agent = $(NodeAgent.access)
+
+    return {
+      execute: (request: Http.Request) =>
+        executeRaw(request).provideService(NodeAgent, agent),
+    }
+  }),
+)
+
+export const LiveNodeRequestExecutorWithAgent =
+  LiveNodeAgent >> LiveNodeRequestExecutor
 
 const executeRequest = (
   { httpAgent, httpsAgent }: NodeAgent,
