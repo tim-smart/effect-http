@@ -11,8 +11,6 @@ import { pipeline } from "node:stream/promises"
 import { NodeAgent } from "./internal/Agent.js"
 import * as IS from "./internal/stream.js"
 
-export * from "./internal/Agent.js"
-
 export const executeRaw: Http.executor.RequestExecutor<
   NodeAgent,
   Http.HttpClientError,
