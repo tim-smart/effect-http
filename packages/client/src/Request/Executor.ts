@@ -18,7 +18,7 @@ export interface RequestExecutor<R, E, A> {
  * @since 1.0.0
  */
 export interface HttpRequestExecutor {
-  execute(request: Request): Effect<never, HttpClientError, Response>
+  readonly execute: RequestExecutor<never, HttpClientError, Response>
 }
 
 /**
