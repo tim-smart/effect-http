@@ -13,7 +13,7 @@ import * as executor from "./Executor.js"
  *
  * @since 1.0.0
  */
-export const fetchRaw =
+export const fetch =
   (
     options: RequestInit = {},
   ): RequestExecutor<never, HttpClientError, response.Response> =>
@@ -55,8 +55,8 @@ export const fetchRaw =
  *
  * @since 1.0.0
  */
-export const fetch = flow(
-  fetchRaw,
+export const fetchOk = flow(
+  fetch,
   executor.filterStatus(_ => _ >= 200 && _ < 300),
 )
 
@@ -67,7 +67,7 @@ export const fetch = flow(
 export const fetch_: (
   options?: RequestInit,
 ) => (request: Request) => Effect<never, HttpClientError, response.Response> =
-  fetch
+  fetchOk
 
 /**
  * A request executor that uses the global fetch function.
@@ -78,7 +78,7 @@ export const fetch_: (
  * @since 1.0.0
  */
 export const fetchJson = flow(
-  fetch,
+  fetchOk,
   executor.contramap(_ => _.acceptJson),
   executor.mapEffect(_ => _.json),
 )
@@ -101,7 +101,7 @@ export const fetchDecode = <A>(
   schema: Schema<A>,
   options?: RequestInit,
 ): RequestExecutor<never, HttpClientError, A> =>
-  fetch(options)
+  fetchOk(options)
     .contramap(_ => _.acceptJson)
     .mapEffect(_ => _.decode(schema))
 
