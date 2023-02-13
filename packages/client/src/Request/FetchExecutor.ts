@@ -1,3 +1,4 @@
+import type { ParseOptions } from "@fp-ts/schema/AST"
 import { HttpClientError, RequestError } from "../Error.js"
 import { Request } from "../Request.js"
 import * as response from "../Response.js"
@@ -99,18 +100,20 @@ export const fetchJson_: (
  */
 export const fetchDecode = <A>(
   schema: Schema<A>,
-  options?: RequestInit,
+  options?: ParseOptions,
+  requestInit?: RequestInit,
 ): RequestExecutor<never, HttpClientError, A> =>
-  fetchOk(options)
+  fetchOk(requestInit)
     .contramap(_ => _.acceptJson)
-    .mapEffect(_ => _.decode(schema))
+    .mapEffect(_ => _.decode(schema, options))
 
 /**
  * @tsplus pipeable effect-http/client/Request fetchDecode
  */
 export const fetchDecode_: <A>(
   schema: Schema<A>,
-  options?: RequestInit,
+  options?: ParseOptions,
+  requestInit?: RequestInit,
 ) => (request: Request) => Effect<never, HttpClientError, A> = fetchDecode
 
 const convertBody = (body: RequestBody): BodyInit => {
