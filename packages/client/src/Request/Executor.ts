@@ -1,5 +1,5 @@
 import { Predicate } from "@fp-ts/core/Predicate"
-import { StatusCodeError } from "../Error.js"
+import { HttpClientError, StatusCodeError } from "../Error.js"
 import { Request } from "../Request.js"
 import { Response } from "../Response.js"
 
@@ -9,6 +9,24 @@ import { Response } from "../Response.js"
 export interface RequestExecutor<R, E, A> {
   (request: Request): Effect<R, E, A>
 }
+
+/**
+ * Represents a service that can execute a request.
+ *
+ * Can be used for embedding a RequestExecutor into a Layer.
+ *
+ * @since 1.0.0
+ */
+export interface HttpRequestExecutor {
+  execute(request: Request): Effect<never, HttpClientError, Response>
+}
+
+/**
+ * A tag for the HttpRequestExecutor service.
+ *
+ * @since 1.0.0
+ */
+export const HttpRequestExecutor = Tag<HttpRequestExecutor>()
 
 /**
  * @tsplus pipeable effect-http/client/RequestExecutor contramap

@@ -123,3 +123,8 @@ const convertBody = (body: RequestBody): BodyInit => {
       return toReadableStream(body.value)
   }
 }
+
+export const LiveFetchRequestExecutor = Layer.succeed(
+  executor.HttpRequestExecutor,
+  { execute: fetch() },
+)

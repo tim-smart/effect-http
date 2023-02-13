@@ -16,6 +16,11 @@ import type { Exit } from "@effect/io/Exit"
 /**
  * @tsplus global
  */
+import type { Layer } from "@effect/io/Layer"
+
+/**
+ * @tsplus global
+ */
 import type { Scope, CloseableScope } from "@effect/io/Scope"
 
 /**
