@@ -28,7 +28,7 @@ export const fromRequest = (
   source: IncomingMessage,
   { limits, multipartFieldTypes }: MultipartOptions,
 ) => {
-  const make = Effect(BB({ headers: source.headers, limits }))
+  const make = Effect(() => BB({ headers: source.headers, limits }))
     .acquireRelease(_ =>
       Effect(() => {
         _.removeAllListeners()

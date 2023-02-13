@@ -17,6 +17,7 @@ import { HttpFs } from "@effect-http/core/internal/HttpFs"
 import { nodeHttpFsImpl } from "./internal/HttpFs.js"
 
 export * from "./internal/HttpFs.js"
+export * as client from "./Client.js"
 
 export type ServeOptions = ListenOptions & {
   port: number
