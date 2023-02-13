@@ -1,5 +1,5 @@
 import { Predicate } from "@fp-ts/core/Predicate"
-import { HttpClientError, StatusCodeError } from "../Error.js"
+import { StatusCodeError } from "../Error.js"
 import { Request } from "../Request.js"
 import { Response } from "../Response.js"
 
@@ -28,7 +28,7 @@ export const contramapEffect =
     self: RequestExecutor<R1, E1, A>,
   ): RequestExecutor<R1 | R2, E1 | E2, A> =>
   request =>
-    f(request).flatMap(_ => self(_))
+    f(request).flatMap(self)
 
 /**
  * @tsplus pipeable effect-http/client/RequestExecutor map
