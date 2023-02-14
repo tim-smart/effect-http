@@ -21,6 +21,11 @@ import type { Layer } from "@effect/io/Layer"
 /**
  * @tsplus global
  */
+import type { Schedule } from "@effect/io/Schedule"
+
+/**
+ * @tsplus global
+ */
 import type { Scope, CloseableScope } from "@effect/io/Scope"
 
 /**

@@ -94,6 +94,15 @@ export const filterOrElseWith =
     self(request).filterOrElseWith(f, orElse)
 
 /**
+ * @tsplus pipeable effect-http/client/RequestExecutor retry
+ */
+export const retry =
+  <R1, E, B>(policy: Schedule<R1, E, B>) =>
+  <R, A>(self: RequestExecutor<R, E, A>): RequestExecutor<R1 | R, E, A> =>
+  request =>
+    self(request).retry(policy)
+
+/**
  * @tsplus pipeable effect-http/client/RequestExecutor catchTag
  */
 export const catchTag =

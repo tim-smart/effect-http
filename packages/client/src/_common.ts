@@ -1,6 +1,7 @@
 export type { Cause } from "@effect/io/Cause"
 export type { Effect } from "@effect/io/Effect"
 export type { Layer } from "@effect/io/Layer"
+export type { Schedule } from "@effect/io/Schedule"
 export type { Stream } from "@effect/stream/Stream"
 export { Context, Tag } from "@effect/data/Context"
 export type { LazyArg } from "@fp-ts/core/Function"
