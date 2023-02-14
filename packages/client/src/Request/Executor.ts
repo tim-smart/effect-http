@@ -83,6 +83,11 @@ export const filterStatus =
     )
 
 /**
+ * @tsplus getter effect-http/client/RequestExecutor filterStatusOk
+ */
+export const filterStatusOk = filterStatus(_ => _ >= 200 && _ < 300)
+
+/**
  * @tsplus pipeable effect-http/client/RequestExecutor filterOrElseWith
  */
 export const filterOrElseWith =

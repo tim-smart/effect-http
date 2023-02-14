@@ -56,10 +56,7 @@ export const fetch =
  *
  * @since 1.0.0
  */
-export const fetchOk = flow(
-  fetch,
-  executor.filterStatus(_ => _ >= 200 && _ < 300),
-)
+export const fetchOk = flow(fetch, executor.filterStatusOk)
 
 /**
  * @since 1.0.0
