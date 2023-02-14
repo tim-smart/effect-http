@@ -11,6 +11,7 @@ import { Readable } from "node:stream"
 import { pipeline } from "node:stream/promises"
 import { LiveNodeAgent, NodeAgent } from "./internal/Agent.js"
 import * as IS from "./internal/stream.js"
+import { ParseOptions } from "@fp-ts/schema/AST"
 
 export const executeRaw: Http.executor.RequestExecutor<
   NodeAgent,
@@ -210,10 +211,11 @@ export class ResponseImpl implements Http.response.Response {
 
   decode<A>(
     schema: S.Schema<A>,
+    options?: ParseOptions,
   ): Effect<never, Http.ResponseDecodeError | Http.SchemaDecodeError, A> {
     const decode = S.decode(schema)
     return this.json.flatMap(_ =>
-      Effect.fromEither(decode(_)).mapError(
+      Effect.fromEither(decode(_, options)).mapError(
         _ => new Http.SchemaDecodeError(_, this),
       ),
     )
