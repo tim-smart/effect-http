@@ -188,6 +188,31 @@ export const appendParams =
     )
 
 /**
+ * @tsplus pipeable effect-http/client/Request setParam
+ */
+export const setParam =
+  (name: string, value: any) =>
+  (self: Request): Request =>
+    appendParam(
+      name,
+      value,
+    )({
+      ...self,
+      urlParams: self.urlParams.filter(([key]) => key !== name),
+    })
+
+/**
+ * @tsplus pipeable effect-http/client/Request setParams
+ */
+export const setParams =
+  (params: Record<string, any>) =>
+  (self: Request): Request =>
+    Object.entries(params).reduce(
+      (acc, [key, value]) => setParam(key, value)(acc),
+      self,
+    )
+
+/**
  * @tsplus pipeable effect-http/client/Request setBody
  */
 export const setBody =
