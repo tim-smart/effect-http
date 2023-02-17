@@ -1,6 +1,6 @@
 {
   "name": "@effect-http/bun",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "type": "module",
   "publishConfig": {
     "access": "public"
@@ -17,16 +17,16 @@
   "license": "ISC",
   "dependencies": {
     "@effect-http/core": "workspace:^0.6.0",
-    "@effect/data": "^0.1.0",
-    "@effect/io": "~0.1.11",
-    "@fp-ts/core": "^0.2.0"
+    "@effect/data": "^0.1.2",
+    "@effect/io": "~0.1.12",
+    "@fp-ts/core": "^0.2.1"
   },
   "devDependencies": {
     "@changesets/cli": "^2.26.0",
-    "@tsplus-types/effect__data": "0.1.0-cf9876a",
-    "@tsplus-types/effect__io": "0.1.11-cf9876a",
-    "@tsplus-types/fp-ts__core": "0.2.0-cf9876a",
-    "bun-types": "^0.5.4",
+    "@tsplus-types/effect__data": "0.1.2-565f9c6",
+    "@tsplus-types/effect__io": "0.1.12-565f9c6",
+    "@tsplus-types/fp-ts__core": "0.2.1-565f9c6",
+    "bun-types": "^0.5.6",
     "prettier": "^2.8.4",
     "typescript": "https://cdn.jsdelivr.net/npm/@tsplus/installer@0.0.170/compiler/typescript.tgz"
   },
