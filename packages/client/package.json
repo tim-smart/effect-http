@@ -1,6 +1,6 @@
 {
   "name": "@effect-http/client",
-  "version": "0.2.10",
+  "version": "0.2.11",
   "type": "module",
   "publishConfig": {
     "access": "public"
