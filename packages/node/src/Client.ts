@@ -2,7 +2,7 @@ import * as Http from "@effect-http/client"
 import type { Effect } from "@effect/io/Effect"
 import type { Layer } from "@effect/io/Layer"
 import type { Stream } from "@effect/stream/Stream"
-import type { Option } from "@fp-ts/core/Option"
+import type { Option } from "@effect/data/Option"
 import * as S from "@fp-ts/schema"
 import { IncomingMessage } from "http"
 import * as NodeHttp from "node:http"
@@ -15,7 +15,7 @@ import { ParseOptions } from "@fp-ts/schema/AST"
 
 export const executeRaw: Http.executor.RequestExecutor<
   NodeAgent,
-  Http.HttpClientError,
+  Http.RequestError,
   Http.response.Response
 > = request =>
   Do($ => {
@@ -62,8 +62,16 @@ export const executeDecode = <A>(schema: S.Schema<A>) =>
  */
 export const executeDecode_: <A>(
   schema: S.Schema<A>,
-) => (request: Http.Request) => Effect<NodeAgent, Http.HttpClientError, A> =
-  executeDecode
+) => (
+  request: Http.Request,
+) => Effect<
+  NodeAgent,
+  | Http.RequestError
+  | Http.StatusCodeError
+  | Http.ResponseDecodeError
+  | Http.SchemaDecodeError,
+  A
+> = executeDecode
 
 export const LiveNodeRequestExecutor = Layer.effect(
   Http.executor.HttpRequestExecutor,

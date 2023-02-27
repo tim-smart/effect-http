@@ -1,8 +1,8 @@
 import * as Effect from "@effect/io/Effect"
 import * as Sink from "@effect/stream/Sink"
 import * as Stream from "@effect/stream/Stream"
-import { pipe } from "@fp-ts/core/Function"
-import * as Option from "@fp-ts/core/Option"
+import { pipe } from "@effect/data/Function"
+import * as Option from "@effect/data/Option"
 import * as NFS from "fs"
 
 export class ErrnoError {
@@ -18,7 +18,7 @@ export class OpenError {
 }
 
 const unsafeOpen = (path: string, flags?: NFS.OpenMode, mode?: NFS.Mode) =>
-  Effect.async<never, ErrnoError | OpenError, number>((resume) => {
+  Effect.async<never, ErrnoError | OpenError, number>(resume => {
     try {
       NFS.open(path, flags, mode, (err, fd) => {
         if (err) {
@@ -33,8 +33,8 @@ const unsafeOpen = (path: string, flags?: NFS.OpenMode, mode?: NFS.Mode) =>
   })
 
 const close = (fd: number) =>
-  Effect.async<never, ErrnoError, void>((resume) => {
-    NFS.close(fd, (err) => {
+  Effect.async<never, ErrnoError, void>(resume => {
+    NFS.close(fd, err => {
       if (err) {
         resume(Effect.fail(new ErrnoError(err)))
       } else {
@@ -44,12 +44,12 @@ const close = (fd: number) =>
   })
 
 export const open = (path: string, flags?: NFS.OpenMode, mode?: NFS.Mode) =>
-  Effect.acquireRelease(unsafeOpen(path, flags, mode), (fd) =>
+  Effect.acquireRelease(unsafeOpen(path, flags, mode), fd =>
     Effect.ignoreLogged(close(fd)),
   )
 
 export const stat = (path: string) =>
-  Effect.async<never, ErrnoError, NFS.Stats>((resume) => {
+  Effect.async<never, ErrnoError, NFS.Stats>(resume => {
     NFS.stat(path, (err, stats) => {
       if (err) {
         resume(Effect.fail(new ErrnoError(err)))
@@ -66,7 +66,7 @@ export const read = (
   length: number,
   position: NFS.ReadPosition | null,
 ) =>
-  Effect.async<never, ErrnoError, number>((resume) => {
+  Effect.async<never, ErrnoError, number>(resume => {
     NFS.read(fd, buf, offset, length, position, (err, bytesRead) => {
       if (err) {
         resume(Effect.fail(new ErrnoError(err)))
@@ -83,10 +83,10 @@ export const allocAndRead = (
 ) =>
   pipe(
     Effect.sync(() => Buffer.allocUnsafeSlow(size)),
-    Effect.flatMap((buf) =>
+    Effect.flatMap(buf =>
       pipe(
         read(fd, buf, 0, size, position),
-        Effect.map((bytesRead) => {
+        Effect.map(bytesRead => {
           if (bytesRead === 0) {
             return Option.none()
           }
@@ -121,8 +121,8 @@ export const stream = (
 ) =>
   pipe(
     open(path, "r"),
-    Effect.map((fd) =>
-      Stream.unfoldEffect(offset, (position) => {
+    Effect.map(fd =>
+      Stream.unfoldEffect(offset, position => {
         if (bytesToRead !== undefined && bytesToRead <= position - offset) {
           return Effect.succeedNone()
         }
@@ -148,7 +148,7 @@ export const stream = (
   )
 
 export const write = (fd: number, data: Uint8Array, offset?: number) =>
-  Effect.async<never, ErrnoError, number>((resume) => {
+  Effect.async<never, ErrnoError, number>(resume => {
     NFS.write(fd, data, offset, (err, written) => {
       if (err) {
         resume(Effect.fail(new ErrnoError(err)))
@@ -165,7 +165,7 @@ export const writeAll = (
 ): Effect.Effect<never, ErrnoError, void> =>
   pipe(
     write(fd, data, offset),
-    Effect.flatMap((bytesWritten) => {
+    Effect.flatMap(bytesWritten => {
       const newOffset = offset + bytesWritten
 
       if (newOffset >= data.byteLength) {
@@ -183,6 +183,6 @@ export const sink = (
 ) =>
   pipe(
     open(path, flags, mode),
-    Effect.map((fd) => Sink.forEach((_: Uint8Array) => writeAll(fd, _))),
+    Effect.map(fd => Sink.forEach((_: Uint8Array) => writeAll(fd, _))),
     Sink.unwrapScoped,
   )

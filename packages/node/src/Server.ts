@@ -6,7 +6,7 @@ import {
 } from "@effect-http/core/Response"
 import type { Effect } from "@effect/io/Effect"
 import * as Runtime from "@effect/io/Runtime"
-import { LazyArg } from "@fp-ts/core/Function"
+import { LazyArg } from "@effect/data/Function"
 import * as Http from "http"
 import type { ListenOptions } from "net"
 import { Readable } from "stream"

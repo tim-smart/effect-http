@@ -96,42 +96,38 @@ importers:
     specifiers:
       '@changesets/cli': ^2.26.0
       '@effect-http/client': workspace:^0.3.0
-      '@effect-http/core': workspace:^0.6.0
-      '@effect/data': ^0.1.2
-      '@effect/io': ~0.1.12
-      '@effect/stream': ^0.3.1
-      '@fp-ts/core': ^0.2.1
-      '@fp-ts/schema': ^0.2.0
-      '@tsplus-types/effect__data': 0.1.2-565f9c6
-      '@tsplus-types/effect__io': 0.1.12-565f9c6
-      '@tsplus-types/effect__stream': 0.3.1-565f9c6
-      '@tsplus-types/fp-ts__core': 0.2.1-565f9c6
+      '@effect-http/core': workspace:^0.7.0
+      '@effect/data': ^0.2.0
+      '@effect/io': ~0.3.0
+      '@effect/stream': ^0.5.0
+      '@fp-ts/schema': ^0.3.2
+      '@tsplus-types/effect__data': 0.2.0-9b60662
+      '@tsplus-types/effect__io': 0.3.0-9b60662
+      '@tsplus-types/effect__stream': 0.5.0-9b60662
       '@types/busboy': ^1.5.0
-      '@types/node': ^18.13.0
+      '@types/node': ^18.14.2
       busboy: ^1.6.0
       prettier: ^2.8.4
-      raw-body: ^2.5.1
-      typescript: https://cdn.jsdelivr.net/npm/@tsplus/installer@0.0.170/compiler/typescript.tgz
+      raw-body: ^2.5.2
+      typescript: https://cdn.jsdelivr.net/npm/@tsplus/installer@0.0.171/compiler/typescript.tgz
     dependencies:
       '@effect-http/client': link:../client
       '@effect-http/core': link:../core
-      '@effect/data': 0.1.2
-      '@effect/io': 0.1.12
-      '@effect/stream': 0.3.1
-      '@fp-ts/core': 0.2.1
-      '@fp-ts/schema': 0.2.0
+      '@effect/data': 0.2.0
+      '@effect/io': 0.3.0
+      '@effect/stream': 0.5.0
+      '@fp-ts/schema': 0.3.2
       '@types/busboy': 1.5.0
       busboy: 1.6.0
-      raw-body: 2.5.1
+      raw-body: 2.5.2
     devDependencies:
       '@changesets/cli': 2.26.0
-      '@tsplus-types/effect__data': 0.1.2-565f9c6_@effect+data@0.1.2
-      '@tsplus-types/effect__io': 0.1.12-565f9c6_@effect+io@0.1.12
-      '@tsplus-types/effect__stream': 0.3.1-565f9c6_@effect+stream@0.3.1
-      '@tsplus-types/fp-ts__core': 0.2.1-565f9c6_@fp-ts+core@0.2.1
-      '@types/node': 18.13.0
+      '@tsplus-types/effect__data': 0.2.0-9b60662_@effect+data@0.2.0
+      '@tsplus-types/effect__io': 0.3.0-9b60662_@effect+io@0.3.0
+      '@tsplus-types/effect__stream': 0.5.0-9b60662_@effect+stream@0.5.0
+      '@types/node': 18.14.2
       prettier: 2.8.4
-      typescript: '@cdn.jsdelivr.net/npm/@tsplus/installer@0.0.170/compiler/typescript.tgz'
+      typescript: '@cdn.jsdelivr.net/npm/@tsplus/installer@0.0.171/compiler/typescript.tgz'
 
 packages:
 
@@ -347,48 +343,19 @@ packages:
       prettier: 2.8.4
     dev: true
 
-  /@effect/data/0.1.2:
-    resolution: {integrity: sha512-X0zlbWN/po6LxMQRxRAdIJMiBNpp8ib7FpskVeDmTlJ2id+SrcFoE4R/QnW1YkD2WvnPH2s7AtNLT8Xwx7+GnQ==}
-    dependencies:
-      '@fp-ts/core': 0.2.1
-
   /@effect/data/0.2.0:
     resolution: {integrity: sha512-1hSNjR0LX3zsGxCB8wykSNZ4OHXoA9NjeWlxgjmxcCOkYyMH+3exxJu/9GbkXt/35zaZE0KDFyMwfvrr20zRKw==}
-
-  /@effect/io/0.1.12:
-    resolution: {integrity: sha512-qWEPKQzmkKiKn3bWy7nHJjr5f8ez3VHJ1SnzKOKIAvFq83pbGpCkbaxq4xyL6lIT/1kDG4wZzwSrTAMNoKRB1g==}
-    dependencies:
-      '@effect/data': 0.1.2
-      '@fp-ts/core': 0.2.1
 
   /@effect/io/0.3.0:
     resolution: {integrity: sha512-Vpp+CUkUolShXJ9uosGJu3uOojoCw7ifB23u3ffr7yogk8o60MIGi2vbbo6V9UZgSIGDDnURgyOX6i/0KQt12Q==}
     dependencies:
       '@effect/data': 0.2.0
 
-  /@effect/stream/0.3.1:
-    resolution: {integrity: sha512-SurR6IaJMkMSzLqcGBBB0XpLAW2gmwQ16DRpBeCbaFMEoNh2nwBFP9HY7Z/UbfNxdNAU52P7tIglYALUVJQIig==}
-    dependencies:
-      '@effect/data': 0.1.2
-      '@effect/io': 0.1.12
-      '@fp-ts/core': 0.2.1
-
   /@effect/stream/0.5.0:
     resolution: {integrity: sha512-Qt+NGT8CpwTcCu8mhmSssNMDWDSokkpdhXrEDheHsjR1up3HkH4eNyxmLIITcl7byKfDpIXQDAxq9TQbkHMVEA==}
     dependencies:
       '@effect/data': 0.2.0
       '@effect/io': 0.3.0
-
-  /@fp-ts/core/0.2.1:
-    resolution: {integrity: sha512-gjp/LTCsxqe8KYvPOcMcsEXT+J6tKC4v1nNqK4RZsZcB6pMcQgrullh5Oa371O9WHSULivpgOvjWyeioFevg5g==}
-
-  /@fp-ts/schema/0.2.0:
-    resolution: {integrity: sha512-t+WqpvddcLWFJ0xUI8Ey+AxehUvzWicAuHSI7EV854m6lKMzQV6aAV5/vWV7l7CMXJ3R0juWWyzQIkdEXus4/Q==}
-    dependencies:
-      '@effect/data': 0.1.2
-      '@fp-ts/core': 0.2.1
-      fast-check: 3.6.3
-    dev: false
 
   /@fp-ts/schema/0.3.2:
     resolution: {integrity: sha512-DTWpgptOjnqEJxiif4Q8DDE6/8k7dx8Q+bJe/PMs+EiSvn62CXli4I6jBZHymL9+YJ35ezeK9zHa9Y2cQIOYwQ==}
@@ -437,28 +404,12 @@ packages:
       fastq: 1.15.0
     dev: true
 
-  /@tsplus-types/effect__data/0.1.2-565f9c6_@effect+data@0.1.2:
-    resolution: {integrity: sha512-k1NaCYnXRbEzO6TLk3U4lpBUHMP5On1h2Apzyknapqlc/fU/8AmUoPNOSfU8VMLOJA5G4u3mnQqQM6mpfndBLQ==}
-    peerDependencies:
-      '@effect/data': 0.1.2
-    dependencies:
-      '@effect/data': 0.1.2
-    dev: true
-
   /@tsplus-types/effect__data/0.2.0-9b60662_@effect+data@0.2.0:
     resolution: {integrity: sha512-9uuLDL6zKtLO6xu76V9jI0MonJp1Buz1T1ZKCsSaNyzBP6K/DDHacK57sBjCidnWFIY8Z7VVZTjXStgKf2ulOA==}
     peerDependencies:
       '@effect/data': 0.2.0
     dependencies:
       '@effect/data': 0.2.0
-    dev: true
-
-  /@tsplus-types/effect__io/0.1.12-565f9c6_@effect+io@0.1.12:
-    resolution: {integrity: sha512-fdaoTZ5ZpEnwEv1Gm0ChjoFz7BkwDgFgA9ucyVo0GdzGPDqtqoaEG3eS85ZifOb2Ohq5a7iy3nS+Bt8ZpnUdBw==}
-    peerDependencies:
-      '@effect/io': 0.1.12
-    dependencies:
-      '@effect/io': 0.1.12
     dev: true
 
   /@tsplus-types/effect__io/0.3.0-9b60662_@effect+io@0.3.0:
@@ -469,29 +420,12 @@ packages:
       '@effect/io': 0.3.0
     dev: true
 
-  /@tsplus-types/effect__stream/0.3.1-565f9c6_@effect+stream@0.3.1:
-    resolution: {integrity: sha512-vbWqlW5qBmnZLghWDgwLftfRvXu8/gCPIwEmKqDaF6uSJTEY34tt6gyFTBlgpf/oN4h6P0rs3XxLcw/VTopExQ==}
-    peerDependencies:
-      '@effect/stream': 0.3.1
-    dependencies:
-      '@effect/stream': 0.3.1
-    dev: true
-
   /@tsplus-types/effect__stream/0.5.0-9b60662_@effect+stream@0.5.0:
     resolution: {integrity: sha512-vxoppqLeHo0CuyS0h8UlKhlIRTfaS1fdlSl9jw+iFLbY8GC/M6kJfxQH7RRCzJmpCXkvAURgSvfrksjazCwm+g==}
     peerDependencies:
       '@effect/stream': 0.5.0
     dependencies:
       '@effect/stream': 0.5.0
-    dev: true
-
-  /@tsplus-types/fp-ts__core/0.2.1-565f9c6_@fp-ts+core@0.2.1:
-    resolution: {integrity: sha512-K5IeQ9znH/m395kN9C05JAEUMDsHfdqVPHlmmQQDM43kqZEZeRbQBBEFJsscTQRncl1h18CQeiVLepvPJpMDsA==}
-    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
-    peerDependencies:
-      '@fp-ts/core': 0.2.1
-    dependencies:
-      '@fp-ts/core': 0.2.1
     dev: true
 
   /@tsplus-types/fp-ts__schema/0.3.2-9b60662_@fp-ts+schema@0.3.2:
@@ -505,7 +439,7 @@ packages:
   /@types/busboy/1.5.0:
     resolution: {integrity: sha512-ncOOhwmyFDW76c/Tuvv9MA9VGYUCn8blzyWmzYELcNGDb0WXWLSmFi7hJq25YdRBYJrmMBB5jZZwUjlJe9HCjQ==}
     dependencies:
-      '@types/node': 18.13.0
+      '@types/node': 18.14.2
     dev: false
 
   /@types/is-ci/3.0.0:
@@ -526,8 +460,8 @@ packages:
     resolution: {integrity: sha512-J8xLz7q2OFulZ2cyGTLE1TbbZcjpno7FaN6zdJNrgAdrJ+DZzh/uFR6YrTb4C+nXakvud8Q4+rbhoIWlYQbUFQ==}
     dev: true
 
-  /@types/node/18.13.0:
-    resolution: {integrity: sha512-gC3TazRzGoOnoKAhUx+Q0t8S9Tzs74z7m0ipwGpSqQrleP14hKxP4/JUeEQcD3W1/aIpnWl8pHowI7WokuZpXg==}
+  /@types/node/18.14.2:
+    resolution: {integrity: sha512-1uEQxww3DaghA0RxqHx0O0ppVlo43pJhepY51OxuQIKHpjbnYLA7vcdwioNPzIqmC2u3I/dmylcqjlh0e7AyUA==}
 
   /@types/normalize-package-data/2.4.1:
     resolution: {integrity: sha512-Gj7cI7z+98M282Tqmp2K5EIsoouUEzbBJhQQzDE3jSIRk6r9gsz0oUokqIUR4u1R3dMHo0pDHM7sNOHyhulypw==}
@@ -908,13 +842,6 @@ packages:
       iconv-lite: 0.4.24
       tmp: 0.0.33
     dev: true
-
-  /fast-check/3.6.3:
-    resolution: {integrity: sha512-5+ovrjQLUa+F9RbRcW7A++K+olKy2mNgYNfFmXSzQOAQ/Fuit12F1UI8z5Bic9YgRkUAQqXSkFUAAs7xohbvvg==}
-    engines: {node: '>=8.0.0'}
-    dependencies:
-      pure-rand: 6.0.0
-    dev: false
 
   /fast-check/3.7.0:
     resolution: {integrity: sha512-1QFnXC7UcTlSBk7523W99QbnP6mTrvUjEXLKODjjhh/QJUHAzzBow2POae7hV+Qrqjj4XaU0HbTfwEa8HprS5g==}
@@ -1645,8 +1572,8 @@ packages:
     engines: {node: '>= 0.6'}
     dev: false
 
-  /raw-body/2.5.1:
-    resolution: {integrity: sha512-qqJBtEyVgS0ZmPGdCFPWJ3FreoqvG4MVQln/kCgF7Olq95IbOp0/BWyMwbdtn4VTvkM8Y7khCQ2Xgk/tcrCXig==}
+  /raw-body/2.5.2:
+    resolution: {integrity: sha512-8zGqypfENjCIqGhgXToC8aB2r7YrBX+AQAfIPs/Mlk+BtPTztOvTS01NRW/3Eh60J+a48lt8qsCzirQ6loCVfA==}
     engines: {node: '>= 0.8'}
     dependencies:
       bytes: 3.1.2

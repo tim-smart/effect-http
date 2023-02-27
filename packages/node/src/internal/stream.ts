@@ -1,8 +1,8 @@
 import type { Effect } from "@effect/io/Effect"
 import * as Sink from "@effect/stream/Sink"
 import * as Stream from "@effect/stream/Stream"
-import { LazyArg, pipe } from "@fp-ts/core/Function"
-import * as Option from "@fp-ts/core/Option"
+import { LazyArg, pipe } from "@effect/data/Function"
+import * as Option from "@effect/data/Option"
 import { Readable, Writable } from "stream"
 
 export class ReadableError {
