@@ -113,7 +113,7 @@ export const retry =
 export const catchTag =
   <K extends E["_tag"] & string, E extends { _tag: string }, R1, E1, A1>(
     tag: K,
-    f: (e: E) => Effect<R1, E1, A1>,
+    f: (e: Extract<E, { _tag: K }>) => Effect<R1, E1, A1>,
   ) =>
   <R, A>(
     self: RequestExecutor<R, E, A>,
