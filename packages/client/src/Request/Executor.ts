@@ -1,5 +1,5 @@
 import { Predicate } from "@fp-ts/core/Predicate"
-import { HttpClientError, StatusCodeError } from "../Error.js"
+import { RequestError, StatusCodeError } from "../Error.js"
 import { Request } from "../Request.js"
 import { Response } from "../Response.js"
 
@@ -18,7 +18,7 @@ export interface RequestExecutor<R, E, A> {
  * @since 1.0.0
  */
 export interface HttpRequestExecutor {
-  readonly execute: RequestExecutor<never, HttpClientError, Response>
+  readonly execute: RequestExecutor<never, RequestError, Response>
 }
 
 /**

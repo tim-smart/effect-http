@@ -31,7 +31,7 @@ import type { Maybe } from "@effect-http/core/_common"
 /**
  * @tsplus global
  */
-import type { NonEmptyReadonlyArray } from "@fp-ts/core/ReadonlyArray"
+import type { NonEmptyReadonlyArray } from "@effect/data/ReadonlyArray"
 
 /**
  * @tsplus global
@@ -61,7 +61,7 @@ import { Context, Tag } from "@effect/data/Context"
 /**
  * @tsplus global
  */
-import { Either } from "@fp-ts/core/Either"
+import { Either } from "@effect/data/Either"
 
 /**
  * @tsplus global
@@ -71,7 +71,7 @@ import type { HashMap } from "@effect/data/HashMap"
 /**
  * @tsplus global
  */
-import { flow, pipe, identity, LazyArg } from "@fp-ts/core/Function"
+import { flow, pipe, identity, LazyArg } from "@effect/data/Function"
 
 /**
  * @tsplus global

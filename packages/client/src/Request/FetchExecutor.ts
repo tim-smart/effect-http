@@ -1,5 +1,10 @@
 import type { ParseOptions } from "@fp-ts/schema/AST"
-import { HttpClientError, RequestError } from "../Error.js"
+import {
+  RequestError,
+  ResponseDecodeError,
+  SchemaDecodeError,
+  StatusCodeError,
+} from "../Error.js"
 import { Request } from "../Request.js"
 import * as response from "../Response.js"
 import { toReadableStream } from "../util/stream.js"
@@ -17,7 +22,7 @@ import * as executor from "./Executor.js"
 export const fetch =
   (
     options: RequestInit = {},
-  ): RequestExecutor<never, HttpClientError, response.Response> =>
+  ): RequestExecutor<never, RequestError, response.Response> =>
   request =>
     Do($ => {
       const url = $(
@@ -64,8 +69,9 @@ export const fetchOk = flow(fetch, executor.filterStatusOk)
  */
 export const fetch_: (
   options?: RequestInit,
-) => (request: Request) => Effect<never, HttpClientError, response.Response> =
-  fetchOk
+) => (
+  request: Request,
+) => Effect<never, RequestError | StatusCodeError, response.Response> = fetchOk
 
 /**
  * A request executor that uses the global fetch function.
@@ -86,7 +92,13 @@ export const fetchJson = flow(
  */
 export const fetchJson_: (
   options?: RequestInit,
-) => (request: Request) => Effect<never, HttpClientError, unknown> = fetchJson
+) => (
+  request: Request,
+) => Effect<
+  never,
+  RequestError | StatusCodeError | ResponseDecodeError,
+  unknown
+> = fetchJson
 
 /**
  * A request executor that uses the global fetch function.
@@ -99,7 +111,11 @@ export const fetchDecode = <A>(
   schema: Schema<A>,
   options?: ParseOptions,
   requestInit?: RequestInit,
-): RequestExecutor<never, HttpClientError, A> =>
+): RequestExecutor<
+  never,
+  RequestError | StatusCodeError | ResponseDecodeError | SchemaDecodeError,
+  A
+> =>
   fetchOk(requestInit)
     .contramap(_ => _.acceptJson)
     .mapEffect(_ => _.decode(schema, options))
@@ -111,7 +127,13 @@ export const fetchDecode_: <A>(
   schema: Schema<A>,
   options?: ParseOptions,
   requestInit?: RequestInit,
-) => (request: Request) => Effect<never, HttpClientError, A> = fetchDecode
+) => (
+  request: Request,
+) => Effect<
+  never,
+  RequestError | StatusCodeError | ResponseDecodeError | SchemaDecodeError,
+  A
+> = fetchDecode
 
 const convertBody = (body: RequestBody): BodyInit => {
   switch (body._tag) {
