@@ -14,7 +14,8 @@ export type HttpClientError =
   | SchemaEncodeError
 
 export abstract class BaseFetchError {
-  readonly [HttpClientErrorTypeId] = HttpClientErrorTypeId
+  readonly [HttpClientErrorTypeId]: (_: HttpClientErrorTypeId) => unknown =
+    identity
 }
 
 export class RequestError extends BaseFetchError {
