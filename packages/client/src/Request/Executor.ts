@@ -1,10 +1,15 @@
-import { Predicate } from "@fp-ts/core/Predicate"
+import { Predicate } from "@effect/data/Predicate"
 import { RequestError, StatusCodeError } from "../Error.js"
 import { Request } from "../Request.js"
 import { Response } from "../Response.js"
 
 /**
+ * Represents a function that can execute a request.
+ *
+ * It takes a `Request` and returns an Effect that returns the result.
+ *
  * @tsplus type effect-http/client/RequestExecutor
+ * @since 1.0.0
  */
 export interface RequestExecutor<R, E, A> {
   (request: Request): Effect<R, E, A>
