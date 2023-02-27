@@ -8,29 +8,25 @@ importers:
   packages/bun:
     specifiers:
       '@changesets/cli': ^2.26.0
-      '@effect-http/core': workspace:^0.6.0
-      '@effect/data': ^0.1.2
-      '@effect/io': ~0.1.12
-      '@fp-ts/core': ^0.2.1
-      '@tsplus-types/effect__data': 0.1.2-565f9c6
-      '@tsplus-types/effect__io': 0.1.12-565f9c6
-      '@tsplus-types/fp-ts__core': 0.2.1-565f9c6
-      bun-types: ^0.5.6
+      '@effect-http/core': workspace:^0.7.0
+      '@effect/data': ^0.2.0
+      '@effect/io': ~0.3.0
+      '@tsplus-types/effect__data': 0.2.0-9b60662
+      '@tsplus-types/effect__io': 0.3.0-9b60662
+      bun-types: ^0.5.7
       prettier: ^2.8.4
-      typescript: https://cdn.jsdelivr.net/npm/@tsplus/installer@0.0.170/compiler/typescript.tgz
+      typescript: https://cdn.jsdelivr.net/npm/@tsplus/installer@0.0.171/compiler/typescript.tgz
     dependencies:
       '@effect-http/core': link:../core
-      '@effect/data': 0.1.2
-      '@effect/io': 0.1.12
-      '@fp-ts/core': 0.2.1
+      '@effect/data': 0.2.0
+      '@effect/io': 0.3.0
     devDependencies:
       '@changesets/cli': 2.26.0
-      '@tsplus-types/effect__data': 0.1.2-565f9c6_@effect+data@0.1.2
-      '@tsplus-types/effect__io': 0.1.12-565f9c6_@effect+io@0.1.12
-      '@tsplus-types/fp-ts__core': 0.2.1-565f9c6_@fp-ts+core@0.2.1
-      bun-types: 0.5.6
+      '@tsplus-types/effect__data': 0.2.0-9b60662_@effect+data@0.2.0
+      '@tsplus-types/effect__io': 0.3.0-9b60662_@effect+io@0.3.0
+      bun-types: 0.5.7
       prettier: 2.8.4
-      typescript: '@cdn.jsdelivr.net/npm/@tsplus/installer@0.0.170/compiler/typescript.tgz'
+      typescript: '@cdn.jsdelivr.net/npm/@tsplus/installer@0.0.171/compiler/typescript.tgz'
 
   packages/client:
     specifiers:
@@ -624,8 +620,8 @@ packages:
       wcwidth: 1.0.1
     dev: true
 
-  /bun-types/0.5.6:
-    resolution: {integrity: sha512-c4XXSAo4gA03XE3EIOB1bcLxUvWMzhiE9AQdoZi+3fplNLpyeOw7UJM3o1UCtk00NYZQIbgC/eJ88QrlSdxhxg==}
+  /bun-types/0.5.7:
+    resolution: {integrity: sha512-79ualR6PIZYTbALgsUxZXlAhkz0M7h7QMsXWn/eX+VOOCX3bPA9y0Pywu4MUEWOK8cK/JhnAODMqZfhCb911nw==}
     dev: true
 
   /busboy/1.6.0:
