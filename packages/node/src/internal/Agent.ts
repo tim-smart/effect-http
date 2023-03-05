@@ -6,7 +6,7 @@ import type { Layer } from "@effect/io/Layer"
 import { Tag } from "@effect/data/Context"
 
 const makeAgent = (opts?: AgentOptions) =>
-  Effect.struct({
+  Effect.all({
     httpAgent: Effect(() => new Http.Agent(opts)).acquireRelease(_ =>
       Effect(() => _.destroy()),
     ),

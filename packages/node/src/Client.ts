@@ -1,9 +1,10 @@
 import * as Http from "@effect-http/client"
+import type { Option } from "@effect/data/Option"
 import type { Effect } from "@effect/io/Effect"
 import type { Layer } from "@effect/io/Layer"
+import * as S from "@effect/schema"
+import { ParseOptions } from "@effect/schema/AST"
 import type { Stream } from "@effect/stream/Stream"
-import type { Option } from "@effect/data/Option"
-import * as S from "@fp-ts/schema"
 import { IncomingMessage } from "http"
 import * as NodeHttp from "node:http"
 import * as NodeHttps from "node:https"
@@ -11,7 +12,6 @@ import { Readable } from "node:stream"
 import { pipeline } from "node:stream/promises"
 import { LiveNodeAgent, NodeAgent } from "./internal/Agent.js"
 import * as IS from "./internal/stream.js"
-import { ParseOptions } from "@fp-ts/schema/AST"
 
 export const executeRaw: Http.executor.RequestExecutor<
   NodeAgent,
