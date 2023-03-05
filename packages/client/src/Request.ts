@@ -274,6 +274,20 @@ export const formDataBody =
     self.setBody(body.formData(value))
 
 /**
+ * @tsplus pipeable effect-http/client/Request streamBody
+ */
+export const streamBody =
+  (
+    value: Stream<never, unknown, Uint8Array>,
+    {
+      contentType,
+      contentLength,
+    }: { contentType?: string; contentLength?: number } = {},
+  ) =>
+  (self: Request): Request =>
+    self.setBody(body.stream(value, contentType, contentLength))
+
+/**
  * @tsplus pipeable effect-http/client/Request withSchema
  */
 export const withSchema = <A, R, E, RA>(
