@@ -1,7 +1,7 @@
 import type { Effect } from "@effect/io/Effect"
 import { ResponseDecodeError, SchemaDecodeError } from "./Error.js"
 import { fromReadableStream } from "./util/stream.js"
-import type { ParseOptions } from "@fp-ts/schema/AST"
+import type { ParseOptions } from "@effect/schema/AST"
 
 export interface Response {
   readonly status: number
@@ -68,11 +68,12 @@ class ResponseImpl implements Response {
     schema: Schema<A>,
     options: ParseOptions = { isUnexpectedAllowed: true },
   ): Effect<never, ResponseDecodeError | SchemaDecodeError, A> {
-    return this.json.flatMap(_ =>
-      Effect.fromEither(schema.decode(_, options)).mapError(
-        _ => new SchemaDecodeError(_, this),
-      ),
-    )
+    return this.json.flatMap(_ => {
+      const result = schema.decode(_, options)
+      return result._tag === "Right"
+        ? Effect.succeed(result.right)
+        : Effect.fail(new SchemaDecodeError(result.left, this))
+    })
   }
 }
 

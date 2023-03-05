@@ -46,17 +46,17 @@ import type { NonEmptyReadonlyArray } from "@effect/data/ReadonlyArray"
 /**
  * @tsplus global
  */
-import type { Parser } from "@fp-ts/schema/Parser"
+import type { Parser } from "@effect/schema/Parser"
 
 /**
  * @tsplus global
  */
-import type { ParseError } from "@fp-ts/schema/ParseResult"
+import type { ParseError } from "@effect/schema/ParseResult"
 
 /**
  * @tsplus global
  */
-import type { Schema } from "@fp-ts/schema"
+import type { Schema } from "@effect/schema"
 
 /**
  * @tsplus global

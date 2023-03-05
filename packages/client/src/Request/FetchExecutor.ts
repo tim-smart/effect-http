@@ -1,4 +1,4 @@
-import type { ParseOptions } from "@fp-ts/schema/AST"
+import type { ParseOptions } from "@effect/schema/AST"
 import {
   RequestError,
   ResponseDecodeError,

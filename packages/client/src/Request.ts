@@ -1,4 +1,4 @@
-import { ParseOptions } from "@fp-ts/schema/AST"
+import { ParseOptions } from "@effect/schema/AST"
 import { SchemaEncodeError } from "./Error.js"
 import type { RequestBody } from "./Request/Body.js"
 import * as body from "./Request/Body.js"
