@@ -97,16 +97,16 @@ importers:
   packages/node:
     specifiers:
       '@changesets/cli': ^2.26.0
-      '@effect-http/client': workspace:^0.5.0
-      '@effect-http/core': workspace:^0.8.1
-      '@effect/data': ^0.3.2
-      '@effect/io': ~0.6.0
-      '@effect/schema': ~0.0.4
-      '@effect/stream': ^0.6.0
-      '@tsplus-types/effect__data': 0.3.2-152bf26
-      '@tsplus-types/effect__io': 0.6.0-152bf26
-      '@tsplus-types/effect__schema': 0.0.4-152bf26
-      '@tsplus-types/effect__stream': 0.6.0-152bf26
+      '@effect-http/client': workspace:^0.6.0
+      '@effect-http/core': workspace:^0.9.0
+      '@effect/data': ^0.3.3
+      '@effect/io': ~0.7.0
+      '@effect/schema': ~0.0.5
+      '@effect/stream': ^0.7.0
+      '@tsplus-types/effect__data': 0.3.3-dc37160
+      '@tsplus-types/effect__io': 0.7.0-dc37160
+      '@tsplus-types/effect__schema': 0.0.5-dc37160
+      '@tsplus-types/effect__stream': 0.7.0-dc37160
       '@types/busboy': ^1.5.0
       '@types/node': ^18.14.6
       busboy: ^1.6.0
@@ -116,19 +116,19 @@ importers:
     dependencies:
       '@effect-http/client': link:../client
       '@effect-http/core': link:../core
-      '@effect/data': 0.3.2
-      '@effect/io': 0.6.0
-      '@effect/schema': 0.0.4
-      '@effect/stream': 0.6.0
+      '@effect/data': 0.3.3
+      '@effect/io': 0.7.0
+      '@effect/schema': 0.0.5
+      '@effect/stream': 0.7.0
       '@types/busboy': 1.5.0
       busboy: 1.6.0
       raw-body: 2.5.2
     devDependencies:
       '@changesets/cli': 2.26.0
-      '@tsplus-types/effect__data': 0.3.2-152bf26_@effect+data@0.3.2
-      '@tsplus-types/effect__io': 0.6.0-152bf26_@effect+io@0.6.0
-      '@tsplus-types/effect__schema': 0.0.4-152bf26_@effect+schema@0.0.4
-      '@tsplus-types/effect__stream': 0.6.0-152bf26_@effect+stream@0.6.0
+      '@tsplus-types/effect__data': 0.3.3-dc37160_@effect+data@0.3.3
+      '@tsplus-types/effect__io': 0.7.0-dc37160_@effect+io@0.7.0
+      '@tsplus-types/effect__schema': 0.0.5-dc37160_@effect+schema@0.0.5
+      '@tsplus-types/effect__stream': 0.7.0-dc37160_@effect+stream@0.7.0
       '@types/node': 18.14.6
       prettier: 2.8.4
       typescript: '@cdn.jsdelivr.net/npm/@tsplus/installer@0.0.171/compiler/typescript.tgz'
@@ -363,23 +363,11 @@ packages:
     dependencies:
       '@effect/data': 0.3.3
 
-  /@effect/schema/0.0.4:
-    resolution: {integrity: sha512-KOPkGMJgxV+vtkdUs01jg9wQvUcFLQ7JtOR2iFNycGtsP4n+rR9QcPf+oFsjdwROzgOgnkjEehB358Z9bIBZOQ==}
-    dependencies:
-      '@effect/data': 0.3.2
-      fast-check: 3.7.0
-
   /@effect/schema/0.0.5:
     resolution: {integrity: sha512-xe+aL+WsK9+DGkyiMWCq7EeEbMMDYOKI4WveBs20Bgfl38vYiOxNtbJ8qcS6SUKso8bkyJcsZnlBUfzoW9pdyw==}
     dependencies:
       '@effect/data': 0.3.3
       fast-check: 3.7.0
-
-  /@effect/stream/0.6.0:
-    resolution: {integrity: sha512-ApRI4X8tEQr88TsAvaB9/g13sduh3t/1hF8+kkJVNsm4dXkq8+zrHkgsBmgu/wddHmrCk2zGjqcGBbswyTjDmw==}
-    dependencies:
-      '@effect/data': 0.3.2
-      '@effect/io': 0.6.0
 
   /@effect/stream/0.7.0:
     resolution: {integrity: sha512-NZuSDIaiZwPKXLm/Dt1ttVlhllfxshM+DXkaB2654zU7tjwu9scjbx+Pa+1kg/TJeKxQcmNVbtKcDXqwlHytxw==}
@@ -460,28 +448,12 @@ packages:
       '@effect/io': 0.7.0
     dev: true
 
-  /@tsplus-types/effect__schema/0.0.4-152bf26_@effect+schema@0.0.4:
-    resolution: {integrity: sha512-ea/lWtZiGHJVlwT78zoDbGdWNVzDQYbHsvcVoNfXFHnE34VPGo3tDTYqOmE9KQzmLPMZt8o1nUzp99Flfob0GQ==}
-    peerDependencies:
-      '@effect/schema': 0.0.4
-    dependencies:
-      '@effect/schema': 0.0.4
-    dev: true
-
   /@tsplus-types/effect__schema/0.0.5-dc37160_@effect+schema@0.0.5:
     resolution: {integrity: sha512-yAYV/nfEa17Ey98K/lgjl5Ia0bpmN3T5E/0Vqye9EMpygFvW2swG0B8YuAc+3y4NRW8iAygEukv2zgvwCOCPCg==}
     peerDependencies:
       '@effect/schema': 0.0.5
     dependencies:
       '@effect/schema': 0.0.5
-    dev: true
-
-  /@tsplus-types/effect__stream/0.6.0-152bf26_@effect+stream@0.6.0:
-    resolution: {integrity: sha512-Z/6SRey3m63h1W7rIX6k/edjn37kFYFTnpYdQKzlTuEZO9/jF5+TQCOEHBXf+rfMGI/qjz7E0ihLGYKwh95SOw==}
-    peerDependencies:
-      '@effect/stream': 0.6.0
-    dependencies:
-      '@effect/stream': 0.6.0
     dev: true
 
   /@tsplus-types/effect__stream/0.7.0-dc37160_@effect+stream@0.7.0:
