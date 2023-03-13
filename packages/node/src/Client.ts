@@ -222,10 +222,11 @@ export class ResponseImpl implements Http.response.Response {
     options?: ParseOptions,
   ): Effect<never, Http.ResponseDecodeError | Http.SchemaDecodeError, A> {
     const decode = S.decode(schema)
-    return this.json.flatMap(_ =>
-      Effect.fromEither(decode(_, options)).mapError(
-        _ => new Http.SchemaDecodeError(_, this),
-      ),
-    )
+    return this.json.flatMap(_ => {
+      const result = decode(_, options)
+      return result._tag === "Left"
+        ? Effect.fail(new Http.SchemaDecodeError(result.left, this))
+        : Effect.succeed(result.right)
+    })
   }
 }

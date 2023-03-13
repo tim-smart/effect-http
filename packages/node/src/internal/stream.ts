@@ -132,6 +132,6 @@ export const readableToString = (stream: Readable) => {
 
 export const readableToBuffer = (stream: Readable) => {
   return fromReadableEager<Buffer>(stream).runCollect.map(_ =>
-    Buffer.concat(_.toReadonlyArray()),
+    Buffer.concat(_.toReadonlyArray),
   )
 }

@@ -8,7 +8,7 @@ importers:
   packages/bun:
     specifiers:
       '@changesets/cli': ^2.26.0
-      '@effect-http/core': workspace:^0.9.0
+      '@effect-http/core': workspace:^0.10.0
       '@effect/data': ^0.3.3
       '@effect/io': ~0.7.0
       '@tsplus-types/effect__data': 0.3.3-dc37160
@@ -97,18 +97,18 @@ importers:
   packages/node:
     specifiers:
       '@changesets/cli': ^2.26.0
-      '@effect-http/client': workspace:^0.6.0
-      '@effect-http/core': workspace:^0.9.0
-      '@effect/data': ^0.3.3
-      '@effect/io': ~0.7.0
+      '@effect-http/client': workspace:^0.7.0
+      '@effect-http/core': workspace:^0.10.0
+      '@effect/data': ^0.4.1
+      '@effect/io': ~0.8.0
       '@effect/schema': ~0.0.5
-      '@effect/stream': ^0.7.0
-      '@tsplus-types/effect__data': 0.3.3-dc37160
-      '@tsplus-types/effect__io': 0.7.0-dc37160
+      '@effect/stream': ^0.9.0
+      '@tsplus-types/effect__data': 0.4.1-dc37160
+      '@tsplus-types/effect__io': 0.8.0-dc37160
       '@tsplus-types/effect__schema': 0.0.5-dc37160
-      '@tsplus-types/effect__stream': 0.7.0-dc37160
+      '@tsplus-types/effect__stream': 0.9.0-dc37160
       '@types/busboy': ^1.5.0
-      '@types/node': ^18.14.6
+      '@types/node': ^18.15.2
       busboy: ^1.6.0
       prettier: ^2.8.4
       raw-body: ^2.5.2
@@ -116,20 +116,20 @@ importers:
     dependencies:
       '@effect-http/client': link:../client
       '@effect-http/core': link:../core
-      '@effect/data': 0.3.3
-      '@effect/io': 0.7.0
+      '@effect/data': 0.4.1
+      '@effect/io': 0.8.0
       '@effect/schema': 0.0.5
-      '@effect/stream': 0.7.0
-      '@types/busboy': 1.5.0
+      '@effect/stream': 0.9.0
       busboy: 1.6.0
       raw-body: 2.5.2
     devDependencies:
       '@changesets/cli': 2.26.0
-      '@tsplus-types/effect__data': 0.3.3-dc37160_@effect+data@0.3.3
-      '@tsplus-types/effect__io': 0.7.0-dc37160_@effect+io@0.7.0
+      '@tsplus-types/effect__data': 0.4.1-dc37160_@effect+data@0.4.1
+      '@tsplus-types/effect__io': 0.8.0-dc37160_@effect+io@0.8.0
       '@tsplus-types/effect__schema': 0.0.5-dc37160_@effect+schema@0.0.5
-      '@tsplus-types/effect__stream': 0.7.0-dc37160_@effect+stream@0.7.0
-      '@types/node': 18.14.6
+      '@tsplus-types/effect__stream': 0.9.0-dc37160_@effect+stream@0.9.0
+      '@types/busboy': 1.5.0
+      '@types/node': 18.15.2
       prettier: 2.8.4
       typescript: '@cdn.jsdelivr.net/npm/@tsplus/installer@0.0.171/compiler/typescript.tgz'
 
@@ -369,12 +369,6 @@ packages:
       '@effect/data': 0.3.3
       fast-check: 3.7.0
 
-  /@effect/stream/0.7.0:
-    resolution: {integrity: sha512-NZuSDIaiZwPKXLm/Dt1ttVlhllfxshM+DXkaB2654zU7tjwu9scjbx+Pa+1kg/TJeKxQcmNVbtKcDXqwlHytxw==}
-    dependencies:
-      '@effect/data': 0.3.3
-      '@effect/io': 0.7.0
-
   /@effect/stream/0.9.0:
     resolution: {integrity: sha512-oePK3uiOilENsgnSYAM6jSEeuYyrGXv/RctuI8HTuuzvD9oE74Lh3LLKiLZGa/Ec4RlbA1oJmg7bhukydQrOgQ==}
     dependencies:
@@ -462,14 +456,6 @@ packages:
       '@effect/schema': 0.0.5
     dev: true
 
-  /@tsplus-types/effect__stream/0.7.0-dc37160_@effect+stream@0.7.0:
-    resolution: {integrity: sha512-W4JW9v3H62NAe1UAPLZxmj4MWxruJ2UoXnHs0Tq6US/FgLMxTmvZVlFSlnJ//loB1TfzZ8nl/MKng+gznb9uJQ==}
-    peerDependencies:
-      '@effect/stream': 0.7.0
-    dependencies:
-      '@effect/stream': 0.7.0
-    dev: true
-
   /@tsplus-types/effect__stream/0.9.0-dc37160_@effect+stream@0.9.0:
     resolution: {integrity: sha512-5FW+iKnSWXXVwamm/g0pyzBo7M5xIWrb5TUqhHjo0spxEo8Dn8csd1WSLPbhG3mu6gzdYQA6FHEUaSyKNFZoUg==}
     peerDependencies:
@@ -481,8 +467,8 @@ packages:
   /@types/busboy/1.5.0:
     resolution: {integrity: sha512-ncOOhwmyFDW76c/Tuvv9MA9VGYUCn8blzyWmzYELcNGDb0WXWLSmFi7hJq25YdRBYJrmMBB5jZZwUjlJe9HCjQ==}
     dependencies:
-      '@types/node': 18.14.6
-    dev: false
+      '@types/node': 18.15.2
+    dev: true
 
   /@types/is-ci/3.0.0:
     resolution: {integrity: sha512-Q0Op0hdWbYd1iahB+IFNQcWXFq4O0Q5MwQP7uN0souuQ4rPg1vEYcnIOfr1gY+M+6rc8FGoRaBO1mOOvL29sEQ==}
@@ -501,9 +487,6 @@ packages:
   /@types/node/12.20.55:
     resolution: {integrity: sha512-J8xLz7q2OFulZ2cyGTLE1TbbZcjpno7FaN6zdJNrgAdrJ+DZzh/uFR6YrTb4C+nXakvud8Q4+rbhoIWlYQbUFQ==}
     dev: true
-
-  /@types/node/18.14.6:
-    resolution: {integrity: sha512-93+VvleD3mXwlLI/xASjw0FzKcwzl3OdTCzm1LaRfqgS21gfFtK3zDXM5Op9TeeMsJVOaJ2VRDpT9q4Y3d0AvA==}
 
   /@types/node/18.15.2:
     resolution: {integrity: sha512-sDPHm2wfx2QhrMDK0pOt2J4KLJMAcerqWNvnED0itPRJWvI+bK+uNHzcH1dFsBlf7G3u8tqXmRF3wkvL9yUwMw==}
