@@ -1,4 +1,5 @@
 import type { ParseOptions } from "@effect/schema/AST"
+import { To } from "@effect/schema/Schema"
 import {
   RequestError,
   ResponseDecodeError,
@@ -107,14 +108,14 @@ export const fetchJson_: (
  *
  * @since 1.0.0
  */
-export const fetchDecode = <A>(
-  schema: Schema<A>,
+export const fetchDecode = <S extends response.SchemaFromJson>(
+  schema: S,
   options?: ParseOptions,
   requestInit?: RequestInit,
 ): RequestExecutor<
   never,
   RequestError | StatusCodeError | ResponseDecodeError | SchemaDecodeError,
-  A
+  To<S>
 > =>
   fetchOk(requestInit)
     .contramap(_ => _.acceptJson)
@@ -123,8 +124,8 @@ export const fetchDecode = <A>(
 /**
  * @tsplus pipeable effect-http/client/Request fetchDecode
  */
-export const fetchDecode_: <A>(
-  schema: Schema<A>,
+export const fetchDecode_: <S extends response.SchemaFromJson>(
+  schema: S,
   options?: ParseOptions,
   requestInit?: RequestInit,
 ) => (
@@ -132,7 +133,7 @@ export const fetchDecode_: <A>(
 ) => Effect<
   never,
   RequestError | StatusCodeError | ResponseDecodeError | SchemaDecodeError,
-  A
+  To<S>
 > = fetchDecode
 
 const convertBody = (body: RequestBody): BodyInit => {

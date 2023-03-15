@@ -3,6 +3,9 @@ import { SchemaEncodeError } from "./Error.js"
 import type { RequestBody } from "./Request/Body.js"
 import * as body from "./Request/Body.js"
 import { RequestExecutor } from "./Request/Executor.js"
+import { From, Json } from "@effect/schema/Schema"
+
+export type SchemaToJson = Schema<any, Json>
 
 export type HttpMethod =
   | "GET"
@@ -290,15 +293,15 @@ export const streamBody =
 /**
  * @tsplus pipeable effect-http/client/Request withSchema
  */
-export const withSchema = <A, R, E, RA>(
-  schema: Schema<A>,
+export const withSchema = <S extends SchemaToJson, R, E, RA>(
+  schema: S,
   run: RequestExecutor<R, E, RA>,
   options?: ParseOptions,
 ) => {
   const encode = schema.encodeEither
 
   return (self: Request) =>
-    (input: A): Effect<R, E | SchemaEncodeError, RA> => {
+    (input: From<S>): Effect<R, E | SchemaEncodeError, RA> => {
       const encoded = encode(input, options)
 
       return encoded._tag === "Left"
