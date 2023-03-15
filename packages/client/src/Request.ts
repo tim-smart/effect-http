@@ -295,7 +295,7 @@ export const withSchema = <A, R, E, RA>(
   run: RequestExecutor<R, E, RA>,
   options?: ParseOptions,
 ) => {
-  const encode = schema.encode
+  const encode = schema.encodeEither
 
   return (self: Request) =>
     (input: A): Effect<R, E | SchemaEncodeError, RA> => {
