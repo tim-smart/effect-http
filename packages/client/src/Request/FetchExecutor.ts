@@ -108,7 +108,7 @@ export const fetchJson_: (
  *
  * @since 1.0.0
  */
-export const fetchDecode = <S extends response.SchemaFromJson>(
+export const fetchDecode = <S extends response.JsonSchema>(
   schema: S,
   options?: ParseOptions,
   requestInit?: RequestInit,
@@ -124,7 +124,7 @@ export const fetchDecode = <S extends response.SchemaFromJson>(
 /**
  * @tsplus pipeable effect-http/client/Request fetchDecode
  */
-export const fetchDecode_: <S extends response.SchemaFromJson>(
+export const fetchDecode_: <S extends response.JsonSchema>(
   schema: S,
   options?: ParseOptions,
   requestInit?: RequestInit,

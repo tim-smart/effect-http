@@ -4,7 +4,7 @@ import { fromReadableStream } from "./util/stream.js"
 import type { ParseOptions } from "@effect/schema/AST"
 import { Json, To } from "@effect/schema/Schema"
 
-export type SchemaFromJson = Schema<Json, any>
+export type JsonSchema = Schema<Json, any>
 
 export interface Response {
   readonly status: number
@@ -14,7 +14,7 @@ export interface Response {
   readonly text: Effect<never, ResponseDecodeError, string>
   readonly formData: Effect<never, ResponseDecodeError, FormData>
   readonly blob: Effect<never, ResponseDecodeError, Blob>
-  readonly decode: <S extends SchemaFromJson>(
+  readonly decode: <S extends JsonSchema>(
     schema: S,
     options?: ParseOptions,
   ) => Effect<never, ResponseDecodeError | SchemaDecodeError, To<S>>
@@ -67,7 +67,7 @@ class ResponseImpl implements Response {
     )
   }
 
-  decode<S extends SchemaFromJson>(
+  decode<S extends JsonSchema>(
     schema: S,
     options: ParseOptions = { isUnexpectedAllowed: true },
   ): Effect<never, ResponseDecodeError | SchemaDecodeError, To<S>> {
