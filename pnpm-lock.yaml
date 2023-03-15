@@ -97,15 +97,15 @@ importers:
   packages/node:
     specifiers:
       '@changesets/cli': ^2.26.0
-      '@effect-http/client': workspace:^0.8.0
-      '@effect-http/core': workspace:^0.11.0
+      '@effect-http/client': workspace:^0.9.0
+      '@effect-http/core': workspace:^0.12.0
       '@effect/data': ^0.4.1
       '@effect/io': ~0.8.0
-      '@effect/schema': ~0.1.0
+      '@effect/schema': ~0.2.0
       '@effect/stream': ^0.10.0
       '@tsplus-types/effect__data': 0.4.1-dc37160
       '@tsplus-types/effect__io': 0.8.0-dc37160
-      '@tsplus-types/effect__schema': 0.1.0-dc37160
+      '@tsplus-types/effect__schema': 0.2.0-3e044b4
       '@tsplus-types/effect__stream': 0.10.0-dc37160
       '@types/busboy': ^1.5.0
       '@types/node': ^18.15.3
@@ -118,7 +118,7 @@ importers:
       '@effect-http/core': link:../core
       '@effect/data': 0.4.1
       '@effect/io': 0.8.0
-      '@effect/schema': 0.1.0
+      '@effect/schema': 0.2.0
       '@effect/stream': 0.10.0
       busboy: 1.6.0
       raw-body: 2.5.2
@@ -126,7 +126,7 @@ importers:
       '@changesets/cli': 2.26.0
       '@tsplus-types/effect__data': 0.4.1-dc37160_@effect+data@0.4.1
       '@tsplus-types/effect__io': 0.8.0-dc37160_@effect+io@0.8.0
-      '@tsplus-types/effect__schema': 0.1.0-dc37160_@effect+schema@0.1.0
+      '@tsplus-types/effect__schema': 0.2.0-3e044b4_@effect+schema@0.2.0
       '@tsplus-types/effect__stream': 0.10.0-dc37160_@effect+stream@0.10.0
       '@types/busboy': 1.5.0
       '@types/node': 18.15.3
@@ -355,12 +355,6 @@ packages:
     dependencies:
       '@effect/data': 0.4.1
 
-  /@effect/schema/0.1.0:
-    resolution: {integrity: sha512-iZE5OP3YKtOP9QvfHhSFx5f6IfRCn2jqJIYSQUprbqkdJM4BfHptsu4u6950sG6bzW6/fE1xTVcX7K0aY3/Lag==}
-    dependencies:
-      '@effect/data': 0.4.1
-      fast-check: 3.7.0
-
   /@effect/schema/0.2.0:
     resolution: {integrity: sha512-2lqFmYn0qEhFMyri3GH6qA/2gvxqDHKoXFMA9tkDFz77LiA6vpTylz64sskRUqifvdlX+FsZGozcieWcB5XObQ==}
     dependencies:
@@ -428,14 +422,6 @@ packages:
       '@effect/io': 0.8.0
     dependencies:
       '@effect/io': 0.8.0
-    dev: true
-
-  /@tsplus-types/effect__schema/0.1.0-dc37160_@effect+schema@0.1.0:
-    resolution: {integrity: sha512-7qci4AGSIaDkooKxK+JB2XwWcRnf6m2XWi7j+uSPKR/3xeBFwcRaPkwq/HFTZH5rJx3CIgl1A4oa6efrxM9kRg==}
-    peerDependencies:
-      '@effect/schema': 0.1.0
-    dependencies:
-      '@effect/schema': 0.1.0
     dev: true
 
   /@tsplus-types/effect__schema/0.2.0-3e044b4_@effect+schema@0.2.0:

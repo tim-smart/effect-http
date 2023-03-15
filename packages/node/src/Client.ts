@@ -2,7 +2,7 @@ import * as Http from "@effect-http/client"
 import type { Option } from "@effect/data/Option"
 import type { Effect } from "@effect/io/Effect"
 import type { Layer } from "@effect/io/Layer"
-import * as S from "@effect/schema"
+import * as S from "@effect/schema/Schema"
 import { ParseOptions } from "@effect/schema/AST"
 import type { Stream } from "@effect/stream/Stream"
 import { IncomingMessage } from "http"
@@ -221,7 +221,7 @@ export class ResponseImpl implements Http.response.Response {
     schema: S.Schema<A>,
     options?: ParseOptions,
   ): Effect<never, Http.ResponseDecodeError | Http.SchemaDecodeError, A> {
-    const decode = S.decode(schema)
+    const decode = S.decodeEither(schema)
     return this.json.flatMap(_ => {
       const result = decode(_, options)
       return result._tag === "Left"
