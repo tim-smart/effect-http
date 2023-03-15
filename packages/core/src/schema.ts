@@ -9,16 +9,16 @@ export class DecodeSchemaError {
   ) {}
 }
 
+const decodeEither = <A>(schema: Schema<A>) => {
+  const decode = schema.decode
+  return (input: unknown, request: HttpRequest) =>
+    decode(input).mapLeft(_ => new DecodeSchemaError(_, request, input))
+}
+
 const decodeEffect = <A>(schema: Schema<A>) => {
-  const decode = Parser.decode(schema)
-
-  return (input: unknown, request: HttpRequest) => {
-    const result = decode(input)
-
-    return result._tag === "Left"
-      ? Effect.fail(new DecodeSchemaError(result.left, request, input))
-      : Effect.succeed(result.right)
-  }
+  const decode = decodeEither(schema)
+  return (input: unknown, request: HttpRequest) =>
+    Effect.fromEither(decode(input, request))
 }
 
 export const decode = <A>(schema: Schema<A>) => {
@@ -54,7 +54,7 @@ const jsonParse = Either.liftThrowable(
 export const decodeJsonFromFormData =
   <A>(schema: Schema<A>) =>
   (key: string, formData?: FormData) => {
-    const decode = Parser.decode(schema)
+    const decode = decodeEither(schema)
 
     return Do($ => {
       const { request } = $(Effect.service(RouteContext))
@@ -65,12 +65,7 @@ export const decodeJsonFromFormData =
         () => new RequestBodyError(new FormDataKeyNotFound(key)),
       )
         .flatMap(_ => jsonParse(_.toString()))
-        .flatMap(_ => {
-          const result = decode(_)
-          return result._tag === "Left"
-            ? Either.left(new DecodeSchemaError(result.left, request, _))
-            : Either.right(result.right)
-        })
+        .flatMap(_ => decode(_, request))
         .map(value => [value, data] as const)
 
       return $(Effect.fromEither(result))
