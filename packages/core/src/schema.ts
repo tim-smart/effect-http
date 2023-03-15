@@ -10,7 +10,7 @@ export class DecodeSchemaError {
 }
 
 const decodeEither = <A>(schema: Schema<A>) => {
-  const decode = schema.decode
+  const decode = schema.decodeEither
   return (input: unknown, request: HttpRequest) =>
     decode(input).mapLeft(_ => new DecodeSchemaError(_, request, input))
 }

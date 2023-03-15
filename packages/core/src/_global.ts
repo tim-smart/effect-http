@@ -36,11 +36,6 @@ import type { NonEmptyReadonlyArray } from "@effect/data/ReadonlyArray"
 /**
  * @tsplus global
  */
-import type { Parser } from "@effect/schema/Parser"
-
-/**
- * @tsplus global
- */
 import type { ParseError } from "@effect/schema/ParseResult"
 
 /**
