@@ -1,4 +1,8 @@
+import { Json, To } from "@effect/schema/Schema"
 import type { HttpRequest } from "./Request.js"
+
+export type JsonSchema = Schema<Json, any>
+export type ParamsSchema = Schema<Record<string, string | undefined>, any>
 
 export class DecodeSchemaError {
   readonly _tag = "DecodeSchemaError"
@@ -9,20 +13,28 @@ export class DecodeSchemaError {
   ) {}
 }
 
-const decodeEither = <A>(schema: Schema<A>) => {
-  const decode = schema.decodeEither
-  return (input: unknown, request: HttpRequest) =>
-    decode(input).mapLeft(_ => new DecodeSchemaError(_, request, input))
-}
+const decodeEither =
+  <ParentSchema extends Schema<any>>() =>
+  <S extends ParentSchema>(schema: S) => {
+    const decode = schema.decodeEither
 
-const decodeEffect = <A>(schema: Schema<A>) => {
-  const decode = decodeEither(schema)
-  return (input: unknown, request: HttpRequest) =>
-    Effect.fromEither(decode(input, request))
-}
+    return (
+      input: unknown,
+      request: HttpRequest,
+    ): Either<DecodeSchemaError, To<S>> =>
+      decode(input).mapLeft(_ => new DecodeSchemaError(_, request, input))
+  }
 
-export const decode = <A>(schema: Schema<A>) => {
-  const decode = decodeEffect(schema)
+const decodeEffect =
+  <ParentSchema extends Schema<any>>() =>
+  <S extends ParentSchema>(schema: S) => {
+    const decode = decodeEither()(schema)
+    return (input: unknown, request: HttpRequest) =>
+      Effect.fromEither(decode(input, request))
+  }
+
+export const decode = <S extends JsonSchema>(schema: S) => {
+  const decode = decodeEffect<JsonSchema>()(schema)
 
   return Do($ => {
     const ctx = $(Effect.service(RouteContext))
@@ -32,8 +44,8 @@ export const decode = <A>(schema: Schema<A>) => {
   })
 }
 
-export const decodeParams = <A>(schema: Schema<A>) => {
-  const decode = decodeEffect(schema)
+export const decodeParams = <S extends ParamsSchema>(schema: S) => {
+  const decode = decodeEffect<ParamsSchema>()(schema)
 
   return Do($ => {
     const { request, params, searchParams } = $(Effect.service(RouteContext))
@@ -52,9 +64,9 @@ const jsonParse = Either.liftThrowable(
 )
 
 export const decodeJsonFromFormData =
-  <A>(schema: Schema<A>) =>
+  <S extends JsonSchema>(schema: S) =>
   (key: string, formData?: FormData) => {
-    const decode = decodeEither(schema)
+    const decode = decodeEither<JsonSchema>()(schema)
 
     return Do($ => {
       const { request } = $(Effect.service(RouteContext))
