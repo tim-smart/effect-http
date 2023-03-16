@@ -35,19 +35,32 @@ export interface MakeOptions {
   readonly acceptJson: boolean
 }
 
+const emptyRequest: Request = {
+  _tag: "Request",
+  method: "GET",
+  url: "",
+  urlParams: Chunk.empty(),
+  headers: HashMap.empty(),
+  body: Maybe.none(),
+}
+
 /**
  * @tsplus static effect-http/client/Request.Ops make
  */
-export const make =
-  (method: HttpMethod) =>
-  (url: string, options: Partial<MakeOptions> = {}): Request => {
-    let request: Request = {
-      _tag: "Request",
-      method,
+export const make = (method: HttpMethod) => {
+  let request: Request = {
+    ...emptyRequest,
+    method,
+  }
+
+  return (url: string, options: Partial<MakeOptions> = {}): Request => {
+    request = {
+      ...request,
       url,
-      urlParams: Chunk.empty(),
-      headers: HashMap.empty(),
-      body: Maybe.fromNullable(options.body),
+    }
+
+    if (options.body) {
+      request = setBody(options.body)(request)
     }
 
     if (options.acceptJson) {
@@ -72,6 +85,7 @@ export const make =
 
     return request
   }
+}
 
 /**
  * @tsplus static effect-http/client/Request.Ops get
