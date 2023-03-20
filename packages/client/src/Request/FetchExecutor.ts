@@ -27,7 +27,7 @@ export const fetch =
   request =>
     Do($ => {
       const url = $(
-        Effect.tryCatch(
+        Effect.attemptCatch(
           () => new URL(request.url),
           _ => new RequestError(request, _),
         ),
@@ -41,7 +41,7 @@ export const fetch =
       const body = request.body.map(convertBody).getOrUndefined
 
       return $(
-        Effect.tryCatchPromiseInterrupt(
+        Effect.attemptCatchPromiseInterrupt(
           signal =>
             globalThis.fetch(url, {
               ...options,

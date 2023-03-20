@@ -38,28 +38,28 @@ class ResponseImpl implements Response {
   }
 
   get json(): Effect<never, ResponseDecodeError, unknown> {
-    return Effect.tryCatchPromise(
+    return Effect.attemptCatchPromise(
       () => this.source.json(),
       _ => new ResponseDecodeError(_, this, "json"),
     )
   }
 
   get text(): Effect<never, ResponseDecodeError, string> {
-    return Effect.tryCatchPromise(
+    return Effect.attemptCatchPromise(
       () => this.source.text(),
       _ => new ResponseDecodeError(_, this, "text"),
     )
   }
 
   get formData(): Effect<never, ResponseDecodeError, FormData> {
-    return Effect.tryCatchPromise(
+    return Effect.attemptCatchPromise(
       () => this.source.formData(),
       _ => new ResponseDecodeError(_, this, "text"),
     )
   }
 
   get blob(): Effect<never, ResponseDecodeError, Blob> {
-    return Effect.tryCatchPromise(
+    return Effect.attemptCatchPromise(
       () => this.source.blob(),
       _ => new ResponseDecodeError(_, this, "blob"),
     )
