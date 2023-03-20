@@ -22,7 +22,7 @@ export const executeRaw: Http.executor.RequestExecutor<
     const agent = $(NodeAgent.access)
 
     const url = $(
-      Effect.tryCatch(
+      Effect.attemptCatch(
         () => new URL(request.url),
         _ => new Http.RequestError(request, _),
       ),
@@ -148,7 +148,7 @@ const sendBody = (
         })
 
         return $(
-          Effect.tryCatchPromise(
+          Effect.attemptCatchPromise(
             () => pipeline(Readable.fromWeb(response.body! as any), request),
             _ => _,
           ),
@@ -192,7 +192,7 @@ export class ResponseImpl implements Http.response.Response {
     return IS.readableToString(this.source)
       .mapError(_ => new Http.ResponseDecodeError(_.reason, this, "json"))
       .flatMap(_ =>
-        Effect.tryCatch(
+        Effect.attemptCatch(
           () => JSON.parse(_) as unknown,
           _ => new Http.ResponseDecodeError(_, this, "json"),
         ),
