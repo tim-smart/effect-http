@@ -1,8 +1,5 @@
-import { Json, To } from "@effect/schema/Schema"
+import { Json, Schema } from "@effect/schema/Schema"
 import type { HttpRequest } from "./Request.js"
-
-export type JsonSchema = Schema<Json, any>
-export type ParamsSchema = Schema<Record<string, string | undefined>, any>
 
 export class DecodeSchemaError {
   readonly _tag = "DecodeSchemaError"
@@ -14,32 +11,29 @@ export class DecodeSchemaError {
 }
 
 const decodeEither =
-  <ParentSchema extends Schema<any>>() =>
-  <S extends ParentSchema>(schema: S) => {
+  <ParentI>() =>
+  <I extends ParentI, A>(schema: Schema<I, A>) => {
     const decode = schema.decodeEither
 
     return (
       input: unknown,
       request: HttpRequest,
-    ): Either<DecodeSchemaError, To<S>> => {
-      const result = decode(input)
-
-      return result._tag === "Left"
-        ? new DecodeSchemaError(result.left, request, input)
-        : result.right
-    }
+    ): Either<DecodeSchemaError, A> =>
+      (
+        decode(input) as any as Either<NonEmptyReadonlyArray<ParseError>, A>
+      ).mapLeft(errors => new DecodeSchemaError(errors, request, input))
   }
 
 const decodeEffect =
-  <ParentSchema extends Schema<any>>() =>
-  <S extends ParentSchema>(schema: S) => {
+  <ParentI>() =>
+  <I extends ParentI, A>(schema: Schema<I, A>) => {
     const decode = decodeEither()(schema)
     return (input: unknown, request: HttpRequest) =>
       Effect.fromEither(decode(input, request))
   }
 
-export const decode = <S extends JsonSchema>(schema: S) => {
-  const decode = decodeEffect<JsonSchema>()(schema)
+export const decode = <I extends Json, A>(schema: Schema<I, A>) => {
+  const decode = decodeEffect<Json>()(schema)
 
   return Do($ => {
     const ctx = $(Effect.service(RouteContext))
@@ -49,8 +43,10 @@ export const decode = <S extends JsonSchema>(schema: S) => {
   })
 }
 
-export const decodeParams = <S extends ParamsSchema>(schema: S) => {
-  const decode = decodeEffect<ParamsSchema>()(schema)
+export const decodeParams = <I extends Record<string, string | undefined>, A>(
+  schema: Schema<I, A>,
+) => {
+  const decode = decodeEffect<Record<string, string | undefined>>()(schema)
 
   return Do($ => {
     const { request, params, searchParams } = $(Effect.service(RouteContext))
@@ -69,9 +65,9 @@ const jsonParse = Either.liftThrowable(
 )
 
 export const decodeJsonFromFormData =
-  <S extends JsonSchema>(schema: S) =>
+  <I extends Json, A>(schema: Schema<I, A>) =>
   (key: string, formData?: FormData) => {
-    const decode = decodeEither<JsonSchema>()(schema)
+    const decode = decodeEither<Json>()(schema)
 
     return Do($ => {
       const { request } = $(Effect.service(RouteContext))

@@ -54,14 +54,14 @@ export const executeJson = execute
   .contramap(_ => _.acceptJson)
   .mapEffect(_ => _.json)
 
-export const executeDecode = <S extends Http.response.JsonSchema>(schema: S) =>
+export const executeDecode = <I extends S.Json, A>(schema: S.Schema<I, A>) =>
   execute.contramap(_ => _.acceptJson).mapEffect(_ => _.decode(schema))
 
 /**
  * @tsplus pipeable effect-http/client/Request executeDecode
  */
-export const executeDecode_: <A extends Http.response.JsonSchema>(
-  schema: A,
+export const executeDecode_: <I extends S.Json, A>(
+  schema: S.Schema<I, A>,
 ) => (
   request: Http.Request,
 ) => Effect<
@@ -70,7 +70,7 @@ export const executeDecode_: <A extends Http.response.JsonSchema>(
   | Http.StatusCodeError
   | Http.ResponseDecodeError
   | Http.SchemaDecodeError,
-  S.To<A>
+  A
 > = executeDecode
 
 export const LiveNodeRequestExecutor = Layer.effect(
@@ -217,10 +217,10 @@ export class ResponseImpl implements Http.response.Response {
       .mapError(_ => new Http.ResponseDecodeError(_, this, "blob"))
   }
 
-  decode<A extends Http.response.JsonSchema>(
-    schema: A,
+  decode<I extends S.Json, A>(
+    schema: S.Schema<I, A>,
     options?: ParseOptions,
-  ): Effect<never, Http.ResponseDecodeError | Http.SchemaDecodeError, S.To<A>> {
+  ): Effect<never, Http.ResponseDecodeError | Http.SchemaDecodeError, A> {
     const decode = S.decodeEither(schema)
     return this.json.flatMap(_ => {
       const result = decode(_, options)

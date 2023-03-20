@@ -2,9 +2,7 @@ import type { Effect } from "@effect/io/Effect"
 import { ResponseDecodeError, SchemaDecodeError } from "./Error.js"
 import { fromReadableStream } from "./util/stream.js"
 import type { ParseOptions } from "@effect/schema/AST"
-import { Json, To } from "@effect/schema/Schema"
-
-export type JsonSchema = Schema<Json, any>
+import { Json, Schema } from "@effect/schema/Schema"
 
 export interface Response {
   readonly status: number
@@ -14,10 +12,10 @@ export interface Response {
   readonly text: Effect<never, ResponseDecodeError, string>
   readonly formData: Effect<never, ResponseDecodeError, FormData>
   readonly blob: Effect<never, ResponseDecodeError, Blob>
-  readonly decode: <S extends JsonSchema>(
-    schema: S,
+  readonly decode: <I extends Json, O>(
+    schema: Schema<I, O>,
     options?: ParseOptions,
-  ) => Effect<never, ResponseDecodeError | SchemaDecodeError, To<S>>
+  ) => Effect<never, ResponseDecodeError | SchemaDecodeError, O>
 }
 
 class ResponseImpl implements Response {
@@ -67,10 +65,10 @@ class ResponseImpl implements Response {
     )
   }
 
-  decode<S extends JsonSchema>(
-    schema: S,
+  decode<I extends Json, O>(
+    schema: Schema<I, O>,
     options: ParseOptions = { isUnexpectedAllowed: true },
-  ): Effect<never, ResponseDecodeError | SchemaDecodeError, To<S>> {
+  ): Effect<never, ResponseDecodeError | SchemaDecodeError, O> {
     return this.json.flatMap(_ => {
       const result = schema.decodeEither(_, options)
       return result._tag === "Right"
