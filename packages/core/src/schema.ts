@@ -21,8 +21,13 @@ const decodeEither =
     return (
       input: unknown,
       request: HttpRequest,
-    ): Either<DecodeSchemaError, To<S>> =>
-      decode(input).mapLeft(_ => new DecodeSchemaError(_, request, input))
+    ): Either<DecodeSchemaError, To<S>> => {
+      const result = decode(input)
+
+      return result._tag === "Left"
+        ? new DecodeSchemaError(result.left, request, input)
+        : result.right
+    }
   }
 
 const decodeEffect =
@@ -115,7 +120,7 @@ export const parseBody = (request: HttpRequest) => {
 
 export const queryStringBody = (request: HttpRequest) =>
   request.text.flatMap(a =>
-    Effect.tryCatch(
+    Effect.attemptCatch(
       () => Object.fromEntries(new URLSearchParams(a).entries()),
       reason => new RequestBodyError(reason),
     ),

@@ -6,7 +6,7 @@ export const fromReadableStream = <A = Uint8Array>(
       .acquireRelease(reader => Effect.promise(reader.cancel()))
       .map(reader =>
         Stream.repeatEffectOption(
-          Effect.tryCatchPromise(
+          Effect.attemptCatchPromise(
             () => reader.read(),
             reason => Maybe.some(new ReadableStreamError(reason)),
           ).flatMap(({ value, done }) =>
@@ -43,7 +43,7 @@ const readChunk = (reader: ReadableStreamBYOBReader, size: number) => {
   const buffer = new ArrayBuffer(size)
 
   return Stream.paginateEffect(0, offset =>
-    Effect.tryCatchPromise(
+    Effect.attemptCatchPromise(
       () =>
         reader.read(new Uint8Array(buffer, offset, buffer.byteLength - offset)),
       reason => new ReadableStreamError(reason),

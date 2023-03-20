@@ -56,14 +56,14 @@ importers:
   packages/core:
     specifiers:
       '@changesets/cli': ^2.26.0
-      '@effect/data': ^0.4.1
-      '@effect/io': ~0.8.0
-      '@effect/schema': ~0.2.0
-      '@effect/stream': ~0.10.0
-      '@tsplus-types/effect__data': 0.4.1-dc37160
-      '@tsplus-types/effect__io': 0.8.0-dc37160
-      '@tsplus-types/effect__schema': 0.2.0-3e044b4
-      '@tsplus-types/effect__stream': 0.10.0-dc37160
+      '@effect/data': ^0.5.0
+      '@effect/io': ~0.10.0
+      '@effect/schema': ~0.2.1
+      '@effect/stream': ~0.12.0
+      '@tsplus-types/effect__data': 0.5.0-3e044b4
+      '@tsplus-types/effect__io': 0.10.0-3e044b4
+      '@tsplus-types/effect__schema': 0.2.1-3e044b4
+      '@tsplus-types/effect__stream': 0.12.0-3e044b4
       '@types/mime-types': ^2.1.1
       '@types/node': ^18.15.3
       '@types/range-parser': ^1.2.4
@@ -74,20 +74,20 @@ importers:
       range-parser: ^1.2.1
       typescript: https://cdn.jsdelivr.net/npm/@tsplus/installer@0.0.171/compiler/typescript.tgz
     dependencies:
-      '@effect/data': 0.4.1
-      '@effect/io': 0.8.0
-      '@effect/schema': 0.2.0
-      '@effect/stream': 0.10.0
+      '@effect/data': 0.5.0
+      '@effect/io': 0.10.0
+      '@effect/schema': 0.2.1
+      '@effect/stream': 0.12.0
       '@types/route-parser': 0.1.4
       find-my-way: 7.6.0
       mime-types: 2.1.35
       range-parser: 1.2.1
     devDependencies:
       '@changesets/cli': 2.26.0
-      '@tsplus-types/effect__data': 0.4.1-dc37160_@effect+data@0.4.1
-      '@tsplus-types/effect__io': 0.8.0-dc37160_@effect+io@0.8.0
-      '@tsplus-types/effect__schema': 0.2.0-3e044b4_@effect+schema@0.2.0
-      '@tsplus-types/effect__stream': 0.10.0-dc37160_@effect+stream@0.10.0
+      '@tsplus-types/effect__data': 0.5.0-3e044b4_@effect+data@0.5.0
+      '@tsplus-types/effect__io': 0.10.0-3e044b4_@effect+io@0.10.0
+      '@tsplus-types/effect__schema': 0.2.1-3e044b4_@effect+schema@0.2.1
+      '@tsplus-types/effect__stream': 0.12.0-3e044b4_@effect+stream@0.12.0
       '@types/mime-types': 2.1.1
       '@types/node': 18.15.3
       '@types/range-parser': 1.2.4
@@ -350,6 +350,14 @@ packages:
   /@effect/data/0.4.1:
     resolution: {integrity: sha512-FdQ0qbYL7t+GP5eWdAPC+oeN2w3zqnujrdDLp/sj58UtMxFSHg21crprmbmiAJAWsL5EdB9aZzcisBGn382xHg==}
 
+  /@effect/data/0.5.0:
+    resolution: {integrity: sha512-9yuEyx19MCt4cCUlqJMgtiDxuAVlm9oA14IS4AtsG7Xip/8uKcmxSfynKfiDuPWJukA2QHR54blUzewqBxupvQ==}
+
+  /@effect/io/0.10.0:
+    resolution: {integrity: sha512-zNST2PjJlbpzle/zCUpui3Ttp8By8Z9gDfRpy6o//ejgL2CCd0G4VflZ74Hy3L8w/GLCVUXput52DfB5bxEsqA==}
+    dependencies:
+      '@effect/data': 0.5.0
+
   /@effect/io/0.8.0:
     resolution: {integrity: sha512-JJUs05oiHzh/Eupf5mgeLRFA4RXJAJo2DNxPC4ZVXwhvgJeqJ/G0ftYo3znOO0vKLzXjw8WYrnXPBM1nYLPnfQ==}
     dependencies:
@@ -361,11 +369,23 @@ packages:
       '@effect/data': 0.4.1
       fast-check: 3.7.0
 
+  /@effect/schema/0.2.1:
+    resolution: {integrity: sha512-ZaSUaIDD5rgGnl3j+XtoDO1ARUbjCWTbGdMQoaYQJrf/0NtovYVTGnEzIAqXBvi2pMw3suGsP7KQyHToHY8NHg==}
+    dependencies:
+      '@effect/data': 0.4.1
+      fast-check: 3.7.1
+
   /@effect/stream/0.10.0:
     resolution: {integrity: sha512-JmZLuBO6xYDeNWA2Mg9Sly/i25tHPmvX6fRval/FydTu0np59mTSRJDtHeFvg0jFe0xVvRTRy/CRcYtc130wIw==}
     dependencies:
       '@effect/data': 0.4.1
       '@effect/io': 0.8.0
+
+  /@effect/stream/0.12.0:
+    resolution: {integrity: sha512-V1b4IAo/321so1lUASedY4YLVuOSt7Bw+5+1hZ9rNGmjS2GG5cLIV+NEmJNHf4dAgbvvUzlxjKoE92ZLDGTfqQ==}
+    dependencies:
+      '@effect/data': 0.5.0
+      '@effect/io': 0.10.0
 
   /@manypkg/find-root/1.1.0:
     resolution: {integrity: sha512-mki5uBvhHzO8kYYix/WRy2WX8S3B5wdVSc9D6KcU5lQNglP2yt58/VfLuAK49glRXChosY8ap2oJ1qgma3GUVA==}
@@ -416,6 +436,22 @@ packages:
       '@effect/data': 0.4.1
     dev: true
 
+  /@tsplus-types/effect__data/0.5.0-3e044b4_@effect+data@0.5.0:
+    resolution: {integrity: sha512-JGBdF0COcH4g/MCMjvzf3kn+MrW+9S0PrfmXk93PTRTar28EeyUN0NEAGBtR94JgmQ0hLbymXbGWfPBeNC4yDg==}
+    peerDependencies:
+      '@effect/data': 0.5.0
+    dependencies:
+      '@effect/data': 0.5.0
+    dev: true
+
+  /@tsplus-types/effect__io/0.10.0-3e044b4_@effect+io@0.10.0:
+    resolution: {integrity: sha512-lduiR1iiLYGskWOTfyso3doOV4cdxgh0Ri/qIryHxhbZZaS3JoP7XKAVBG9XLNSx3MhHj5krV0Uq5tmeBFOK+A==}
+    peerDependencies:
+      '@effect/io': 0.10.0
+    dependencies:
+      '@effect/io': 0.10.0
+    dev: true
+
   /@tsplus-types/effect__io/0.8.0-dc37160_@effect+io@0.8.0:
     resolution: {integrity: sha512-Lzzb+nzd8MSKzqPtOQs8lvEY4ix3EuwOiZTKN0yaMF9c+QQvq2mQ8UMbGMHYGJccJ6JatyNvHn8BAsYU+NoEmQ==}
     peerDependencies:
@@ -432,12 +468,28 @@ packages:
       '@effect/schema': 0.2.0
     dev: true
 
+  /@tsplus-types/effect__schema/0.2.1-3e044b4_@effect+schema@0.2.1:
+    resolution: {integrity: sha512-YSqC23XOyWIt46v9D/RyrLfzzWudvDmYxX4Ejif21pV1zwqOUwySoF0Waq/NaL/L9DcFywODvvxjvaoWOjRq9g==}
+    peerDependencies:
+      '@effect/schema': 0.2.1
+    dependencies:
+      '@effect/schema': 0.2.1
+    dev: true
+
   /@tsplus-types/effect__stream/0.10.0-dc37160_@effect+stream@0.10.0:
     resolution: {integrity: sha512-tTrZQ0grg9rMT29LyHtiiHkvlQh7S0Il4pklvj0vuchcugMlDOxkxhjdlRuADCEMuLIZTScjZS5dY8nvITmopg==}
     peerDependencies:
       '@effect/stream': 0.10.0
     dependencies:
       '@effect/stream': 0.10.0
+    dev: true
+
+  /@tsplus-types/effect__stream/0.12.0-3e044b4_@effect+stream@0.12.0:
+    resolution: {integrity: sha512-tYCoIgczAnDLhH5rYLGSfld/2yU1umnXMU45HKW8ID07Cy4Nt+ufG0EQr5sEnT3TtbtcOCSFkAuS/dyEqr8IsA==}
+    peerDependencies:
+      '@effect/stream': 0.12.0
+    dependencies:
+      '@effect/stream': 0.12.0
     dev: true
 
   /@types/busboy/1.5.0:
@@ -850,6 +902,12 @@ packages:
 
   /fast-check/3.7.0:
     resolution: {integrity: sha512-1QFnXC7UcTlSBk7523W99QbnP6mTrvUjEXLKODjjhh/QJUHAzzBow2POae7hV+Qrqjj4XaU0HbTfwEa8HprS5g==}
+    engines: {node: '>=8.0.0'}
+    dependencies:
+      pure-rand: 6.0.1
+
+  /fast-check/3.7.1:
+    resolution: {integrity: sha512-d63EsxP1eedA+x94xNxIpTWtBShq95KL6ZSrKTD0Pp1lPASmajAaDHJ71c5ebwZ+vBzlTt3AOalcAnBzL7PQ6Q==}
     engines: {node: '>=8.0.0'}
     dependencies:
       pure-rand: 6.0.1

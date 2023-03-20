@@ -57,21 +57,21 @@ class HttpRequestImpl implements HttpRequest {
   }
 
   get json() {
-    return Effect.tryCatchPromise(
+    return Effect.attemptCatchPromise(
       () => this.source.json(),
       reason => new RequestBodyError(reason),
     )
   }
 
   get text() {
-    return Effect.tryCatchPromise(
+    return Effect.attemptCatchPromise(
       () => this.source.text(),
       reason => new RequestBodyError(reason),
     )
   }
 
   get formData() {
-    return Effect.tryCatchPromise(
+    return Effect.attemptCatchPromise(
       () => this.source.formData(),
       reason => new RequestBodyError(reason),
     )
