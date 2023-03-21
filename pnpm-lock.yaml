@@ -11,10 +11,10 @@ importers:
       '@effect-http/core': workspace:^0.14.0
       '@effect/data': ^0.5.0
       '@effect/io': ~0.10.0
-      '@tsplus-types/effect__data': 0.5.0-3e044b4
-      '@tsplus-types/effect__io': 0.10.0-3e044b4
-      bun-types: ^0.5.7
-      prettier: ^2.8.4
+      '@tsplus-types/effect__data': 0.5.0-bf7ce75
+      '@tsplus-types/effect__io': 0.10.0-bf7ce75
+      bun-types: ^0.5.8
+      prettier: ^2.8.6
       typescript: https://cdn.jsdelivr.net/npm/@tsplus/installer@0.0.171/compiler/typescript.tgz
     dependencies:
       '@effect-http/core': link:../core
@@ -22,10 +22,10 @@ importers:
       '@effect/io': 0.10.0
     devDependencies:
       '@changesets/cli': 2.26.0
-      '@tsplus-types/effect__data': 0.5.0-3e044b4_@effect+data@0.5.0
-      '@tsplus-types/effect__io': 0.10.0-3e044b4_@effect+io@0.10.0
-      bun-types: 0.5.7
-      prettier: 2.8.4
+      '@tsplus-types/effect__data': 0.5.0-bf7ce75_@effect+data@0.5.0
+      '@tsplus-types/effect__io': 0.10.0-bf7ce75_@effect+io@0.10.0
+      bun-types: 0.5.8
+      prettier: 2.8.6
       typescript: '@cdn.jsdelivr.net/npm/@tsplus/installer@0.0.171/compiler/typescript.tgz'
 
   packages/client:
@@ -409,28 +409,12 @@ packages:
       fastq: 1.15.0
     dev: true
 
-  /@tsplus-types/effect__data/0.5.0-3e044b4_@effect+data@0.5.0:
-    resolution: {integrity: sha512-JGBdF0COcH4g/MCMjvzf3kn+MrW+9S0PrfmXk93PTRTar28EeyUN0NEAGBtR94JgmQ0hLbymXbGWfPBeNC4yDg==}
-    peerDependencies:
-      '@effect/data': 0.5.0
-    dependencies:
-      '@effect/data': 0.5.0
-    dev: true
-
   /@tsplus-types/effect__data/0.5.0-bf7ce75_@effect+data@0.5.0:
     resolution: {integrity: sha512-uLCfotHgZAbAO1sHGV8epnd7qDM8jo57ll6acJ5MxkvsRmwJaoyiZco3NeNzVshllsnzgEXaD4CXCYrfQDCmgQ==}
     peerDependencies:
       '@effect/data': 0.5.0
     dependencies:
       '@effect/data': 0.5.0
-    dev: true
-
-  /@tsplus-types/effect__io/0.10.0-3e044b4_@effect+io@0.10.0:
-    resolution: {integrity: sha512-lduiR1iiLYGskWOTfyso3doOV4cdxgh0Ri/qIryHxhbZZaS3JoP7XKAVBG9XLNSx3MhHj5krV0Uq5tmeBFOK+A==}
-    peerDependencies:
-      '@effect/io': 0.10.0
-    dependencies:
-      '@effect/io': 0.10.0
     dev: true
 
   /@tsplus-types/effect__io/0.10.0-bf7ce75_@effect+io@0.10.0:
@@ -576,8 +560,8 @@ packages:
       wcwidth: 1.0.1
     dev: true
 
-  /bun-types/0.5.7:
-    resolution: {integrity: sha512-79ualR6PIZYTbALgsUxZXlAhkz0M7h7QMsXWn/eX+VOOCX3bPA9y0Pywu4MUEWOK8cK/JhnAODMqZfhCb911nw==}
+  /bun-types/0.5.8:
+    resolution: {integrity: sha512-VHwD0MAHo3wraYAeqTWH2NDmXOdGfC3wWWOnZvK93ytI6yq/LkgsCjDudWNmN7MlfPvJb2zoLMnkzhjxNwLsLw==}
     dev: true
 
   /busboy/1.6.0:
@@ -1565,12 +1549,6 @@ packages:
       find-yarn-workspace-root2: 1.2.16
       path-exists: 4.0.0
       which-pm: 2.0.0
-    dev: true
-
-  /prettier/2.8.4:
-    resolution: {integrity: sha512-vIS4Rlc2FNh0BySk3Wkd6xmwxB0FpOndW5fisM5H8hsZSxU2VWVB5CWIkIjWvrHjIhxk2g3bfMKM87zNTrZddw==}
-    engines: {node: '>=10.13.0'}
-    hasBin: true
     dev: true
 
   /prettier/2.8.6:
