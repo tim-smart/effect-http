@@ -219,14 +219,12 @@ export class ResponseImpl implements Http.response.Response {
 
   decode<I extends S.Json, A>(
     schema: S.Schema<I, A>,
-    options?: ParseOptions,
+    options: ParseOptions = { isUnexpectedAllowed: true },
   ): Effect<never, Http.ResponseDecodeError | Http.SchemaDecodeError, A> {
-    const decode = S.decodeEither(schema)
-    return this.json.flatMap(_ => {
-      const result = decode(_, options)
-      return result._tag === "Left"
-        ? Effect.fail(new Http.SchemaDecodeError(result.left, this))
-        : Effect.succeed(result.right)
-    })
+    return this.json.flatMap(_ =>
+      schema
+        .decodeEffect(_, options)
+        .mapError(_ => new Http.SchemaDecodeError(_, this)),
+    )
   }
 }
