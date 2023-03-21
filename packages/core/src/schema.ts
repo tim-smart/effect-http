@@ -4,7 +4,7 @@ import type { HttpRequest } from "./Request.js"
 export class DecodeSchemaError {
   readonly _tag = "DecodeSchemaError"
   constructor(
-    readonly errors: NonEmptyReadonlyArray<ParseError>,
+    readonly error: ParseError,
     readonly request: HttpRequest,
     readonly body: unknown,
   ) {}
@@ -13,23 +13,25 @@ export class DecodeSchemaError {
 const decodeEither =
   <ParentI>() =>
   <I extends ParentI, A>(schema: Schema<I, A>) => {
-    const decode = schema.decodeEither
+    const decode = schema.parseEither
 
     return (
       input: unknown,
       request: HttpRequest,
     ): Either<DecodeSchemaError, A> =>
-      (
-        decode(input) as any as Either<NonEmptyReadonlyArray<ParseError>, A>
-      ).mapLeft(errors => new DecodeSchemaError(errors, request, input))
+      decode(input, { isUnexpectedAllowed: true }).mapLeft(
+        _ => new DecodeSchemaError(_, request, input),
+      )
   }
 
 const decodeEffect =
   <ParentI>() =>
   <I extends ParentI, A>(schema: Schema<I, A>) => {
-    const decode = decodeEither()(schema)
+    const decode = schema.decodeEffect
     return (input: unknown, request: HttpRequest) =>
-      Effect.fromEither(decode(input, request))
+      decode(input, { isUnexpectedAllowed: true }).mapError(
+        _ => new DecodeSchemaError(_, request, input),
+      )
   }
 
 export const decode = <I extends Json, A>(schema: Schema<I, A>) => {
@@ -115,9 +117,9 @@ export const parseBody = (request: HttpRequest) => {
 }
 
 export const queryStringBody = (request: HttpRequest) =>
-  request.text.flatMap(a =>
+  request.text.flatMap(_ =>
     Effect.attemptCatch(
-      () => Object.fromEntries(new URLSearchParams(a).entries()),
+      () => Object.fromEntries(new URLSearchParams(_).entries()),
       reason => new RequestBodyError(reason),
     ),
   )

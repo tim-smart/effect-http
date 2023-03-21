@@ -1,6 +1,12 @@
+import { Json, Schema } from "@effect/schema/Schema"
 import { ToResponseOptions } from "./internal/HttpFs.js"
 import { toReadableStream } from "./util/stream.js"
 import * as Mime from "mime-types"
+
+export class EncodeSchemaError {
+  readonly _tag = "EncodeSchemaError"
+  constructor(readonly error: ParseError, readonly value: unknown) {}
+}
 
 /**
  * @tsplus type effect-http/Response
@@ -75,6 +81,23 @@ export const json = (
 ): HttpResponse => {
   headers.set("content-type", "application/json")
   return new RawResponse(status, headers, JSON.stringify(value))
+}
+
+/**
+ * @tsplus static effect-http/Response.Ops encodeJson
+ */
+export const encodeJson = <I extends Json, A>(schema: Schema<I, A>) => {
+  const encode = schema.encodeEffect
+  return (
+    value: A,
+    opts: {
+      status?: number
+      headers?: Headers
+    } = {},
+  ): Effect<never, EncodeSchemaError, HttpResponse> =>
+    encode(value, { isUnexpectedAllowed: true })
+      .mapError(_ => new EncodeSchemaError(_, value))
+      .map(_ => json(_, opts))
 }
 
 /**
