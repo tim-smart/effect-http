@@ -308,16 +308,13 @@ export const streamBody =
 export const withSchema = <I extends Json, O, R, E, A>(
   schema: Schema<I, O>,
   run: RequestExecutor<R, E, A>,
-  options?: ParseOptions,
+  options: ParseOptions = { isUnexpectedAllowed: true },
 ) => {
-  const encode = schema.encodeEither
+  const encode = schema.encodeEffect
 
   return (self: Request) =>
-    (input: O): Effect<R, E | SchemaEncodeError, A> => {
-      const encoded = encode(input, options)
-
-      return encoded._tag === "Left"
-        ? Effect.fail(new SchemaEncodeError(encoded.left, self))
-        : run(self.jsonBody(encoded.right))
-    }
+    (input: O): Effect<R, E | SchemaEncodeError, A> =>
+      encode(input, options)
+        .mapError(_ => new SchemaEncodeError(_, self))
+        .flatMap(_ => run(self.jsonBody(_)))
 }

@@ -69,12 +69,11 @@ class ResponseImpl implements Response {
     schema: Schema<I, O>,
     options: ParseOptions = { isUnexpectedAllowed: true },
   ): Effect<never, ResponseDecodeError | SchemaDecodeError, O> {
-    return this.json.flatMap(_ => {
-      const result = schema.decodeEither(_, options)
-      return result._tag === "Right"
-        ? Effect.succeed(result.right)
-        : Effect.fail(new SchemaDecodeError(result.left, this))
-    })
+    return this.json.flatMap(_ =>
+      schema
+        .decodeEffect(_, options)
+        .mapError(_ => new SchemaDecodeError(_, this)),
+    )
   }
 }
 

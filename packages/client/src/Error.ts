@@ -13,19 +13,19 @@ export type HttpClientError =
   | SchemaDecodeError
   | SchemaEncodeError
 
-export abstract class BaseFetchError {
+export abstract class BaseHttpError {
   readonly [HttpClientErrorTypeId]: (_: HttpClientErrorTypeId) => unknown =
     identity
 }
 
-export class RequestError extends BaseFetchError {
+export class RequestError extends BaseHttpError {
   readonly _tag = "RequestError"
   constructor(readonly request: Request, readonly error: unknown) {
     super()
   }
 }
 
-export class StatusCodeError extends BaseFetchError {
+export class StatusCodeError extends BaseHttpError {
   readonly _tag = "StatusCodeError"
   readonly status: number
   constructor(readonly response: Response) {
@@ -34,7 +34,7 @@ export class StatusCodeError extends BaseFetchError {
   }
 }
 
-export class ResponseDecodeError extends BaseFetchError {
+export class ResponseDecodeError extends BaseHttpError {
   readonly _tag = "ResponseDecodeError"
   constructor(
     readonly error: unknown,
@@ -51,22 +51,16 @@ export class ResponseDecodeError extends BaseFetchError {
   }
 }
 
-export class SchemaEncodeError extends BaseFetchError {
+export class SchemaEncodeError extends BaseHttpError {
   readonly _tag = "SchemaEncodeError"
-  constructor(
-    readonly errors: NonEmptyReadonlyArray<ParseError>,
-    readonly request: Request,
-  ) {
+  constructor(readonly error: ParseError, readonly request: Request) {
     super()
   }
 }
 
-export class SchemaDecodeError extends BaseFetchError {
+export class SchemaDecodeError extends BaseHttpError {
   readonly _tag = "SchemaDecodeError"
-  constructor(
-    readonly errors: NonEmptyReadonlyArray<ParseError>,
-    readonly response: Response,
-  ) {
+  constructor(readonly error: ParseError, readonly response: Response) {
     super()
   }
 }
