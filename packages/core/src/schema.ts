@@ -27,7 +27,7 @@ const decodeEither =
 const decodeEffect =
   <ParentI>() =>
   <I extends ParentI, A>(schema: Schema<I, A>) => {
-    const decode = schema.decodeEffect
+    const decode = schema.parseEffect
     return (input: unknown, request: HttpRequest) =>
       decode(input, { isUnexpectedAllowed: true }).mapError(
         _ => new DecodeSchemaError(_, request, input),

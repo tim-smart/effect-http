@@ -221,10 +221,9 @@ export class ResponseImpl implements Http.response.Response {
     schema: S.Schema<I, A>,
     options: ParseOptions = { isUnexpectedAllowed: true },
   ): Effect<never, Http.ResponseDecodeError | Http.SchemaDecodeError, A> {
+    const parse = schema.parseEffect
     return this.json.flatMap(_ =>
-      schema
-        .decodeEffect(_, options)
-        .mapError(_ => new Http.SchemaDecodeError(_, this)),
+      parse(_, options).mapError(_ => new Http.SchemaDecodeError(_, this)),
     )
   }
 }
