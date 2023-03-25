@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@changesets/cli": "^2.26.1",
-    "@tsplus-types/effect__data": "0.5.0-bf7ce75",
+    "@tsplus-types/effect__data": "0.5.1-bf7ce75",
     "@tsplus-types/effect__io": "0.10.0-bf7ce75",
     "@tsplus-types/effect__schema": "0.5.0-bf7ce75",
     "@tsplus-types/effect__stream": "0.12.1-bf7ce75",
