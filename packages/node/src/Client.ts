@@ -3,6 +3,7 @@ import type { Option } from "@effect/data/Option"
 import type { Effect } from "@effect/io/Effect"
 import type { Layer } from "@effect/io/Layer"
 import { ParseOptions } from "@effect/schema/AST"
+import { ParseError } from "@effect/schema/ParseResult"
 import * as S from "@effect/schema/Schema"
 import type { Stream } from "@effect/stream/Stream"
 import { IncomingMessage } from "http"
@@ -223,7 +224,9 @@ export class ResponseImpl implements Http.response.Response {
   ): Effect<never, Http.ResponseDecodeError | Http.SchemaDecodeError, A> {
     const parse = schema.parseEffect
     return this.json.flatMap(_ =>
-      parse(_, options).mapError(_ => new Http.SchemaDecodeError(_, this)),
+      (parse(_, options) as unknown as Effect<never, ParseError, A>).mapError(
+        _ => new Http.SchemaDecodeError(_, this),
+      ),
     )
   }
 }

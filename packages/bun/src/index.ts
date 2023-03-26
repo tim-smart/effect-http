@@ -25,8 +25,7 @@ export const serve =
           const server = Bun.serve({
             ...options,
             fetch(request) {
-              return rt.unsafeRunSyncOrPromise(
-                httpApp(
+              return httpApp(
                   HttpRequest.fromStandard(
                     request,
                     request.method,
@@ -34,8 +33,7 @@ export const serve =
                   ),
                 )
                   .catchTag("EarlyResponse", e => Effect.succeed(e.response))
-                  .map(HttpResponse.toStandard),
-              )
+                  .map(HttpResponse.toStandard).runPromise(rt)
             },
           })
 

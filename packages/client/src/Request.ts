@@ -314,7 +314,7 @@ export const withSchema = <I extends Json, O, R, E, A>(
 
   return (self: Request) =>
     (input: O): Effect<R, E | SchemaEncodeError, A> =>
-      encode(input, options)
+      (encode(input, options) as unknown as Effect<never, ParseError, I>)
         .mapError(_ => new SchemaEncodeError(_, self))
         .flatMap(_ => run(self.jsonBody(_)))
 }
