@@ -95,7 +95,13 @@ export const encodeJson = <I extends Json, A>(schema: Schema<I, A>) => {
       headers?: Headers
     } = {},
   ): Effect<never, EncodeSchemaError, HttpResponse> =>
-    encode(value, { isUnexpectedAllowed: true })
+    (
+      encode(value, { isUnexpectedAllowed: true }) as unknown as Effect<
+        never,
+        ParseError,
+        A
+      >
+    )
       .mapError(_ => new EncodeSchemaError(_, value))
       .map(_ => json(_, opts))
 }

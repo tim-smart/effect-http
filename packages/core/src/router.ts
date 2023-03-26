@@ -34,16 +34,16 @@ export class Router<R = never, E = never, EnvR = never, ReqR = never> {
     )
   }
 
-  provideService<T extends Tag<any>>(tag: T, service: Tag.Service<T>) {
+  provideService<T extends Tag<any, any>>(tag: T, service: Tag.Service<T>) {
     return this.provideServiceEffect(tag, Effect.succeed(service))
   }
 
-  provideServiceEffect<T extends Tag<any>, R2, E2>(
+  provideServiceEffect<T extends Tag<any, any>, R2, E2>(
     tag: T,
     service: Effect<R2, E2, Tag.Service<T>>,
   ) {
     return new Router<
-      Exclude<R, Tag.Service<T>> | Exclude<R2, RouteContext | ReqR>,
+      Exclude<R, Tag.Identifier<T>> | Exclude<R2, RouteContext | ReqR>,
       E | E2,
       EnvR | Exclude<R2, RouteContext | ReqR>,
       ReqR | Tag.Service<T>
@@ -57,7 +57,9 @@ export class Router<R = never, E = never, EnvR = never, ReqR = never> {
               .map(a => add(tag, a)(ctx)),
           ),
         )
-        .orElse(() => Maybe.some(service.map(a => Context.make(tag, a)))) as any,
+        .orElse(() =>
+          Maybe.some(service.map(a => Context.make(tag, a))),
+        ) as any,
       this.mounts as any,
     )
   }

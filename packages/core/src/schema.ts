@@ -19,9 +19,12 @@ const decodeEither =
       input: unknown,
       request: HttpRequest,
     ): Either<DecodeSchemaError, A> =>
-      decode(input, { isUnexpectedAllowed: true }).mapLeft(
-        _ => new DecodeSchemaError(_, request, input),
-      )
+      (
+        decode(input, { isUnexpectedAllowed: true }) as unknown as Either<
+          ParseError,
+          A
+        >
+      ).mapLeft(_ => new DecodeSchemaError(_, request, input))
   }
 
 const decodeEffect =
@@ -29,9 +32,13 @@ const decodeEffect =
   <I extends ParentI, A>(schema: Schema<I, A>) => {
     const decode = schema.parseEffect
     return (input: unknown, request: HttpRequest) =>
-      decode(input, { isUnexpectedAllowed: true }).mapError(
-        _ => new DecodeSchemaError(_, request, input),
-      )
+      (
+        decode(input, { isUnexpectedAllowed: true }) as unknown as Effect<
+          never,
+          ParseError,
+          A
+        >
+      ).mapError(_ => new DecodeSchemaError(_, request, input))
   }
 
 export const decode = <I extends Json, A>(schema: Schema<I, A>) => {
