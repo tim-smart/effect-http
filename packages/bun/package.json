@@ -1,6 +1,6 @@
 {
   "name": "@effect-http/bun",
-  "version": "0.14.0",
+  "version": "0.15.0",
   "type": "module",
   "publishConfig": {
     "access": "public"
@@ -16,13 +16,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@effect-http/core": "workspace:^0.15.0",
+    "@effect-http/core": "workspace:^0.16.0",
     "@effect/data": "^0.7.1",
     "@effect/io": "~0.14.1"
   },
   "devDependencies": {
     "@tsplus-types/effect__data": "0.7.1-bf7ce75",
-    "@tsplus-types/effect__io": "0.14.0-bf7ce75",
+    "@tsplus-types/effect__io": "0.14.1-bf7ce75",
     "bun-types": "^0.5.8",
     "typescript": "https://cdn.jsdelivr.net/npm/@tsplus/installer@0.0.171/compiler/typescript.tgz"
   },
