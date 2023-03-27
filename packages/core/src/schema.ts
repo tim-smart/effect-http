@@ -59,7 +59,7 @@ export const decodeParams = <I extends Record<string, string | undefined>, A>(
 
   return Do($ => {
     const { request, params, searchParams } = $(Effect.service(RouteContext))
-    return $(decode({ ...params, ...searchParams }, request))
+    return $(decode({ ...searchParams, ...params }, request))
   })
 }
 
