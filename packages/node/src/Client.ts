@@ -224,9 +224,7 @@ export class ResponseImpl implements Http.response.Response {
   ): Effect<never, Http.ResponseDecodeError | Http.SchemaDecodeError, A> {
     const parse = schema.parseEffect
     return this.json.flatMap(_ =>
-      (parse(_, options) as unknown as Effect<never, ParseError, A>).mapError(
-        _ => new Http.SchemaDecodeError(_, this),
-      ),
+      parse(_, options).mapError(_ => new Http.SchemaDecodeError(_, this)),
     )
   }
 }
