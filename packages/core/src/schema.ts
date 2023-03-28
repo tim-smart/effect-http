@@ -19,9 +19,7 @@ const decodeEither =
       input: unknown,
       request: HttpRequest,
     ): Either<DecodeSchemaError, A> =>
-      decode(input, { isUnexpectedAllowed: true }).mapLeft(
-        _ => new DecodeSchemaError(_, request, input),
-      )
+      decode(input).mapLeft(_ => new DecodeSchemaError(_, request, input))
   }
 
 const decodeEffect =
@@ -29,16 +27,14 @@ const decodeEffect =
   <I extends ParentI, A>(schema: Schema<I, A>) => {
     const decode = schema.parseEffect
     return (input: unknown, request: HttpRequest) =>
-      decode(input, { isUnexpectedAllowed: true }).mapError(
-        _ => new DecodeSchemaError(_, request, input),
-      )
+      decode(input).mapError(_ => new DecodeSchemaError(_, request, input))
   }
 
 export const decode = <I extends Json, A>(schema: Schema<I, A>) => {
   const decode = decodeEffect<Json>()(schema)
 
   return Do($ => {
-    const ctx = $(Effect.service(RouteContext))
+    const ctx = $(RouteContext)
     const params = $(parseBodyWithParams(ctx))
 
     return $(decode(params, ctx.request))
@@ -51,7 +47,7 @@ export const decodeParams = <I extends Record<string, string | undefined>, A>(
   const decode = decodeEffect<Record<string, string | undefined>>()(schema)
 
   return Do($ => {
-    const { request, params, searchParams } = $(Effect.service(RouteContext))
+    const { request, params, searchParams } = $(RouteContext)
     return $(decode({ ...searchParams, ...params }, request))
   })
 }
@@ -72,7 +68,7 @@ export const decodeJsonFromFormData =
     const decode = decodeEither<Json>()(schema)
 
     return Do($ => {
-      const { request } = $(Effect.service(RouteContext))
+      const { request } = $(RouteContext)
       const data = $(formData ? Effect.succeed(formData) : request.formData)
 
       const result = Either.fromNullable(

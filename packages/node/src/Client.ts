@@ -3,7 +3,6 @@ import type { Option } from "@effect/data/Option"
 import type { Effect } from "@effect/io/Effect"
 import type { Layer } from "@effect/io/Layer"
 import { ParseOptions } from "@effect/schema/AST"
-import { ParseError } from "@effect/schema/ParseResult"
 import * as S from "@effect/schema/Schema"
 import type { Stream } from "@effect/stream/Stream"
 import { IncomingMessage } from "http"
@@ -20,7 +19,7 @@ export const executeRaw: Http.executor.RequestExecutor<
   Http.response.Response
 > = request =>
   Do($ => {
-    const agent = $(NodeAgent.access)
+    const agent = $(NodeAgent)
 
     const url = $(
       Effect.attemptCatch(
@@ -77,7 +76,7 @@ export const executeDecode_: <I extends S.Json, A>(
 export const LiveNodeRequestExecutor = Layer.effect(
   Http.executor.HttpRequestExecutor,
   Do($ => {
-    const agent = $(NodeAgent.access)
+    const agent = $(NodeAgent)
 
     return {
       execute: (request: Http.Request) =>
@@ -220,7 +219,7 @@ export class ResponseImpl implements Http.response.Response {
 
   decode<I extends S.Json, A>(
     schema: S.Schema<I, A>,
-    options: ParseOptions = { isUnexpectedAllowed: true },
+    options?: ParseOptions,
   ): Effect<never, Http.ResponseDecodeError | Http.SchemaDecodeError, A> {
     const parse = schema.parseEffect
     return this.json.flatMap(_ =>

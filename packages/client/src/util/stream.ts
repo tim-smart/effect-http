@@ -22,7 +22,7 @@ export const toReadableStream = <E, A>(source: Stream<never, E, A>) => {
 
   return new ReadableStream<A>({
     start(controller) {
-      scope = Scope.make().runSync
+      scope = CloseableScope.make().runSync
       pull = source.toPull
         .use(scope)
         .runSync.tap(_ =>

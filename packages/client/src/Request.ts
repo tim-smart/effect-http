@@ -308,7 +308,7 @@ export const streamBody =
 export const withSchema = <I extends Json, O, R, E, A>(
   schema: Schema<I, O>,
   run: RequestExecutor<R, E, A>,
-  options: ParseOptions = { isUnexpectedAllowed: true },
+  options?: ParseOptions,
 ) => {
   const encode = schema.encodeEffect
 

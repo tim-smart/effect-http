@@ -95,7 +95,7 @@ export const encodeJson = <I extends Json, A>(schema: Schema<I, A>) => {
       headers?: Headers
     } = {},
   ): Effect<never, EncodeSchemaError, HttpResponse> =>
-    encode(value, { isUnexpectedAllowed: true })
+    encode(value)
       .mapError(_ => new EncodeSchemaError(_, value))
       .map(_ => json(_, opts))
 }
@@ -217,7 +217,7 @@ export const file = (path: string, opts: Partial<ToResponseOptions> = {}) => {
     contentType: Mime.lookup(path) || "application/octet-stream",
   }
 
-  return HttpFs.accessWithEffect(_ => _.toResponse(path, options))
+  return HttpFs.flatMap(_ => _.toResponse(path, options))
 }
 
 export class EarlyResponse {
