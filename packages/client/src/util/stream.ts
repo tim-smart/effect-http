@@ -6,7 +6,7 @@ export const fromReadableStream = <A = Uint8Array>(
       .acquireRelease(reader => Effect.promise(reader.cancel()))
       .map(reader =>
         Stream.repeatEffectOption(
-          Effect.attemptCatchPromise(
+          Effect.tryCatchPromise(
             () => reader.read(),
             _ => Maybe.some(_),
           ).flatMap(({ value, done }) =>

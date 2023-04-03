@@ -114,7 +114,7 @@ export const parseBody = (request: HttpRequest) => {
 
 export const queryStringBody = (request: HttpRequest) =>
   request.text.flatMap(_ =>
-    Effect.attemptCatch(
+    Effect.tryCatch(
       () => Object.fromEntries(new URLSearchParams(_).entries()),
       reason => new RequestBodyError(reason),
     ),

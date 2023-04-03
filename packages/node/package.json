@@ -1,6 +1,6 @@
 {
   "name": "@effect-http/node",
-  "version": "0.17.1",
+  "version": "0.18.0",
   "type": "module",
   "publishConfig": {
     "access": "public"
@@ -16,21 +16,21 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@effect-http/client": "workspace:^0.14.0",
-    "@effect-http/core": "workspace:^0.17.0",
-    "@effect/data": "^0.7.4",
-    "@effect/io": "~0.15.1",
-    "@effect/schema": "~0.8.0",
-    "@effect/stream": "^0.14.0",
+    "@effect-http/client": "workspace:^0.15.0",
+    "@effect-http/core": "workspace:^0.18.0",
+    "@effect/data": "^0.10.3",
+    "@effect/io": "~0.17.0",
+    "@effect/schema": "~0.10.0",
+    "@effect/stream": "^0.16.0",
     "busboy": "^1.6.0",
     "raw-body": "^2.5.2"
   },
   "devDependencies": {
     "@changesets/cli": "^2.26.1",
-    "@tsplus-types/effect__data": "0.7.4-ce83fa1",
-    "@tsplus-types/effect__io": "0.15.1-ce83fa1",
-    "@tsplus-types/effect__schema": "0.8.0-ce83fa1",
-    "@tsplus-types/effect__stream": "0.14.0-ce83fa1",
+    "@tsplus-types/effect__data": "0.10.3-5cbc616",
+    "@tsplus-types/effect__io": "0.17.0-5cbc616",
+    "@tsplus-types/effect__schema": "0.10.0-5cbc616",
+    "@tsplus-types/effect__stream": "0.16.0-5cbc616",
     "@types/busboy": "^1.5.0",
     "@types/node": "^18.15.11",
     "prettier": "^2.8.7",

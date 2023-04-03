@@ -34,7 +34,7 @@ export class NodeHttpRequest implements HttpRequest {
 
   get json() {
     return this.text.flatMap((_) =>
-      Effect.attemptCatch(
+      Effect.tryCatch(
         () => JSON.parse(_) as unknown,
         (reason) => new RequestBodyError(reason),
       ),
