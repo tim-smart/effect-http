@@ -7,59 +7,59 @@ importers:
 
   packages/bun:
     specifiers:
-      '@effect-http/core': workspace:^0.18.0
-      '@effect/data': ^0.10.3
-      '@effect/io': ~0.17.0
-      '@tsplus-types/effect__data': 0.10.3-5cbc616
-      '@tsplus-types/effect__io': 0.17.0-5cbc616
+      '@effect-http/core': workspace:^0.19.0
+      '@effect/data': ^0.11.1
+      '@effect/io': ~0.19.0
+      '@tsplus-types/effect__data': 0.11.1-5cbc616
+      '@tsplus-types/effect__io': 0.19.0-5cbc616
       bun-types: ^0.5.8
       typescript: https://cdn.jsdelivr.net/npm/@tsplus/installer@0.0.171/compiler/typescript.tgz
     dependencies:
       '@effect-http/core': link:../core
-      '@effect/data': 0.10.3
-      '@effect/io': 0.17.0
+      '@effect/data': 0.11.1
+      '@effect/io': 0.19.0
     devDependencies:
-      '@tsplus-types/effect__data': 0.10.3-5cbc616_@effect+data@0.10.3
-      '@tsplus-types/effect__io': 0.17.0-5cbc616_@effect+io@0.17.0
+      '@tsplus-types/effect__data': 0.11.1-5cbc616_@effect+data@0.11.1
+      '@tsplus-types/effect__io': 0.19.0-5cbc616_@effect+io@0.19.0
       bun-types: 0.5.8
       typescript: '@cdn.jsdelivr.net/npm/@tsplus/installer@0.0.171/compiler/typescript.tgz'
 
   packages/client:
     specifiers:
-      '@effect/data': ^0.10.3
-      '@effect/io': ~0.17.0
-      '@effect/schema': ~0.10.0
-      '@effect/stream': ~0.16.0
-      '@tsplus-types/effect__data': 0.10.3-5cbc616
-      '@tsplus-types/effect__io': 0.17.0-5cbc616
-      '@tsplus-types/effect__schema': 0.10.0-5cbc616
-      '@tsplus-types/effect__stream': 0.16.0-5cbc616
+      '@effect/data': ^0.11.1
+      '@effect/io': ~0.19.0
+      '@effect/schema': ~0.11.0
+      '@effect/stream': ~0.17.0
+      '@tsplus-types/effect__data': 0.11.1-5cbc616
+      '@tsplus-types/effect__io': 0.19.0-5cbc616
+      '@tsplus-types/effect__schema': 0.11.0-5cbc616
+      '@tsplus-types/effect__stream': 0.17.0-5cbc616
       prettier: ^2.8.7
       typescript: https://cdn.jsdelivr.net/npm/@tsplus/installer@0.0.171/compiler/typescript.tgz
     dependencies:
-      '@effect/data': 0.10.3
-      '@effect/io': 0.17.0
-      '@effect/schema': 0.10.0
-      '@effect/stream': 0.16.0
+      '@effect/data': 0.11.1
+      '@effect/io': 0.19.0
+      '@effect/schema': 0.11.0
+      '@effect/stream': 0.17.0
     devDependencies:
-      '@tsplus-types/effect__data': 0.10.3-5cbc616_@effect+data@0.10.3
-      '@tsplus-types/effect__io': 0.17.0-5cbc616_@effect+io@0.17.0
-      '@tsplus-types/effect__schema': 0.10.0-5cbc616_@effect+schema@0.10.0
-      '@tsplus-types/effect__stream': 0.16.0-5cbc616_@effect+stream@0.16.0
+      '@tsplus-types/effect__data': 0.11.1-5cbc616_@effect+data@0.11.1
+      '@tsplus-types/effect__io': 0.19.0-5cbc616_@effect+io@0.19.0
+      '@tsplus-types/effect__schema': 0.11.0-5cbc616_@effect+schema@0.11.0
+      '@tsplus-types/effect__stream': 0.17.0-5cbc616_@effect+stream@0.17.0
       prettier: 2.8.7
       typescript: '@cdn.jsdelivr.net/npm/@tsplus/installer@0.0.171/compiler/typescript.tgz'
 
   packages/core:
     specifiers:
       '@changesets/cli': ^2.26.1
-      '@effect/data': ^0.10.3
-      '@effect/io': ~0.17.0
-      '@effect/schema': ~0.10.0
-      '@effect/stream': ~0.16.0
-      '@tsplus-types/effect__data': 0.10.3-5cbc616
-      '@tsplus-types/effect__io': 0.17.0-5cbc616
-      '@tsplus-types/effect__schema': 0.10.0-5cbc616
-      '@tsplus-types/effect__stream': 0.16.0-5cbc616
+      '@effect/data': ^0.11.1
+      '@effect/io': ~0.19.0
+      '@effect/schema': ~0.11.0
+      '@effect/stream': ~0.17.0
+      '@tsplus-types/effect__data': 0.11.1-5cbc616
+      '@tsplus-types/effect__io': 0.19.0-5cbc616
+      '@tsplus-types/effect__schema': 0.11.0-5cbc616
+      '@tsplus-types/effect__stream': 0.17.0-5cbc616
       '@types/mime-types': ^2.1.1
       '@types/node': ^18.15.11
       '@types/range-parser': ^1.2.4
@@ -69,19 +69,19 @@ importers:
       range-parser: ^1.2.1
       typescript: https://cdn.jsdelivr.net/npm/@tsplus/installer@0.0.171/compiler/typescript.tgz
     dependencies:
-      '@effect/data': 0.10.3
-      '@effect/io': 0.17.0
-      '@effect/schema': 0.10.0
-      '@effect/stream': 0.16.0
+      '@effect/data': 0.11.1
+      '@effect/io': 0.19.0
+      '@effect/schema': 0.11.0
+      '@effect/stream': 0.17.0
       find-my-way: 7.6.0
       mime-types: 2.1.35
       range-parser: 1.2.1
     devDependencies:
       '@changesets/cli': 2.26.1
-      '@tsplus-types/effect__data': 0.10.3-5cbc616_@effect+data@0.10.3
-      '@tsplus-types/effect__io': 0.17.0-5cbc616_@effect+io@0.17.0
-      '@tsplus-types/effect__schema': 0.10.0-5cbc616_@effect+schema@0.10.0
-      '@tsplus-types/effect__stream': 0.16.0-5cbc616_@effect+stream@0.16.0
+      '@tsplus-types/effect__data': 0.11.1-5cbc616_@effect+data@0.11.1
+      '@tsplus-types/effect__io': 0.19.0-5cbc616_@effect+io@0.19.0
+      '@tsplus-types/effect__schema': 0.11.0-5cbc616_@effect+schema@0.11.0
+      '@tsplus-types/effect__stream': 0.17.0-5cbc616_@effect+stream@0.17.0
       '@types/mime-types': 2.1.1
       '@types/node': 18.15.11
       '@types/range-parser': 1.2.4
@@ -91,16 +91,16 @@ importers:
   packages/node:
     specifiers:
       '@changesets/cli': ^2.26.1
-      '@effect-http/client': workspace:^0.15.0
-      '@effect-http/core': workspace:^0.18.0
-      '@effect/data': ^0.10.3
-      '@effect/io': ~0.17.0
-      '@effect/schema': ~0.10.0
-      '@effect/stream': ^0.16.0
-      '@tsplus-types/effect__data': 0.10.3-5cbc616
-      '@tsplus-types/effect__io': 0.17.0-5cbc616
-      '@tsplus-types/effect__schema': 0.10.0-5cbc616
-      '@tsplus-types/effect__stream': 0.16.0-5cbc616
+      '@effect-http/client': workspace:^0.16.0
+      '@effect-http/core': workspace:^0.19.0
+      '@effect/data': ^0.11.1
+      '@effect/io': ~0.19.0
+      '@effect/schema': ~0.11.0
+      '@effect/stream': ^0.17.0
+      '@tsplus-types/effect__data': 0.11.1-5cbc616
+      '@tsplus-types/effect__io': 0.19.0-5cbc616
+      '@tsplus-types/effect__schema': 0.11.0-5cbc616
+      '@tsplus-types/effect__stream': 0.17.0-5cbc616
       '@types/busboy': ^1.5.0
       '@types/node': ^18.15.11
       busboy: ^1.6.0
@@ -110,18 +110,18 @@ importers:
     dependencies:
       '@effect-http/client': link:../client
       '@effect-http/core': link:../core
-      '@effect/data': 0.10.3
-      '@effect/io': 0.17.0
-      '@effect/schema': 0.10.0
-      '@effect/stream': 0.16.0
+      '@effect/data': 0.11.1
+      '@effect/io': 0.19.0
+      '@effect/schema': 0.11.0
+      '@effect/stream': 0.17.0
       busboy: 1.6.0
       raw-body: 2.5.2
     devDependencies:
       '@changesets/cli': 2.26.1
-      '@tsplus-types/effect__data': 0.10.3-5cbc616_@effect+data@0.10.3
-      '@tsplus-types/effect__io': 0.17.0-5cbc616_@effect+io@0.17.0
-      '@tsplus-types/effect__schema': 0.10.0-5cbc616_@effect+schema@0.10.0
-      '@tsplus-types/effect__stream': 0.16.0-5cbc616_@effect+stream@0.16.0
+      '@tsplus-types/effect__data': 0.11.1-5cbc616_@effect+data@0.11.1
+      '@tsplus-types/effect__io': 0.19.0-5cbc616_@effect+io@0.19.0
+      '@tsplus-types/effect__schema': 0.11.0-5cbc616_@effect+schema@0.11.0
+      '@tsplus-types/effect__stream': 0.17.0-5cbc616_@effect+stream@0.17.0
       '@types/busboy': 1.5.0
       '@types/node': 18.15.11
       prettier: 2.8.7
@@ -341,26 +341,26 @@ packages:
       prettier: 2.8.7
     dev: true
 
-  /@effect/data/0.10.3:
-    resolution: {integrity: sha512-D3T43FOiCDeYYQCfjR4ra1apgL78GS4T85wMMZ4A2UZ3SmKWeM0CP66jnysUoRW4f9Q6xnk4BfbU8eyUQo8oZw==}
+  /@effect/data/0.11.1:
+    resolution: {integrity: sha512-HjsZIwrT9M0GqOGbM/NHL7bDt3n2mPsC8Lv9YOt76JW/R08s6UexIfmFn2+B1VB/aELY7hXqDlyUlk0QcDs9TQ==}
 
-  /@effect/io/0.17.0:
-    resolution: {integrity: sha512-dJX3jaRksA3BXt3pmvjyBVvWsRJ7UVuw69BglWsDATn+7wPK+jTQSpZvtPehUknGm3aow095KsxCC+ruQ/7NnQ==}
+  /@effect/io/0.19.0:
+    resolution: {integrity: sha512-jdXf0GF361ruzpp40bOUGbbizDOsw7pmTtASGWqxPtZ4g/nGLIJ5TzvhQJX7+sg9VGyvo6Rri1cMIKno66tpLA==}
     dependencies:
-      '@effect/data': 0.10.3
+      '@effect/data': 0.11.1
 
-  /@effect/schema/0.10.0:
-    resolution: {integrity: sha512-QLFVT8WAEQ9i9BkZd4s850eXrQPbV9k6Vr2SPMvnJ0lf4vX7OnldEvPQ8TrKvcaMET8qPV8rk/6jzcz+z2Ia1w==}
+  /@effect/schema/0.11.0:
+    resolution: {integrity: sha512-iqGlRgkOBMoZc19qSo17tnZl+POqOiEprbGUmHo7TZTV/mBaeYc1R99ImLdCwUeZo1EscC03L+py3Nj1kwTK1Q==}
     dependencies:
-      '@effect/data': 0.10.3
-      '@effect/io': 0.17.0
+      '@effect/data': 0.11.1
+      '@effect/io': 0.19.0
       fast-check: 3.8.0
 
-  /@effect/stream/0.16.0:
-    resolution: {integrity: sha512-rXpOuDqagiryke/hNOMT/oCne6j54DtXBlNMWwXO9f5M1mtBl4dl+dXKTu+lNuX3u9CZFGJUTZnALI4JGcUSyQ==}
+  /@effect/stream/0.17.0:
+    resolution: {integrity: sha512-5VODeENcvwUQd83xu3yPG3cVnhpB5MYHWHPqg6U4oJcVCWeux2bfPZBbrz1+qUwWnF4jfswRJ/YCcoTPrML3zg==}
     dependencies:
-      '@effect/data': 0.10.3
-      '@effect/io': 0.17.0
+      '@effect/data': 0.11.1
+      '@effect/io': 0.19.0
 
   /@manypkg/find-root/1.1.0:
     resolution: {integrity: sha512-mki5uBvhHzO8kYYix/WRy2WX8S3B5wdVSc9D6KcU5lQNglP2yt58/VfLuAK49glRXChosY8ap2oJ1qgma3GUVA==}
@@ -403,36 +403,36 @@ packages:
       fastq: 1.15.0
     dev: true
 
-  /@tsplus-types/effect__data/0.10.3-5cbc616_@effect+data@0.10.3:
-    resolution: {integrity: sha512-Xp//txdngTZXqU7wVmUse3hAiSmhXrsVrpCXhiBSXXIVU8tVbwz8fJemm2ffhyZJca2XDH1ZHwgCG3DCPzs3uQ==}
+  /@tsplus-types/effect__data/0.11.1-5cbc616_@effect+data@0.11.1:
+    resolution: {integrity: sha512-dV+LGtsEdTUv636rSHcy778urLB+BXFRbg7BjOJO298X1/C5r1tA67yDWebMIns9G+YaVeYf5yMg1ex3ra8xNg==}
     peerDependencies:
-      '@effect/data': 0.10.3
+      '@effect/data': 0.11.1
     dependencies:
-      '@effect/data': 0.10.3
+      '@effect/data': 0.11.1
     dev: true
 
-  /@tsplus-types/effect__io/0.17.0-5cbc616_@effect+io@0.17.0:
-    resolution: {integrity: sha512-1eoldDdDNsU1ReWSLTmkhxhC4e6xN4W1LDZsqRBskHaCpXKo5JzTczmMpTZzXGAKNKwe3xoFEVEmI66RJsUvlg==}
+  /@tsplus-types/effect__io/0.19.0-5cbc616_@effect+io@0.19.0:
+    resolution: {integrity: sha512-pySZGv4jiDBxRcfknluVyXvDpHHpNQGf12DAJ8FDvtu/p3lbvcYnI51hIbSYT3L0zGm08fqwVmKXKC+PWso1bA==}
     peerDependencies:
-      '@effect/io': 0.17.0
+      '@effect/io': 0.19.0
     dependencies:
-      '@effect/io': 0.17.0
+      '@effect/io': 0.19.0
     dev: true
 
-  /@tsplus-types/effect__schema/0.10.0-5cbc616_@effect+schema@0.10.0:
-    resolution: {integrity: sha512-ywnYZlEFAImVjpimpMy1ReWfUPZN6XuO2YKcyxbA9XuUcvpv5haHdyxWo9ae9DdNPn243lRq5q5rOfLu7vQ+WQ==}
+  /@tsplus-types/effect__schema/0.11.0-5cbc616_@effect+schema@0.11.0:
+    resolution: {integrity: sha512-LMMeslRQ3PgZUxfpmVH7YonPxidHBqTnQjSRGofa7yjmH2j6Ne8DAGbh8nINLpohdyhAST2TpA6NuGVKjI+OWQ==}
     peerDependencies:
-      '@effect/schema': 0.10.0
+      '@effect/schema': 0.11.0
     dependencies:
-      '@effect/schema': 0.10.0
+      '@effect/schema': 0.11.0
     dev: true
 
-  /@tsplus-types/effect__stream/0.16.0-5cbc616_@effect+stream@0.16.0:
-    resolution: {integrity: sha512-5MFXpl13bShqSdWHzfXomI8NUhTIC4URmGfUpx7RZoDPTnDOQJdMD5KJoAq4Fp3kBchl/hiuItmxv94gBTzegw==}
+  /@tsplus-types/effect__stream/0.17.0-5cbc616_@effect+stream@0.17.0:
+    resolution: {integrity: sha512-2aIZ5xTk7kzeZ9pdM6XNX424mCh4z4tYTyo9COdkScLfTOMHzErkV2UK9f/LjJv/BfSkpoJ8fN2v3uHMaWWGVw==}
     peerDependencies:
-      '@effect/stream': 0.16.0
+      '@effect/stream': 0.17.0
     dependencies:
-      '@effect/stream': 0.16.0
+      '@effect/stream': 0.17.0
     dev: true
 
   /@types/busboy/1.5.0:
