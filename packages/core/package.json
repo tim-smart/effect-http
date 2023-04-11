@@ -4,7 +4,8 @@
   "type": "module",
   "publishConfig": {
     "access": "public",
-    "directory": "dist"
+    "directory": "dist",
+    "linkDirectory": true
   },
   "exports": {
     ".": "./dist/index.js",
