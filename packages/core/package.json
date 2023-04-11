@@ -4,8 +4,7 @@
   "type": "module",
   "publishConfig": {
     "access": "public",
-    "directory": "dist",
-    "linkDirectory": true
+    "directory": "dist"
   },
   "exports": {
     ".": "./dist/index.js",
@@ -15,8 +14,7 @@
     "./*": "./dist/*.js"
   },
   "scripts": {
-    "clean": "rm -rf dist && rm -f *.tsbuildinfo",
-    "build": "pnpm run clean && tsc",
+    "build": "make tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
