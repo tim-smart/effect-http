@@ -108,7 +108,7 @@ export const fromStandard = (
 /**
  * @tsplus static effect-http/Request.Ops params
  */
-export const params = RouteContext.map(
+export const params = RouteContext.accessWith(
   (_): Readonly<Record<string, string | undefined>> => ({
     ..._.searchParams,
     ...(_.params || {}),
@@ -118,17 +118,17 @@ export const params = RouteContext.map(
 /**
  * @tsplus static effect-http/Request.Ops json
  */
-export const json = RouteContext.flatMap(_ => _.request.json)
+export const json = RouteContext.accessWithEffect(_ => _.request.json)
 
 /**
  * @tsplus static effect-http/Request.Ops text
  */
-export const text = RouteContext.flatMap(_ => _.request.text)
+export const text = RouteContext.accessWithEffect(_ => _.request.text)
 
 /**
  * @tsplus static effect-http/Request.Ops formData
  */
-export const formData = RouteContext.flatMap(_ => _.request.formData)
+export const formData = RouteContext.accessWithEffect(_ => _.request.formData)
 
 /**
  * @tsplus static effect-http/Request.Ops formDataStream

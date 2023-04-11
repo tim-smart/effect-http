@@ -217,7 +217,7 @@ export const file = (path: string, opts: Partial<ToResponseOptions> = {}) => {
     contentType: Mime.lookup(path) || "application/octet-stream",
   }
 
-  return HttpFs.flatMap(_ => _.toResponse(path, options))
+  return HttpFs.accessWithEffect(_ => _.toResponse(path, options))
 }
 
 export class EarlyResponse {
