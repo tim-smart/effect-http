@@ -11,7 +11,8 @@
     "./*": "./dist/*.js"
   },
   "scripts": {
-    "build": "make tsc",
+    "clean": "make clean",
+    "prepublishOnly": "make tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
