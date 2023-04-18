@@ -79,7 +79,7 @@ export const decodeJsonFromFormData =
         .flatMap(_ => decode(_, request))
         .map(value => [value, data] as const)
 
-      return $(Effect.fromEither(result))
+      return $(result)
     })
   }
 
