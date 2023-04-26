@@ -4,6 +4,7 @@ import type { RequestBody } from "./Request/Body.js"
 import * as body from "./Request/Body.js"
 import { RequestExecutor } from "./Request/Executor.js"
 import { Json, Schema } from "@effect/schema/Schema"
+import { dual } from "@effect/data/Function"
 
 export type HttpMethod =
   | "GET"
@@ -123,51 +124,57 @@ export const head = make("HEAD")
 export const options = make("OPTIONS")
 
 /**
- * @tsplus pipeable effect-http/client/Request setHeader
+ * @tsplus fluent effect-http/client/Request setHeader
  */
-export const setHeader =
-  (name: string, value: string) =>
-  (self: Request): Request => ({
-    ...self,
-    headers: self.headers.set(name.toLowerCase(), value),
-  })
+export const setHeader: {
+  (name: string, value: string): (self: Request) => Request
+  (self: Request, name: string, value: string): Request
+} = dual(3, (self: Request, name: string, value: string) => ({
+  ...self,
+  headers: self.headers.set(name.toLowerCase(), value),
+}))
 
 /**
- * @tsplus pipeable effect-http/client/Request basicAuth
+ * @tsplus fluent effect-http/client/Request basicAuth
  */
-export const basicAuth: (
-  username: string,
-  password: string,
-) => (self: Request) => Request = (username, password) =>
-  setHeader("Authorization", `Basic ${btoa(`${username}:${password}`)}`)
+export const basicAuth: {
+  (username: string, password: string): (self: Request) => Request
+  (self: Request, username: string, password: string): Request
+} = dual(3, (self: Request, username: string, password: string) =>
+  setHeader(self, "Authorization", `Basic ${btoa(`${username}:${password}`)}`),
+)
 
 /**
- * @tsplus pipeable effect-http/client/Request setHeaders
+ * @tsplus fluent effect-http/client/Request setHeaders
  */
-export const setHeaders =
-  (headers: Record<string, string>) =>
-  (self: Request): Request =>
-    Object.entries(headers).reduce(
-      (acc, [key, value]) => setHeader(key, value)(acc),
-      self,
-    )
+export const setHeaders: {
+  (headers: Record<string, string>): (self: Request) => Request
+  (self: Request, headers: Record<string, string>): Request
+} = dual(2, (self: Request, headers: Record<string, string>) =>
+  Object.entries(headers).reduce(
+    (acc, [key, value]) => setHeader(acc, key, value),
+    self,
+  ),
+)
 
 /**
- * @tsplus pipeable effect-http/client/Request updateUrl
+ * @tsplus fluent effect-http/client/Request updateUrl
  */
-export const updateUrl =
-  (f: (url: string) => string) =>
-  (self: Request): Request => ({
-    ...self,
-    url: f(self.url),
-  })
+export const updateUrl: {
+  (f: (url: string) => string): (self: Request) => Request
+  (self: Request, f: (url: string) => string): Request
+} = dual(2, (self: Request, f: (url: string) => string) => ({
+  ...self,
+  url: f(self.url),
+}))
 
 /**
- * @tsplus pipeable effect-http/client/Request accept
+ * @tsplus fluent effect-http/client/Request accept
  */
-export const accept: (value: string) => (self: Request) => Request = (
-  value: string,
-) => setHeader("Accept", value)
+export const accept: {
+  (value: string): (self: Request) => Request
+  (self: Request, value: string): Request
+} = dual(2, (self: Request, value: string) => setHeader(self, "Accept", value))
 
 /**
  * @tsplus getter effect-http/client/Request acceptJson
@@ -175,127 +182,145 @@ export const accept: (value: string) => (self: Request) => Request = (
 export const acceptJson = accept("application/json")
 
 /**
- * @tsplus pipeable effect-http/client/Request appendParam
+ * @tsplus fluent effect-http/client/Request appendParam
  */
-export const appendParam =
-  (name: string, value: any) =>
-  (self: Request): Request => {
-    if (Array.isArray(value)) {
-      return {
-        ...self,
-        urlParams: self.urlParams.concat(
-          Chunk.fromIterable(value.map(_ => [name, _])),
-        ),
-      }
-    } else if (typeof value === "string") {
-      return {
-        ...self,
-        urlParams: self.urlParams.append([name, value]),
-      }
-    }
-
+export const appendParam: {
+  (name: string, value: any): (self: Request) => Request
+  (self: Request, name: string, value: any): Request
+} = dual(3, (self: Request, name: string, value: any) => {
+  if (Array.isArray(value)) {
     return {
       ...self,
-      urlParams: self.urlParams.append([name, JSON.stringify(value)]),
+      urlParams: self.urlParams.concat(
+        Chunk.fromIterable(value.map(_ => [name, _])),
+      ),
+    }
+  } else if (typeof value === "string") {
+    return {
+      ...self,
+      urlParams: self.urlParams.append([name, value]),
     }
   }
 
-/**
- * @tsplus pipeable effect-http/client/Request appendParams
- */
-export const appendParams =
-  (params: Record<string, any>) =>
-  (self: Request): Request =>
-    Object.entries(params).reduce(
-      (acc, [key, value]) => appendParam(key, value)(acc),
-      self,
-    )
+  return {
+    ...self,
+    urlParams: self.urlParams.append([name, JSON.stringify(value)]),
+  }
+})
 
 /**
- * @tsplus pipeable effect-http/client/Request setParam
+ * @tsplus fluent effect-http/client/Request appendParams
  */
-export const setParam =
-  (name: string, value: any) =>
-  (self: Request): Request =>
-    appendParam(
-      name,
-      value,
-    )({
+export const appendParams: {
+  (params: Record<string, any>): (self: Request) => Request
+  (self: Request, params: Record<string, any>): Request
+} = dual(2, (self: Request, params: Record<string, any>) =>
+  Object.entries(params).reduce(
+    (acc, [key, value]) => appendParam(key, value)(acc),
+    self,
+  ),
+)
+
+/**
+ * @tsplus fluent effect-http/client/Request setParam
+ */
+export const setParam: {
+  (name: string, value: any): (self: Request) => Request
+  (self: Request, name: string, value: any): Request
+} = dual(3, (self: Request, name: string, value: any) =>
+  appendParam(
+    {
       ...self,
       urlParams: self.urlParams.filter(([key]) => key !== name),
-    })
+    },
+    name,
+    value,
+  ),
+)
 
 /**
- * @tsplus pipeable effect-http/client/Request setParams
+ * @tsplus fluent effect-http/client/Request setParams
  */
-export const setParams =
-  (params: Record<string, any>) =>
-  (self: Request): Request =>
-    Object.entries(params).reduce(
-      (acc, [key, value]) => setParam(key, value)(acc),
-      self,
-    )
+export const setParams: {
+  (params: Record<string, any>): (self: Request) => Request
+  (self: Request, params: Record<string, any>): Request
+} = dual(2, (self: Request, params: Record<string, any>) =>
+  Object.entries(params).reduce(
+    (acc, [key, value]) => setParam(acc, key, value),
+    self,
+  ),
+)
 
 /**
- * @tsplus pipeable effect-http/client/Request setBody
+ * @tsplus fluent effect-http/client/Request setBody
  */
-export const setBody =
-  (body: RequestBody) =>
-  (self: Request): Request => {
-    let request: Request = {
-      ...self,
-      body: Maybe.some(body),
-    }
+export const setBody: {
+  (body: RequestBody): (self: Request) => Request
+  (self: Request, body: RequestBody): Request
+} = dual(2, (self: Request, body: RequestBody) => {
+  let request: Request = {
+    ...self,
+    body: Maybe.some(body),
+  }
 
-    if (body._tag === "FormDataBody") {
-      return request
-    }
-
-    request = body.contentType.match(
-      () => request,
-      contentType => setHeader("content-type", contentType)(request),
-    )
-
-    request = body.contentLength.match(
-      () => request,
-      contentLength =>
-        setHeader("content-length", contentLength.toString())(request),
-    )
-
+  if (body._tag === "FormDataBody") {
     return request
   }
 
-/**
- * @tsplus pipeable effect-http/client/Request textBody
- */
-export const textBody =
-  (value: string, contentType?: string) =>
-  (self: Request): Request =>
-    self.setBody(body.text(value, contentType))
+  request = body.contentType.match(
+    () => request,
+    contentType => setHeader("content-type", contentType)(request),
+  )
+
+  request = body.contentLength.match(
+    () => request,
+    contentLength =>
+      setHeader("content-length", contentLength.toString())(request),
+  )
+
+  return request
+})
 
 /**
- * @tsplus pipeable effect-http/client/Request jsonBody
+ * @tsplus fluent effect-http/client/Request textBody
  */
-export const jsonBody =
-  (value: unknown) =>
-  (self: Request): Request =>
-    self.setBody(body.json(value)).acceptJson
+export const textBody: {
+  (value: string, contentType: string): (self: Request) => Request
+  (self: Request, value: string, contentType: string): Request
+} = dual(3, (self: Request, value: string, contentType: string) =>
+  self.setBody(body.text(value, contentType)),
+)
 
 /**
- * @tsplus pipeable effect-http/client/Request searchParamsBody
+ * @tsplus fluent effect-http/client/Request jsonBody
  */
-export const searchParamsBody =
-  (value: URLSearchParams) =>
-  (self: Request): Request =>
-    self.setBody(body.searchParams(value))
+export const jsonBody: {
+  (value: unknown): (self: Request) => Request
+  (self: Request, value: unknown): Request
+} = dual(
+  2,
+  (self: Request, value: unknown) => self.setBody(body.json(value)).acceptJson,
+)
 
 /**
- * @tsplus pipeable effect-http/client/Request formDataBody
+ * @tsplus fluent effect-http/client/Request searchParamsBody
  */
-export const formDataBody =
-  (value: FormData) =>
-  (self: Request): Request =>
-    self.setBody(body.formData(value))
+export const searchParamsBody: {
+  (value: URLSearchParams): (self: Request) => Request
+  (self: Request, value: URLSearchParams): Request
+} = dual(2, (self: Request, value: URLSearchParams) =>
+  self.setBody(body.searchParams(value)),
+)
+
+/**
+ * @tsplus fluent effect-http/client/Request formDataBody
+ */
+export const formDataBody: {
+  (value: FormData): (self: Request) => Request
+  (self: Request, value: FormData): Request
+} = dual(2, (self: Request, value: FormData) =>
+  self.setBody(body.formData(value)),
+)
 
 /**
  * @tsplus pipeable effect-http/client/Request streamBody
