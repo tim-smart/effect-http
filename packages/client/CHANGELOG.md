@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.22.1](https://github.com/tim-smart/effect-http/compare/v0.22.0...v0.22.1) (2023-04-26)
+
+
+### Features
+
+* basicAuth for Request ([0074df1](https://github.com/tim-smart/effect-http/commit/0074df170b545d90a91e4cd207b94eea0f537da3))
+
+
+
+
+
 # 0.22.0 (2023-04-24)
 
 
