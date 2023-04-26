@@ -133,6 +133,15 @@ export const setHeader =
   })
 
 /**
+ * @tsplus pipeable effect-http/client/Request basicAuth
+ */
+export const basicAuth: (
+  username: string,
+  password: string,
+) => (self: Request) => Request = (username, password) =>
+  setHeader("Authorization", `Basic ${btoa(`${username}:${password}`)}`)
+
+/**
  * @tsplus pipeable effect-http/client/Request setHeaders
  */
 export const setHeaders =
