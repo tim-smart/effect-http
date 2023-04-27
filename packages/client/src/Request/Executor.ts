@@ -175,19 +175,19 @@ export const filterOrElseWith: {
  * @tsplus fluent effect-http/client/RequestExecutor retry
  */
 export const retry: {
-  <R1, E, B>(policy: Schedule<R1, E, B>): <R, A>(
+  <R1, E extends E0, E0, B>(policy: Schedule<R1, E0, B>): <R, A>(
     self: RequestExecutor<R, E, A>,
-  ) => RequestExecutor<R1 | R, E, A>
-  <R, E, A, R1, B>(
+  ) => Effect<R1 | R, E, A>
+  <R, E extends E0, E0, A, R1, B>(
     self: RequestExecutor<R, E, A>,
-    policy: Schedule<R1, E, B>,
-  ): RequestExecutor<R1 | R, E, A>
+    policy: Schedule<R1, E0, B>,
+  ): RequestExecutor<R | R1, E, A>
 } = dual(
   2,
-  <R, E, A, R1, B>(
+  <R, E extends E0, E0, A, R1, B>(
       self: RequestExecutor<R, E, A>,
-      policy: Schedule<R1, E, B>,
-    ): RequestExecutor<R1 | R, E, A> =>
+      policy: Schedule<R1, E0, B>,
+    ): RequestExecutor<R | R1, E, A> =>
     request =>
       self(request).retry(policy),
 )
