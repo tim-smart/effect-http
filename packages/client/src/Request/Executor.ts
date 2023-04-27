@@ -177,7 +177,7 @@ export const filterOrElseWith: {
 export const retry: {
   <R1, E extends E0, E0, B>(policy: Schedule<R1, E0, B>): <R, A>(
     self: RequestExecutor<R, E, A>,
-  ) => Effect<R1 | R, E, A>
+  ) => RequestExecutor<R1 | R, E, A>
   <R, E extends E0, E0, A, R1, B>(
     self: RequestExecutor<R, E, A>,
     policy: Schedule<R1, E0, B>,
