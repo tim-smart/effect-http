@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.22.3](https://github.com/tim-smart/effect-http/compare/v0.22.2...v0.22.3) (2023-04-27)
+
+
+### Bug Fixes
+
+* realign retry signature with Effect.retry ([7005552](https://github.com/tim-smart/effect-http/commit/7005552fdba3662d059c2dc5e4cef6f259d5d033))
+
+
+
+
+
 ## [0.22.2](https://github.com/tim-smart/effect-http/compare/v0.22.1...v0.22.2) (2023-04-26)
 
 **Note:** Version bump only for package effect-http
