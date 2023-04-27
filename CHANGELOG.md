@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.22.4](https://github.com/tim-smart/effect-http/compare/v0.22.3...v0.22.4) (2023-04-27)
+
+
+### Bug Fixes
+
+* retry return type ([29fc101](https://github.com/tim-smart/effect-http/commit/29fc1011baf754c82076471432e44ca66463a628))
+
+
+
+
+
 ## [0.22.3](https://github.com/tim-smart/effect-http/compare/v0.22.2...v0.22.3) (2023-04-27)
 
 
