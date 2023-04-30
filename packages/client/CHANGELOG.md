@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.23.0](https://github.com/tim-smart/effect-http/compare/v0.22.4...v0.23.0) (2023-04-30)
+
+
+### Features
+
+* setMethod & setUrl ([7057a67](https://github.com/tim-smart/effect-http/commit/7057a67ceb5cf85baf4856fd99cd60070eeb8505))
+
+
+
+
+
 ## [0.22.4](https://github.com/tim-smart/effect-http/compare/v0.22.3...v0.22.4) (2023-04-27)
 
 

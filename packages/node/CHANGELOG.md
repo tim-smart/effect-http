@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.23.0](https://github.com/tim-smart/effect-http/compare/v0.22.4...v0.23.0) (2023-04-30)
+
+**Note:** Version bump only for package @effect-http/node
+
+
+
+
+
 ## [0.22.4](https://github.com/tim-smart/effect-http/compare/v0.22.3...v0.22.4) (2023-04-27)
 
 **Note:** Version bump only for package @effect-http/node
