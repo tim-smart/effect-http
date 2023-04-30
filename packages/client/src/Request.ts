@@ -158,6 +158,22 @@ export const setHeaders: {
 )
 
 /**
+ * @tsplus fluent effect-http/client/Request setMethod
+ */
+export const setMethod: {
+  (method: HttpMethod): (self: Request) => Request
+  (self: Request, method: HttpMethod): Request
+} = dual(2, (self: Request, method: HttpMethod) => ({ ...self, method }))
+
+/**
+ * @tsplus fluent effect-http/client/Request setUrl
+ */
+export const setUrl: {
+  (url: string): (self: Request) => Request
+  (self: Request, url: string): Request
+} = dual(2, (self: Request, url: string) => ({ ...self, url }))
+
+/**
  * @tsplus fluent effect-http/client/Request updateUrl
  */
 export const updateUrl: {
