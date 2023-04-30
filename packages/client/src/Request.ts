@@ -28,15 +28,7 @@ export interface Request {
   readonly body: Maybe<RequestBody>
 }
 
-export interface MakeOptions {
-  readonly params: Record<string, any>
-  readonly headers: Record<string, string>
-  readonly body: RequestBody
-  readonly accept: string
-  readonly acceptJson: boolean
-}
-
-const emptyRequest: Request = {
+export const empty: Request = {
   _tag: "Request",
   method: "GET",
   url: "",
@@ -48,45 +40,65 @@ const emptyRequest: Request = {
 /**
  * @tsplus static effect-http/client/Request.Ops make
  */
-export const make = (method: HttpMethod) => {
-  let request: Request = {
-    ...emptyRequest,
-    method,
-  }
+export const make =
+  (method: HttpMethod) =>
+  (
+    url: string,
+    options: Partial<Omit<ModifyOptions, "method" | "url">> = {},
+  ): Request =>
+    modify(empty, { ...options, method, url })
 
-  return (url: string, options: Partial<MakeOptions> = {}): Request => {
-    request = {
-      ...request,
-      url,
-    }
-
-    if (options.body) {
-      request = setBody(options.body)(request)
-    }
-
-    if (options.acceptJson) {
-      request = acceptJson(request)
-    }
-
-    if (options.accept) {
-      request = accept(options.accept)(request)
-    }
-
-    if (options.headers) {
-      request = setHeaders(options.headers)(request)
-    }
-
-    if (options.params) {
-      request = appendParams(options.params)(request)
-    }
-
-    if (options.body) {
-      request = setBody(options.body)(request)
-    }
-
-    return request
-  }
+export interface ModifyOptions {
+  readonly method: HttpMethod
+  readonly url: string
+  readonly params: Record<string, any>
+  readonly headers: Record<string, string>
+  readonly body: RequestBody
+  readonly accept: string
+  readonly acceptJson: boolean
 }
+
+/**
+ * @tsplus fluent effect-http/client/Request setMethodAndUrl
+ */
+export const modify: {
+  (options: Partial<ModifyOptions>): (self: Request) => Request
+  (self: Request, options: Partial<ModifyOptions>): Request
+} = dual(2, (self: Request, options: ModifyOptions) => {
+  if (options.method) {
+    self = setMethod(options.method)(self)
+  }
+
+  if (options.url) {
+    self = setUrl(options.url)(self)
+  }
+
+  if (options.body) {
+    self = setBody(options.body)(self)
+  }
+
+  if (options.acceptJson) {
+    self = acceptJson(self)
+  }
+
+  if (options.accept) {
+    self = accept(options.accept)(self)
+  }
+
+  if (options.headers) {
+    self = setHeaders(options.headers)(self)
+  }
+
+  if (options.params) {
+    self = appendParams(options.params)(self)
+  }
+
+  if (options.body) {
+    self = setBody(options.body)(self)
+  }
+
+  return self
+})
 
 /**
  * @tsplus static effect-http/client/Request.Ops get
