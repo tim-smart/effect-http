@@ -21,11 +21,11 @@
   "dependencies": {
     "@effect-http/core": "workspace:*",
     "@effect/data": "^0.12.2",
-    "@effect/io": "~0.25.2"
+    "@effect/io": "~0.25.8"
   },
   "devDependencies": {
     "@tsplus-types/effect__data": "0.12.2-c9131e9",
-    "@tsplus-types/effect__io": "0.25.2-3b576ba",
+    "@tsplus-types/effect__io": "0.25.8-3b576ba",
     "bun-types": "^0.5.8",
     "typescript": "https://cdn.jsdelivr.net/npm/@tsplus/installer@0.0.176/compiler/typescript.tgz"
   },
