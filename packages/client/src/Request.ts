@@ -59,7 +59,7 @@ export interface ModifyOptions {
 }
 
 /**
- * @tsplus fluent effect-http/client/Request setMethodAndUrl
+ * @tsplus fluent effect-http/client/Request modify
  */
 export const modify: {
   (options: Partial<ModifyOptions>): (self: Request) => Request
@@ -184,6 +184,17 @@ export const setUrl: {
   (url: string): (self: Request) => Request
   (self: Request, url: string): Request
 } = dual(2, (self: Request, url: string) => ({ ...self, url }))
+
+/**
+ * @tsplus fluent effect-http/client/Request appendUrl
+ */
+export const appendUrl: {
+  (path: string): (self: Request) => Request
+  (self: Request, path: string): Request
+} = dual(2, (self: Request, path: string) => ({
+  ...self,
+  url: `${self.url}${path}`,
+}))
 
 /**
  * @tsplus fluent effect-http/client/Request updateUrl
