@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.24.0](https://github.com/tim-smart/effect-http/compare/v0.23.0...v0.24.0) (2023-04-30)
+
+
+### Features
+
+* Request modify ([d1301cf](https://github.com/tim-smart/effect-http/commit/d1301cf505b1357178a2ba0e731f8c14788e04bc))
+
+
+
+
+
 # [0.23.0](https://github.com/tim-smart/effect-http/compare/v0.22.4...v0.23.0) (2023-04-30)
 
 
