@@ -37,15 +37,14 @@ export const empty: Request = {
   body: Maybe.none(),
 }
 
+export type MakeOptions = Omit<ModifyOptions, "method" | "url">
+
 /**
  * @tsplus static effect-http/client/Request.Ops make
  */
 export const make =
   (method: HttpMethod) =>
-  (
-    url: string,
-    options: Partial<Omit<ModifyOptions, "method" | "url">> = {},
-  ): Request =>
+  (url: string, options: Partial<MakeOptions> = {}): Request =>
     modify(empty, { ...options, method, url })
 
 export interface ModifyOptions {
