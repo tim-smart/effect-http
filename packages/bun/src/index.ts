@@ -20,12 +20,14 @@ export const serve =
     httpApp: HttpApp<R, EarlyResponse>,
   ): Effect<Exclude<R, HttpFs>, never, void> =>
     Effect.runtime<R>()
-      .flatMap(rt =>
-        Effect.asyncInterrupt<never, never, void>(() => {
+      .flatMap(rt => {
+        const run = rt.runPromise
+        return Effect.asyncInterrupt<never, never, void>(() => {
           const server = Bun.serve({
             ...options,
             fetch(request) {
-              return httpApp(
+              return run(
+                httpApp(
                   HttpRequest.fromStandard(
                     request,
                     request.method,
@@ -33,15 +35,16 @@ export const serve =
                   ),
                 )
                   .catchTag("EarlyResponse", e => Effect.succeed(e.response))
-                  .map(HttpResponse.toStandard).runPromise(rt)
+                  .map(HttpResponse.toStandard),
+              )
             },
           })
 
           return Effect(() => {
             server.stop()
           })
-        }),
-      )
+        })
+      })
       .provideService(HttpFs, bunHttpFsImpl)
 
 const bunHttpFsImpl: HttpFs = {
