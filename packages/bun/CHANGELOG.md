@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.25.1](https://github.com/tim-smart/effect-http/compare/v0.25.0...v0.25.1) (2023-05-12)
+
+
+### Bug Fixes
+
+* bun runPromise ([7e15baf](https://github.com/tim-smart/effect-http/commit/7e15baf87221e504b8c604f0b58463da1548a2fc))
+
+
+
+
+
 # [0.25.0](https://github.com/tim-smart/effect-http/compare/v0.24.2...v0.25.0) (2023-05-10)
 
 **Note:** Version bump only for package @effect-http/bun
