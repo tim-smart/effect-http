@@ -77,6 +77,27 @@ export const contramapEffect: {
 )
 
 /**
+ * @tsplus fluent effect-http/client/RequestExecutor contratapEffect
+ */
+export const contratapEffect: {
+  <R2, E2, X>(f: (a: Request) => Effect<R2, E2, X>): <R1, E1, A>(
+    self: RequestExecutor<R1, E1, A>,
+  ) => RequestExecutor<R1 | R2, E1 | E2, A>
+  <R1, R2, E1, E2, A, X>(
+    self: RequestExecutor<R1, E1, A>,
+    f: (a: Request) => Effect<R2, E2, X>,
+  ): RequestExecutor<R1 | R2, E1 | E2, A>
+} = dual(
+  2,
+  <R1, R2, E1, E2, A, X>(
+      self: RequestExecutor<R1, E1, A>,
+      f: (a: Request) => Effect<R2, E2, X>,
+    ): RequestExecutor<R1 | R2, E1 | E2, A> =>
+    request =>
+      f(request).zipRight(self(request)),
+)
+
+/**
  * @tsplus fluent effect-http/client/RequestExecutor map
  */
 export const map: {
@@ -117,6 +138,27 @@ export const mapEffect: {
     ): RequestExecutor<R1 | R2, E1 | E2, B> =>
     request =>
       self(request).flatMap(f),
+)
+
+/**
+ * @tsplus fluent effect-http/client/RequestExecutor tapEffect
+ */
+export const tapEffect: {
+  <R2, E2, A, X>(f: (a: A) => Effect<R2, E2, X>): <R1, E1>(
+    self: RequestExecutor<R1, E1, A>,
+  ) => RequestExecutor<R1 | R2, E1 | E2, A>
+  <R1, R2, E1, E2, A, X>(
+    self: RequestExecutor<R1, E1, A>,
+    f: (a: A) => Effect<R2, E2, X>,
+  ): RequestExecutor<R1 | R2, E1 | E2, A>
+} = dual(
+  2,
+  <R1, R2, E1, E2, A, X>(
+      self: RequestExecutor<R1, E1, A>,
+      f: (a: A) => Effect<R2, E2, X>,
+    ): RequestExecutor<R1 | R2, E1 | E2, A> =>
+    request =>
+      self(request).tap(f),
 )
 
 /**
