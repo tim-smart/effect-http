@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.26.0](https://github.com/tim-smart/effect-http/compare/v0.25.2...v0.26.0) (2023-05-15)
+
+
+### Features
+
+* tap to client Executor ([664b1cc](https://github.com/tim-smart/effect-http/commit/664b1cc6a7c3b676b8748eae430fedef3c97e7c8))
+
+
+
+
+
 ## [0.25.2](https://github.com/tim-smart/effect-http/compare/v0.25.1...v0.25.2) (2023-05-15)
 
 
