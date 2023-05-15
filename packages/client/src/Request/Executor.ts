@@ -196,10 +196,10 @@ export const retry: {
  * @tsplus fluent effect-http/client/RequestExecutor catchTag
  */
 export const catchTag: {
-  <K extends E["_tag"] & string, E extends { _tag: string }, R1, E1, A1>(
+  <E extends { _tag: string }, K extends E["_tag"] & string, R1, E1, A1>(
     tag: K,
     f: (e: Extract<E, { _tag: K }>) => Effect<R1, E1, A1>,
-  ): <R, E, A>(
+  ): <R, A>(
     self: RequestExecutor<R, E, A>,
   ) => RequestExecutor<R1 | R, E1 | Exclude<E, { _tag: K }>, A1 | A>
   <R, E extends { _tag: string }, A, K extends E["_tag"] & string, E1, R1, A1>(
