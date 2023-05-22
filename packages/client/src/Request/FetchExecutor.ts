@@ -34,6 +34,7 @@ export const fetch =
       )
 
       request.urlParams.forEach(([key, value]) => {
+        if (value === undefined) return
         url.searchParams.append(key, value)
       })
 
