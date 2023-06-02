@@ -20,13 +20,13 @@
   "license": "ISC",
   "dependencies": {
     "@effect-http/core": "workspace:*",
-    "@effect/data": "^0.12.2",
-    "@effect/io": "~0.25.12"
+    "@effect/data": "^0.12.4",
+    "@effect/io": "~0.26.0"
   },
   "devDependencies": {
-    "@tsplus-types/effect__data": "0.12.2-c9131e9",
-    "@tsplus-types/effect__io": "0.25.9-11739c0",
-    "bun-types": "^0.6.2",
+    "@tsplus-types/effect__data": "0.12.4-11739c0",
+    "@tsplus-types/effect__io": "0.26.0-11739c0",
+    "bun-types": "^0.6.6",
     "typescript": "https://cdn.jsdelivr.net/npm/@tsplus/installer@0.0.176/compiler/typescript.tgz"
   },
   "sideEffects": false
