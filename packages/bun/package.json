@@ -19,7 +19,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@effect-http/core": "workspace:*",
+    "@effect-http/core": "0.27.0",
     "@effect/data": "^0.12.4",
     "@effect/io": "~0.26.0"
   },
@@ -29,5 +29,6 @@
     "bun-types": "^0.6.6",
     "typescript": "https://cdn.jsdelivr.net/npm/@tsplus/installer@0.0.176/compiler/typescript.tgz"
   },
-  "sideEffects": false
+  "sideEffects": false,
+  "gitHead": "f285647e065f4b904e4d2165df54dd797a9c51fc"
 }
