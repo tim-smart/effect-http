@@ -41,6 +41,16 @@ export const decode = <I extends Json, A>(schema: Schema<I, A>) => {
   })
 }
 
+export const decodeHeaders = <I extends Record<string, string>, A>(
+  schema: Schema<I, A>,
+) => {
+  const decode = decodeEffect<Record<string, string>>()(schema)
+  return Do($ => {
+    const ctx = $(RouteContext)
+    return $(decode(Object.fromEntries(ctx.request.headers), ctx.request))
+  })
+}
+
 export const decodeParams = <I extends Record<string, string | undefined>, A>(
   schema: Schema<I, A>,
 ) => {
