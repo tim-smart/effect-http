@@ -3,7 +3,7 @@
   "packages": [
     "packages/*"
   ],
-  "version": "0.27.2",
+  "version": "0.27.3",
   "npmClient": "pnpm",
   "command": {
     "version": {
