@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.27.5](https://github.com/tim-smart/effect-http/compare/v0.27.4...v0.27.5) (2023-06-23)
+
+
+### Bug Fixes
+
+* node request text ([6f33e21](https://github.com/tim-smart/effect-http/commit/6f33e216f48aa272d7373f3ac3a0734e390a897b))
+
+
+
+
+
 ## [0.27.4](https://github.com/tim-smart/effect-http/compare/v0.27.3...v0.27.4) (2023-06-23)
 
 
