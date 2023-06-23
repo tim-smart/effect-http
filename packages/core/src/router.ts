@@ -34,6 +34,21 @@ export class Router<R = never, E = never, EnvR = never, ReqR = never> {
     )
   }
 
+  preprocess<R2, E2, X>(effect: Effect<R2, E2, X>) {
+    return new Router<
+      R | Exclude<R2, RouteContext | ReqR>,
+      E | E2,
+      EnvR | Exclude<R2, RouteContext | ReqR>,
+      ReqR
+    >(
+      this.routes,
+      this.env
+        .map(prevEnv => prevEnv.zipLeft(effect))
+        .orElse(() => Maybe.some(effect.as(Context.empty()))) as any,
+      this.mounts,
+    )
+  }
+
   provideService<T extends Tag<any, any>>(tag: T, service: Tag.Service<T>) {
     return this.provideServiceEffect(tag, Effect.succeed(service))
   }
