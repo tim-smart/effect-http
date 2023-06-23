@@ -14,6 +14,11 @@ export class NodeHttpRequest implements HttpRequest {
     readonly options: MP.MultipartOptions,
   ) {}
 
+  readonly text = Body.utf8String(
+    this.source,
+    this.options.limits.fieldSize,
+  ).mapError(e => new RequestBodyError(e)).cached.runSync
+
   get method() {
     return this.source.method!
   }
@@ -26,17 +31,11 @@ export class NodeHttpRequest implements HttpRequest {
     return new NodeHttpRequest(this.source, this.originalUrl, url, this.options)
   }
 
-  get text() {
-    return Body.utf8String(this.source, this.options.limits.fieldSize).mapError(
-      (e) => new RequestBodyError(e),
-    )
-  }
-
   get json() {
-    return this.text.flatMap((_) =>
+    return this.text.flatMap(_ =>
       Effect.tryCatch(
         () => JSON.parse(_) as unknown,
-        (reason) => new RequestBodyError(reason),
+        reason => new RequestBodyError(reason),
       ),
     )
   }
@@ -51,7 +50,7 @@ export class NodeHttpRequest implements HttpRequest {
 
   get stream() {
     return fromReadable<Uint8Array>(this.source).mapError(
-      (_) => new RequestBodyError(_),
+      _ => new RequestBodyError(_),
     )
   }
 
