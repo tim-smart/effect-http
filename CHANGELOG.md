@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.28.0](https://github.com/tim-smart/effect-http/compare/v0.27.5...v0.28.0) (2023-06-23)
+
+
+### Features
+
+* add preprocess to router ([7016e0f](https://github.com/tim-smart/effect-http/commit/7016e0fd301ef0b6b75563df4b5b54a73145abf1))
+
+
+
+
+
 ## [0.27.5](https://github.com/tim-smart/effect-http/compare/v0.27.4...v0.27.5) (2023-06-23)
 
 
