@@ -7,17 +7,18 @@ import { Readable } from "stream"
 import * as MP from "./multipart.js"
 
 export class NodeHttpRequest implements HttpRequest {
+  readonly text: Effect<never, RequestBodyError, string>
+
   constructor(
     readonly source: IncomingMessage,
     readonly originalUrl: string,
     readonly url: string,
     readonly options: MP.MultipartOptions,
-  ) {}
-
-  readonly text = Body.utf8String(
-    this.source,
-    this.options.limits.fieldSize,
-  ).mapError(e => new RequestBodyError(e)).cached.runSync
+  ) {
+    this.text = Body.utf8String(source, options.limits.fieldSize).mapError(
+      e => new RequestBodyError(e),
+    ).cached.runSync
+  }
 
   get method() {
     return this.source.method!
