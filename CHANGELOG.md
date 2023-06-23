@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.27.4](https://github.com/tim-smart/effect-http/compare/v0.27.3...v0.27.4) (2023-06-23)
+
+
+### Reverts
+
+* Revert "chore: update deps" ([d600d64](https://github.com/tim-smart/effect-http/commit/d600d640d1817822c0f83527e1b097058def367d))
+
+
+
+
+
 ## [0.27.3](https://github.com/tim-smart/effect-http/compare/v0.27.2...v0.27.3) (2023-06-22)
 
 **Note:** Version bump only for package effect-http
