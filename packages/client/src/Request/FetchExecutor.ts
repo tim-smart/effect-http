@@ -12,6 +12,8 @@ import { toReadableStream } from "../util/stream.js"
 import { RequestBody } from "./Body.js"
 import type { RequestExecutor } from "./Executor.js"
 import * as executor from "./Executor.js"
+import * as ReadonlyArray from "@effect/data/ReadonlyArray"
+import * as Effect from "@effect/io/Effect"
 
 /**
  * A request executor that uses the global fetch function.
@@ -27,13 +29,13 @@ export const fetch =
   request =>
     Do($ => {
       const url = $(
-        Effect.tryCatch(
-          () => new URL(request.url),
-          _ => new RequestError(request, _),
-        ),
+        Effect.try({
+          try: () => new URL(request.url),
+          catch: _ => new RequestError(request, _),
+        }),
       )
 
-      request.urlParams.forEach(([key, value]) => {
+      ReadonlyArray.forEach(request.urlParams, ([key, value]) => {
         if (value === undefined) return
         url.searchParams.append(key, value)
       })
@@ -42,8 +44,8 @@ export const fetch =
       const body = request.body.map(convertBody).getOrUndefined
 
       return $(
-        Effect.tryCatchPromiseInterrupt(
-          signal =>
+        Effect.tryPromiseInterrupt({
+          try: signal =>
             globalThis.fetch(url, {
               ...options,
               method: request.method,
@@ -51,8 +53,8 @@ export const fetch =
               body,
               signal,
             }),
-          _ => new RequestError(request, _),
-        ).map(response.fromWeb),
+          catch: _ => new RequestError(request, _),
+        }).map(response.fromWeb),
       )
     })
 
@@ -63,7 +65,7 @@ export const fetch =
  *
  * @since 1.0.0
  */
-export const fetchOk = flow(fetch, executor.filterStatusOk)
+export const fetchOk = (options?: RequestInit) => fetch(options).filterStatusOk
 
 /**
  * @since 1.0.0
@@ -73,8 +75,8 @@ export const fetch_: (
   options?: RequestInit,
 ) => (
   request: Request,
-) => Effect<never, RequestError | StatusCodeError, response.Response> = fetchOk
-
+) => Effect.Effect<never, RequestError | StatusCodeError, response.Response> =
+  fetchOk
 /**
  * A request executor that uses the global fetch function.
  *
@@ -83,11 +85,10 @@ export const fetch_: (
  *
  * @since 1.0.0
  */
-export const fetchJson = flow(
-  fetchOk,
-  executor.contramap(_ => _.acceptJson),
-  executor.mapEffect(_ => _.json),
-)
+export const fetchJson = (options?: RequestInit) =>
+  fetchOk(options)
+    .contramap(_ => _.acceptJson)
+    .mapEffect(_ => _.json)
 
 /**
  * @tsplus pipeable effect-http/client/Request fetchJson
@@ -96,7 +97,7 @@ export const fetchJson_: (
   options?: RequestInit,
 ) => (
   request: Request,
-) => Effect<
+) => Effect.Effect<
   never,
   RequestError | StatusCodeError | ResponseDecodeError,
   unknown
@@ -131,7 +132,7 @@ export const fetchDecode_: <I extends Json, O>(
   requestInit?: RequestInit,
 ) => (
   request: Request,
-) => Effect<
+) => Effect.Effect<
   never,
   RequestError | StatusCodeError | ResponseDecodeError | SchemaDecodeError,
   O

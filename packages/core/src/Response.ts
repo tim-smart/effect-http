@@ -87,7 +87,7 @@ export const json = (
  * @tsplus static effect-http/Response.Ops encodeJson
  */
 export const encodeJson = <I extends Json, A>(schema: Schema<I, A>) => {
-  const encode = schema.encodeEffect
+  const encode = schema.encode
   return (
     value: A,
     opts: {

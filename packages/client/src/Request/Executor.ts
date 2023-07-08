@@ -179,9 +179,9 @@ export const filterStatus: {
       f: (status: number) => boolean,
     ): RequestExecutor<R, E | StatusCodeError, Response> =>
     request =>
-      self(request).filterOrElseWith(
+      self(request).filterOrFail(
         _ => f(_.status),
-        _ => Effect.fail(new StatusCodeError(_)),
+        _ => new StatusCodeError(_),
       ),
 )
 
@@ -191,9 +191,9 @@ export const filterStatus: {
 export const filterStatusOk = filterStatus(_ => _ >= 200 && _ < 300)
 
 /**
- * @tsplus fluent effect-http/client/RequestExecutor filterOrElseWith
+ * @tsplus fluent effect-http/client/RequestExecutor filterOrElse
  */
-export const filterOrElseWith: {
+export const filterOrElse: {
   <A, R2, E2, B>(f: Predicate<A>, orElse: (a: A) => Effect<R2, E2, B>): <R, E>(
     self: RequestExecutor<R, E, A>,
   ) => RequestExecutor<R2 | R, E2 | E, A | B>
@@ -210,7 +210,7 @@ export const filterOrElseWith: {
       orElse: (a: A) => Effect<R2, E2, B>,
     ): RequestExecutor<R2 | R, E2 | E, A | B> =>
     request =>
-      self(request).filterOrElseWith(f, orElse),
+      self(request).filterOrElse(f, orElse),
 )
 
 /**

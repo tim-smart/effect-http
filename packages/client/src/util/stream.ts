@@ -1,3 +1,6 @@
+import * as Scope from "@effect/io/Scope"
+import * as ReadonlyArray from "@effect/data/ReadonlyArray"
+
 export const fromReadableStream = <A = Uint8Array>(
   evaluate: LazyArg<ReadableStream<A>>,
 ) =>
@@ -6,10 +9,10 @@ export const fromReadableStream = <A = Uint8Array>(
       .acquireRelease(reader => Effect.promise(reader.cancel()))
       .map(reader =>
         Stream.repeatEffectOption(
-          Effect.tryCatchPromise(
-            () => reader.read(),
-            _ => Maybe.some(_),
-          ).flatMap(({ value, done }) =>
+          Effect.tryPromise({
+            try: () => reader.read(),
+            catch: _ => Maybe.some(_),
+          }).flatMap(({ value, done }) =>
             done ? Effect.fail(Maybe.none()) : Effect.succeed(value),
           ),
         ),
@@ -22,17 +25,17 @@ export const toReadableStream = <E, A>(source: Stream<never, E, A>) => {
 
   return new ReadableStream<A>({
     start(controller) {
-      scope = CloseableScope.make().runSync
+      scope = Scope.make().runSync
       pull = source.toPull
         .use(scope)
         .runSync.tap(_ =>
           Effect(() => {
-            _.forEach(_ => {
+            ReadonlyArray.forEach(_, _ => {
               controller.enqueue(_)
             })
           }),
         )
-        .tapErrorCause(() => scope.close(Exit.unit()))
+        .tapErrorCause(() => scope.close(Exit.unit))
         .catchTag("None", () =>
           Effect(() => {
             controller.close()
@@ -48,7 +51,7 @@ export const toReadableStream = <E, A>(source: Stream<never, E, A>) => {
       return pull.runPromise
     },
     cancel() {
-      return scope.close(Exit.unit()).runPromise
+      return scope.close(Exit.unit).runPromise
     },
   })
 }

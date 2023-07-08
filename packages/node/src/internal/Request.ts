@@ -1,4 +1,4 @@
-import type { Effect } from "@effect/io/Effect"
+import * as Effect from "@effect/io/Effect"
 import { HttpRequest, RequestBodyError } from "@effect-http/core/Request"
 import { IncomingMessage } from "http"
 import * as Body from "./body.js"
@@ -7,7 +7,7 @@ import { Readable } from "stream"
 import * as MP from "./multipart.js"
 
 export class NodeHttpRequest implements HttpRequest {
-  readonly text: Effect<never, RequestBodyError, string>
+  readonly text: Effect.Effect<never, RequestBodyError, string>
 
   constructor(
     readonly source: IncomingMessage,
@@ -34,10 +34,10 @@ export class NodeHttpRequest implements HttpRequest {
 
   get json() {
     return this.text.flatMap(_ =>
-      Effect.tryCatch(
-        () => JSON.parse(_) as unknown,
-        reason => new RequestBodyError(reason),
-      ),
+      Effect.try({
+        try: () => JSON.parse(_) as unknown,
+        catch: reason => new RequestBodyError(reason),
+      }),
     )
   }
 

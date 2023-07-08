@@ -21,5 +21,5 @@ export const NodeAgent = Tag<NodeAgent>()
 
 export const makeAgentLayer = (
   opts?: AgentOptions,
-): Layer<never, never, NodeAgent> => makeAgent(opts).toLayerScoped(NodeAgent)
+): Layer<never, never, NodeAgent> => Layer.scoped(NodeAgent, makeAgent(opts))
 export const LiveNodeAgent = makeAgentLayer()

@@ -124,12 +124,12 @@ export class Router<R = never, E = never, EnvR = never, ReqR = never> {
 
     return allRoutes.map(([route, env]) => [
       route,
-      this.env.match(
-        () => env,
-        selfEnv =>
-          env.match(
-            () => Maybe.some(selfEnv),
-            prevEnv =>
+      this.env.match({
+        onNone: () => env,
+        onSome: selfEnv =>
+          env.match({
+            onNone: () => Maybe.some(selfEnv),
+            onSome: prevEnv =>
               Maybe.some(
                 selfEnv.flatMap(selfCtx =>
                   prevEnv
@@ -137,8 +137,8 @@ export class Router<R = never, E = never, EnvR = never, ReqR = never> {
                     .map(prevCtx => selfCtx.merge(prevCtx)),
                 ),
               ),
-          ),
-      ),
+          }),
+      }),
     ])
   }
 
@@ -147,11 +147,11 @@ export class Router<R = never, E = never, EnvR = never, ReqR = never> {
     const router = FindMyWay()
 
     for (const [route, env] of routes) {
-      const handler = env.match(
-        () => route.handler,
-        env =>
+      const handler = env.match({
+        onNone: () => route.handler,
+        onSome: env =>
           env.flatMap(ctx => route.handler.contramapContext(a => a.merge(ctx))),
-      )
+      })
       router.on(route.method, route.path, () => handler)
     }
 

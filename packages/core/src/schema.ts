@@ -1,5 +1,6 @@
 import { Json, Schema } from "@effect/schema/Schema"
 import type { HttpRequest } from "./Request.js"
+import * as Effect from "@effect/io/Effect"
 
 export class DecodeSchemaError {
   readonly _tag = "DecodeSchemaError"
@@ -25,7 +26,7 @@ const decodeEither =
 const decodeEffect =
   <ParentI>() =>
   <I extends ParentI, A>(schema: Schema<I, A>) => {
-    const decode = schema.parseEffect
+    const decode = schema.parse
     return (input: unknown, request: HttpRequest) =>
       decode(input).mapError(_ => new DecodeSchemaError(_, request, input))
   }
@@ -34,7 +35,7 @@ export const decode = <I extends Json, A>(schema: Schema<I, A>) => {
   const decode = decodeEffect<Json>()(schema)
 
   return Do($ => {
-    const ctx = $(RouteContext)
+    const ctx = $(Effect.map(RouteContext, identity))
     const params = $(parseBodyWithParams(ctx))
 
     return $(decode(params, ctx.request))
@@ -46,7 +47,7 @@ export const decodeHeaders = <I extends Record<string, string>, A>(
 ) => {
   const decode = decodeEffect<Record<string, string>>()(schema)
   return Do($ => {
-    const ctx = $(RouteContext)
+    const ctx = $(Effect.map(RouteContext, identity))
     return $(decode(Object.fromEntries(ctx.request.headers), ctx.request))
   })
 }
@@ -57,7 +58,9 @@ export const decodeParams = <I extends Record<string, string | undefined>, A>(
   const decode = decodeEffect<Record<string, string | undefined>>()(schema)
 
   return Do($ => {
-    const { request, params, searchParams } = $(RouteContext)
+    const { request, params, searchParams } = $(
+      Effect.map(RouteContext, identity),
+    )
     return $(decode({ ...searchParams, ...params }, request))
   })
 }
@@ -67,10 +70,11 @@ export class FormDataKeyNotFound {
   constructor(readonly key: string) {}
 }
 
-const jsonParse = Either.liftThrowable(
-  (_: string) => JSON.parse(_) as unknown,
-  _ => new RequestBodyError(_),
-)
+const jsonParse = (_: string) =>
+  Effect.try({
+    try: () => JSON.parse(_) as unknown,
+    catch: _ => new RequestBodyError(_),
+  })
 
 export const decodeJsonFromFormData =
   <I extends Json, A>(schema: Schema<I, A>) =>
@@ -78,13 +82,11 @@ export const decodeJsonFromFormData =
     const decode = decodeEither<Json>()(schema)
 
     return Do($ => {
-      const { request } = $(RouteContext)
+      const { request } = $(Effect.map(RouteContext, identity))
       const data = $(formData ? Effect.succeed(formData) : request.formData)
 
-      const result = Either.fromNullable(
-        data.get(key),
-        () => new RequestBodyError(new FormDataKeyNotFound(key)),
-      )
+      const result = Maybe.fromNullable(data.get(key))
+        .mapError(() => new RequestBodyError(new FormDataKeyNotFound(key)))
         .flatMap(_ => jsonParse(_.toString()))
         .flatMap(_ => decode(_, request))
         .map(value => [value, data] as const)
@@ -124,8 +126,8 @@ export const parseBody = (request: HttpRequest) => {
 
 export const queryStringBody = (request: HttpRequest) =>
   request.text.flatMap(_ =>
-    Effect.tryCatch(
-      () => Object.fromEntries(new URLSearchParams(_).entries()),
-      reason => new RequestBodyError(reason),
-    ),
+    Effect.try({
+      try: () => Object.fromEntries(new URLSearchParams(_).entries()),
+      catch: reason => new RequestBodyError(reason),
+    }),
   )

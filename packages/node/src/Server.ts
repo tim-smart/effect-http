@@ -55,7 +55,7 @@ export const serve =
                     response.end()
                   }
 
-                  exit.cause.logErrorCause.runFork
+                  exit.cause.logCause({ level: "Error" }).runFork
                 }
               },
             )
@@ -64,7 +64,7 @@ export const serve =
           server.listen(options)
 
           return Effect.async(resume => {
-            server.close(() => resume(Effect.unit()))
+            server.close(() => resume(Effect.unit))
           })
         }),
       )
@@ -125,7 +125,7 @@ const handleResponse = (
         Readable.fromWeb(r.body as any)
           .pipe(dest)
           .once("finish", () => {
-            resume(Effect.unit())
+            resume(Effect.unit)
           })
       })
 

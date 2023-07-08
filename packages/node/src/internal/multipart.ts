@@ -95,10 +95,11 @@ export const formData = (source: IncomingMessage, opts: MultipartOptions) =>
       formData.append(part.key, new Blob(), path)
 
       return $(
-        Effect.tryCatchPromise(
-          () => NS.pipeline(part.source as any, NFS.createWriteStream(path)),
-          reason => new RequestBodyError(reason),
-        ).as(formData),
+        Effect.tryPromise({
+          try: () =>
+            NS.pipeline(part.source as any, NFS.createWriteStream(path)),
+          catch: reason => new RequestBodyError(reason),
+        }).as(formData),
       )
     })
   })

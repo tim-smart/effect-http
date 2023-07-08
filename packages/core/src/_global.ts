@@ -66,7 +66,7 @@ import type { HashMap } from "@effect/data/HashMap"
 /**
  * @tsplus global
  */
-import { flow, pipe, identity, LazyArg } from "@effect/data/Function"
+import { pipe, identity, LazyArg } from "@effect/data/Function"
 
 /**
  * @tsplus global

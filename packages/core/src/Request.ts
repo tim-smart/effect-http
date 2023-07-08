@@ -57,23 +57,29 @@ class HttpRequestImpl implements HttpRequest {
   }
 
   get json() {
-    return Effect.tryCatchPromise(
-      () => this.source.json(),
-      reason => new RequestBodyError(reason),
+    return Effect.tryPromise(
+{
+try:      () => this.source.json(),
+   catch:   reason => new RequestBodyError(reason),
+}
     )
   }
 
   get text() {
-    return Effect.tryCatchPromise(
-      () => this.source.text(),
-      reason => new RequestBodyError(reason),
+    return Effect.tryPromise(
+{
+try:      () => this.source.text(),
+   catch:   reason => new RequestBodyError(reason),
+}
     )
   }
 
   get formData() {
-    return Effect.tryCatchPromise(
-      () => this.source.formData(),
-      reason => new RequestBodyError(reason),
+    return Effect.tryPromise(
+{
+try:      () => this.source.formData(),
+   catch:   reason => new RequestBodyError(reason),
+}
     )
   }
 
@@ -133,11 +139,11 @@ export const formData = RouteContext.accessWithEffect(_ => _.request.formData)
 /**
  * @tsplus static effect-http/Request.Ops formDataStream
  */
-export const formDataStream = RouteContext.flatMap(
+export const formDataStream = Stream.fromEffect(RouteContext).flatMap(
   _ => _.request.formDataStream,
 )
 
 /**
  * @tsplus static effect-http/Request.Ops stream
  */
-export const stream = RouteContext.flatMap(_ => _.request.stream)
+export const stream = Stream.fromEffect(RouteContext).flatMap(_ => _.request.stream)

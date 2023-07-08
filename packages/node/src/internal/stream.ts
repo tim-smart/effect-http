@@ -94,7 +94,7 @@ export const sink = <A>(
 ): WritableSink<A> =>
   pipe(
     Effect.sync(evaluate)
-      .acquireRelease(endOnExit ? end : () => Effect.unit())
+      .acquireRelease(endOnExit ? end : () => Effect.unit)
       .map(_ => makeSink<A>(_, encoding)),
     Sink.unwrapScoped,
   )
@@ -102,11 +102,11 @@ export const sink = <A>(
 const end = (stream: Writable) =>
   Effect.async<never, never, void>(resume => {
     if (stream.closed) {
-      resume(Effect.unit())
+      resume(Effect.unit)
       return
     }
 
-    stream.end(() => resume(Effect.unit()))
+    stream.end(() => resume(Effect.unit))
   })
 
 const makeSink = <A>(stream: Writable, encoding: BufferEncoding) =>
@@ -120,7 +120,7 @@ const write =
         if (err) {
           resume(Effect.fail(new WritableError(err)))
         } else {
-          resume(Effect.unit())
+          resume(Effect.unit)
         }
       })
     })

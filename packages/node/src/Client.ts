@@ -1,6 +1,5 @@
 import * as Http from "@effect-http/client"
 import type { Option } from "@effect/data/Option"
-import type { Effect } from "@effect/io/Effect"
 import type { Layer } from "@effect/io/Layer"
 import { ParseOptions } from "@effect/schema/AST"
 import * as S from "@effect/schema/Schema"
@@ -12,6 +11,9 @@ import { Readable } from "node:stream"
 import { pipeline } from "node:stream/promises"
 import { LiveNodeAgent, NodeAgent } from "./internal/Agent.js"
 import * as IS from "./internal/stream.js"
+import * as Effect from "@effect/io/Effect"
+import { identity } from "@effect/data/Function"
+import * as ReadonlyArray from "@effect/data/ReadonlyArray"
 
 export const executeRaw: Http.executor.RequestExecutor<
   NodeAgent,
@@ -19,16 +21,16 @@ export const executeRaw: Http.executor.RequestExecutor<
   Http.response.Response
 > = request =>
   Do($ => {
-    const agent = $(NodeAgent)
+    const agent = $(Effect.map(NodeAgent, identity))
 
     const url = $(
-      Effect.tryCatch(
-        () => new URL(request.url),
-        _ => new Http.RequestError(request, _),
-      ),
+      Effect.try({
+        try: () => new URL(request.url),
+        catch: _ => new Http.RequestError(request, _),
+      }),
     )
 
-    request.urlParams.forEach(([key, value]) => {
+    ReadonlyArray.forEach(request.urlParams, ([key, value]) => {
       url.searchParams.append(key, value)
     })
 
@@ -64,7 +66,7 @@ export const executeDecode_: <I extends S.Json, A>(
   schema: S.Schema<I, A>,
 ) => (
   request: Http.Request,
-) => Effect<
+) => Effect.Effect<
   NodeAgent,
   | Http.RequestError
   | Http.StatusCodeError
@@ -76,7 +78,7 @@ export const executeDecode_: <I extends S.Json, A>(
 export const LiveNodeRequestExecutor = Layer.effect(
   Http.executor.HttpRequestExecutor,
   Do($ => {
-    const agent = $(NodeAgent)
+    const agent = $(Effect.map(NodeAgent, identity))
 
     return {
       execute: (request: Http.Request) =>
@@ -111,11 +113,13 @@ const executeRequest = (
   const requestEffect = handleRequest(request)
   const bodyEffect = sendBody(request, body)
 
-  return bodyEffect.zipParRight(requestEffect).onInterrupt(() =>
-    Effect(() => {
-      controller.abort()
-    }),
-  )
+  return bodyEffect
+    .zipRight(requestEffect, { parallel: true })
+    .onInterrupt(() =>
+      Effect.sync(() => {
+        controller.abort()
+      }),
+    )
 }
 
 const handleRequest = (request: NodeHttp.ClientRequest) =>
@@ -128,7 +132,7 @@ const handleRequest = (request: NodeHttp.ClientRequest) =>
 const sendBody = (
   request: NodeHttp.ClientRequest,
   body: Option<Http.body.RequestBody>,
-): Effect<never, unknown, void> => {
+): Effect.Effect<never, unknown, void> => {
   if (body._tag === "None") {
     request.end()
     return waitForFinish(request)
@@ -148,10 +152,11 @@ const sendBody = (
         })
 
         return $(
-          Effect.tryCatchPromise(
-            () => pipeline(Readable.fromWeb(response.body! as any), request),
-            _ => _,
-          ),
+          Effect.tryPromise({
+            try: () =>
+              pipeline(Readable.fromWeb(response.body! as any), request),
+            catch: _ => _,
+          }),
         )
       })
 
@@ -167,7 +172,7 @@ const waitForFinish = (request: NodeHttp.ClientRequest) =>
     })
 
     request.on("finish", () => {
-      resume(Effect.unit())
+      resume(Effect.unit)
     })
   })
 
@@ -182,24 +187,24 @@ export class ResponseImpl implements Http.response.Response {
     return new Headers(this.source.headers as any)
   }
 
-  get text(): Effect<never, Http.ResponseDecodeError, string> {
+  get text(): Effect.Effect<never, Http.ResponseDecodeError, string> {
     return IS.readableToString(this.source).mapError(
       _ => new Http.ResponseDecodeError(_.reason, this, "text"),
     )
   }
 
-  get json(): Effect<never, Http.ResponseDecodeError, unknown> {
+  get json(): Effect.Effect<never, Http.ResponseDecodeError, unknown> {
     return IS.readableToString(this.source)
       .mapError(_ => new Http.ResponseDecodeError(_.reason, this, "json"))
       .flatMap(_ =>
-        Effect.tryCatch(
-          () => JSON.parse(_) as unknown,
-          _ => new Http.ResponseDecodeError(_, this, "json"),
-        ),
+        Effect.try({
+          try: () => JSON.parse(_) as unknown,
+          catch: _ => new Http.ResponseDecodeError(_, this, "json"),
+        }),
       )
   }
 
-  get formData(): Effect<never, Http.ResponseDecodeError, FormData> {
+  get formData(): Effect.Effect<never, Http.ResponseDecodeError, FormData> {
     return Effect.fail(
       new Http.ResponseDecodeError("Not implemented", this, "formData"),
     )
@@ -211,7 +216,7 @@ export class ResponseImpl implements Http.response.Response {
     )
   }
 
-  get blob(): Effect<never, Http.ResponseDecodeError, Blob> {
+  get blob(): Effect.Effect<never, Http.ResponseDecodeError, Blob> {
     return IS.readableToBuffer(this.source)
       .map(_ => new Blob([_]))
       .mapError(_ => new Http.ResponseDecodeError(_, this, "blob"))
@@ -220,8 +225,12 @@ export class ResponseImpl implements Http.response.Response {
   decode<I extends S.Json, A>(
     schema: S.Schema<I, A>,
     options?: ParseOptions,
-  ): Effect<never, Http.ResponseDecodeError | Http.SchemaDecodeError, A> {
-    const parse = schema.parseEffect
+  ): Effect.Effect<
+    never,
+    Http.ResponseDecodeError | Http.SchemaDecodeError,
+    A
+  > {
+    const parse = schema.parse
     return this.json.flatMap(_ =>
       parse(_, options).mapError(_ => new Http.SchemaDecodeError(_, this)),
     )

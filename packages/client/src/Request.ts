@@ -229,7 +229,7 @@ export const appendParam: {
   if (Array.isArray(value)) {
     return {
       ...self,
-      urlParams: self.urlParams.concat(
+      urlParams: self.urlParams.appendAll(
         Chunk.fromIterable(value.map(_ => [name, _])),
       ),
     }
@@ -305,16 +305,16 @@ export const setBody: {
     return request
   }
 
-  request = body.contentType.match(
-    () => request,
-    contentType => setHeader("content-type", contentType)(request),
-  )
+  request = body.contentType.match({
+    onNone: () => request,
+    onSome: contentType => setHeader("content-type", contentType)(request),
+  })
 
-  request = body.contentLength.match(
-    () => request,
-    contentLength =>
+  request = body.contentLength.match({
+    onNone: () => request,
+    onSome: contentLength =>
       setHeader("content-length", contentLength.toString())(request),
-  )
+  })
 
   return request
 })
@@ -382,7 +382,7 @@ export const withSchema = <I extends Json, O, R, E, A>(
   run: RequestExecutor<R, E, A>,
   options?: ParseOptions,
 ) => {
-  const encode = schema.encodeEffect
+  const encode = schema.encode
 
   return (self: Request) =>
     (input: O): Effect<R, E | SchemaEncodeError, A> =>

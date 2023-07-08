@@ -38,7 +38,7 @@ const close = (fd: number) =>
       if (err) {
         resume(Effect.fail(new ErrnoError(err)))
       } else {
-        resume(Effect.unit())
+        resume(Effect.unit)
       }
     })
   })
@@ -124,7 +124,7 @@ export const stream = (
     Effect.map(fd =>
       Stream.unfoldEffect(offset, position => {
         if (bytesToRead !== undefined && bytesToRead <= position - offset) {
-          return Effect.succeedNone()
+          return Effect.succeedNone
         }
 
         const toRead =
@@ -169,7 +169,7 @@ export const writeAll = (
       const newOffset = offset + bytesWritten
 
       if (newOffset >= data.byteLength) {
-        return Effect.unit()
+        return Effect.unit
       }
 
       return writeAll(fd, data, newOffset)
