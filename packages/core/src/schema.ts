@@ -85,8 +85,10 @@ export const decodeJsonFromFormData =
       const { request } = $(Effect.map(RouteContext, identity))
       const data = $(formData ? Effect.succeed(formData) : request.formData)
 
-      const result = Maybe.fromNullable(data.get(key))
-        .mapError(() => new RequestBodyError(new FormDataKeyNotFound(key)))
+      const result = Effect.mapError(
+        Maybe.fromNullable(data.get(key)),
+        () => new RequestBodyError(new FormDataKeyNotFound(key)),
+      )
         .flatMap(_ => jsonParse(_.toString()))
         .flatMap(_ => decode(_, request))
         .map(value => [value, data] as const)
