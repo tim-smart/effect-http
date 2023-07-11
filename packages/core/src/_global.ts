@@ -98,14 +98,6 @@ import { Router, RouteNotFound } from "@effect-http/core/router"
 /**
  * @tsplus global
  */
-import {
-  ReadableStreamError,
-  fromReadableStream,
-} from "@effect-http/core/util/stream"
-
-/**
- * @tsplus global
- */
 import { FormDataPart } from "@effect-http/core/multipart"
 
 /**

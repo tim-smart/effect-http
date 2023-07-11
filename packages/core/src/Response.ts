@@ -1,6 +1,5 @@
 import { Json, Schema } from "@effect/schema/Schema"
 import { ToResponseOptions } from "./internal/HttpFs.js"
-import { toReadableStream } from "./util/stream.js"
 import * as Mime from "mime-types"
 
 export class EncodeSchemaError {
@@ -258,7 +257,7 @@ export const toStandard = (self: HttpResponse): Response => {
       })
 
     case "StreamResponse":
-      return new Response(toReadableStream(self.body), {
+      return new Response(self.body.toReadableStream, {
         status: self.status,
         headers: self.headers,
       })

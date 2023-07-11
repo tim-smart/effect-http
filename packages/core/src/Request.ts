@@ -28,6 +28,11 @@ export class RequestBodyError {
   constructor(readonly reason: unknown) {}
 }
 
+export class ReadableStreamError {
+  readonly _tag = "ReadableStreamError"
+  constructor(readonly reason: unknown) {}
+}
+
 class HttpRequestImpl implements HttpRequest {
   constructor(
     private _build: Request | LazyArg<Request>,
@@ -57,30 +62,24 @@ class HttpRequestImpl implements HttpRequest {
   }
 
   get json() {
-    return Effect.tryPromise(
-{
-try:      () => this.source.json(),
-   catch:   reason => new RequestBodyError(reason),
-}
-    )
+    return Effect.tryPromise({
+      try: () => this.source.json(),
+      catch: reason => new RequestBodyError(reason),
+    })
   }
 
   get text() {
-    return Effect.tryPromise(
-{
-try:      () => this.source.text(),
-   catch:   reason => new RequestBodyError(reason),
-}
-    )
+    return Effect.tryPromise({
+      try: () => this.source.text(),
+      catch: reason => new RequestBodyError(reason),
+    })
   }
 
   get formData() {
-    return Effect.tryPromise(
-{
-try:      () => this.source.formData(),
-   catch:   reason => new RequestBodyError(reason),
-}
-    )
+    return Effect.tryPromise({
+      try: () => this.source.formData(),
+      catch: reason => new RequestBodyError(reason),
+    })
   }
 
   get formDataStream(): any {
@@ -89,9 +88,10 @@ try:      () => this.source.formData(),
 
   get stream() {
     return this.source.body
-      ? fromReadableStream(this.source.body).mapError(
-          _ => new RequestBodyError(_),
-        )
+      ? Stream.fromReadableStream(
+          this.source.body,
+          _ => new ReadableStreamError(_),
+        ).mapError(_ => new RequestBodyError(_))
       : Stream.fail(new RequestBodyError("no body"))
   }
 
@@ -146,4 +146,6 @@ export const formDataStream = Stream.fromEffect(RouteContext).flatMap(
 /**
  * @tsplus static effect-http/Request.Ops stream
  */
-export const stream = Stream.fromEffect(RouteContext).flatMap(_ => _.request.stream)
+export const stream = Stream.fromEffect(RouteContext).flatMap(
+  _ => _.request.stream,
+)

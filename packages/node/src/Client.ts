@@ -114,7 +114,7 @@ const executeRequest = (
   const bodyEffect = sendBody(request, body)
 
   return bodyEffect
-    .zipRight(requestEffect, { parallel: true })
+    .zipRight(requestEffect, { concurrent: true })
     .onInterrupt(() =>
       Effect.sync(() => {
         controller.abort()

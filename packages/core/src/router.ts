@@ -68,7 +68,7 @@ export class Router<R = never, E = never, EnvR = never, ReqR = never> {
         .map(prevEnv =>
           prevEnv.flatMap(ctx =>
             service
-              .contramapContext(a => a.merge(ctx))
+              .mapInputContext(a => a.merge(ctx))
               .map(a => add(tag, a)(ctx)),
           ),
         )
@@ -133,7 +133,7 @@ export class Router<R = never, E = never, EnvR = never, ReqR = never> {
               Maybe.some(
                 selfEnv.flatMap(selfCtx =>
                   prevEnv
-                    .contramapContext((a: Context<any>) => a.merge(selfCtx))
+                    .mapInputContext((a: Context<any>) => a.merge(selfCtx))
                     .map(prevCtx => selfCtx.merge(prevCtx)),
                 ),
               ),
@@ -150,7 +150,7 @@ export class Router<R = never, E = never, EnvR = never, ReqR = never> {
       const handler = env.match({
         onNone: () => route.handler,
         onSome: env =>
-          env.flatMap(ctx => route.handler.contramapContext(a => a.merge(ctx))),
+          env.flatMap(ctx => route.handler.mapInputContext(a => a.merge(ctx))),
       })
       router.on(route.method, route.path, () => handler)
     }
