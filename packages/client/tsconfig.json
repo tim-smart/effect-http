@@ -6,7 +6,7 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "moduleResolution": "NodeNext",
-    "module": "ESNext",
+    "module": "CommonJS",
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "sourceMap": true,
     "declaration": true,

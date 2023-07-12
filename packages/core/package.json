@@ -1,7 +1,6 @@
 {
   "name": "@effect-http/core",
   "version": "0.30.0",
-  "type": "module",
   "publishConfig": {
     "access": "public",
     "directory": "dist"
