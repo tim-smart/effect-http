@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.31.1](https://github.com/tim-smart/effect-http/compare/v0.31.0...v0.31.1) (2023-07-12)
+
+
+### Bug Fixes
+
+* don't build handler env twice ([dd6add5](https://github.com/tim-smart/effect-http/commit/dd6add56a3df3b7d2a828782be02c96c50023698))
+
+
+
+
+
 # [0.31.0](https://github.com/tim-smart/effect-http/compare/v0.30.0...v0.31.0) (2023-07-12)
 
 **Note:** Version bump only for package @effect-http/core

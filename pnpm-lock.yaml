@@ -15,7 +15,7 @@ importers:
   packages/bun:
     dependencies:
       '@effect-http/core':
-        specifier: ^0.31.0
+        specifier: ^0.31.1
         version: link:../core/dist
       '@effect/data':
         specifier: ^0.14.1
@@ -147,7 +147,7 @@ importers:
         specifier: ^0.31.0
         version: link:../client/dist
       '@effect-http/core':
-        specifier: ^0.31.0
+        specifier: ^0.31.1
         version: link:../core/dist
       '@effect/data':
         specifier: ^0.14.1
