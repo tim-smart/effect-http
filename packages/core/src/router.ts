@@ -105,7 +105,7 @@ export class Router<R = never, E = never, EnvR = never, ReqR = never> {
   ): (readonly [Route<R, E>, Maybe<Effect<R, E, Context<ReqR>>>])[] {
     let allRoutes = this.routes.flatMap(a =>
       a._tag === "Route"
-        ? [[a, this.env] as const]
+        ? [[a, Maybe.none()] as const]
         : a._tag === "ConcatWithPrefix"
         ? a.router.routesWithEnv(prefix ? `${a.prefix}${prefix}` : a.prefix)
         : a.router.routesWithEnv(prefix),
