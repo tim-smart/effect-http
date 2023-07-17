@@ -5,42 +5,44 @@ A runtime agnostic http library for effect-ts
 ## node.js example
 
 ```ts
-import { httpApp, response, router } from "@effect-http/core"
-import { make } from "@effect-http/node"
-import * as T from "@effect/io/Effect"
-import { pipe } from "@fp-ts/data/Function"
-import * as Http from "http"
+import * as Http from "@effect-http/core"
+import * as HttpNode from "@effect-http/node"
+import { Effect, pipe } from "effect"
+import { createServer } from "node:http"
 
 const app = pipe(
-  router
-    .route("GET", "/", T.succeed(response.text("Hello world!")))
+  Http.router
+    .route("GET", "/", Effect.succeed(Http.response.text("Hello world!")))
     .toHttpApp(),
 
-  httpApp.catchTag("RouteNotFound", () =>
-    T.succeed(response.text("Not found", { status: 404 })),
+  Http.httpApp.catchTag("RouteNotFound", () =>
+    Effect.succeed(response.text("Not found", { status: 404 })),
   ),
 )
 
-pipe(app, make(Http.createServer(), { port: 3000 }), T.unsafeRun)
+pipe(
+  app,
+  HttpNode.serve(() => createServer(), { port: 3000 }),
+  Effect.runFork,
+)
 ```
 
 ## bun example
 
 ```ts
-import { httpApp, response, router } from "@effect-http/core"
-import { make } from "@effect-http/bun"
-import * as T from "@effect/io/Effect"
-import { pipe } from "@fp-ts/data/Function"
+import * as Http from "@effect-http/core"
+import * as HttpBun from "@effect-http/bun"
+import { Effect, pipe } from "effect"
 
 const app = pipe(
-  router
-    .route("GET", "/", T.succeed(response.text("Hello world!")))
+  Http.router
+    .route("GET", "/", Effect.succeed(Http.response.text("Hello world!")))
     .toHttpApp(),
 
-  httpApp.catchTag("RouteNotFound", () =>
-    T.succeed(response.text("Not found", { status: 404 })),
+  Http.httpApp.catchTag("RouteNotFound", () =>
+    Effect.succeed(Http.response.text("Not found", { status: 404 })),
   ),
 )
 
-pipe(app, make({ port: 3000 }), T.unsafeRun)
+pipe(app, HttpBun.serve({ port: 3000 }), Effect.runFork)
 ```
