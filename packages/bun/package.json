@@ -1,6 +1,6 @@
 {
   "name": "@effect-http/bun",
-  "version": "0.32.0",
+  "version": "0.33.0",
   "publishConfig": {
     "access": "public",
     "directory": "dist"
@@ -19,7 +19,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@effect-http/core": "^0.32.0",
+    "@effect-http/core": "^0.33.0",
     "@effect/data": "^0.15.1",
     "@effect/io": "^0.34.0"
   },
