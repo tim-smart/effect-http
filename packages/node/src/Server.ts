@@ -55,7 +55,7 @@ export const serve =
                     response.end()
                   }
 
-                  exit.cause.logCause("Error").runFork
+                  Effect.logError(exit.cause).runFork
                 }
               },
             )
