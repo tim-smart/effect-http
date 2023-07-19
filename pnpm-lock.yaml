@@ -18,18 +18,18 @@ importers:
         specifier: ^0.33.0
         version: link:../core/dist
       '@effect/data':
-        specifier: ^0.15.1
-        version: 0.15.1
+        specifier: ^0.16.0
+        version: 0.16.0
       '@effect/io':
-        specifier: ^0.34.0
-        version: 0.34.0
+        specifier: ^0.35.0
+        version: 0.35.0
     devDependencies:
       '@tsplus-types/effect__data':
-        specifier: 0.15.1-11739c0
-        version: 0.15.1-11739c0(@effect/data@0.15.1)
+        specifier: 0.16.0-11739c0
+        version: 0.16.0-11739c0(@effect/data@0.16.0)
       '@tsplus-types/effect__io':
-        specifier: 0.34.0-11739c0
-        version: 0.34.0-11739c0(@effect/io@0.34.0)
+        specifier: 0.35.0-11739c0
+        version: 0.35.0-11739c0(@effect/io@0.35.0)
       '@tsplus/installer':
         specifier: ^0.0.177
         version: 0.0.177(@types/node@20.4.2)(typescript@5.1.6)
@@ -47,30 +47,30 @@ importers:
   packages/client:
     dependencies:
       '@effect/data':
-        specifier: ^0.15.1
-        version: 0.15.1
+        specifier: ^0.16.0
+        version: 0.16.0
       '@effect/io':
-        specifier: ^0.34.0
-        version: 0.34.0
+        specifier: ^0.35.0
+        version: 0.35.0
       '@effect/schema':
-        specifier: ^0.28.0
-        version: 0.28.0
+        specifier: ^0.29.0
+        version: 0.29.0
       '@effect/stream':
-        specifier: ^0.28.0
-        version: 0.28.0
+        specifier: ^0.29.0
+        version: 0.29.0
     devDependencies:
       '@tsplus-types/effect__data':
-        specifier: 0.15.1-11739c0
-        version: 0.15.1-11739c0(@effect/data@0.15.1)
+        specifier: 0.16.0-11739c0
+        version: 0.16.0-11739c0(@effect/data@0.16.0)
       '@tsplus-types/effect__io':
-        specifier: 0.34.0-11739c0
-        version: 0.34.0-11739c0(@effect/io@0.34.0)
+        specifier: 0.35.0-11739c0
+        version: 0.35.0-11739c0(@effect/io@0.35.0)
       '@tsplus-types/effect__schema':
-        specifier: 0.28.0-11739c0
-        version: 0.28.0-11739c0(@effect/schema@0.28.0)
+        specifier: 0.29.0-11739c0
+        version: 0.29.0-11739c0(@effect/schema@0.29.0)
       '@tsplus-types/effect__stream':
-        specifier: 0.28.0-11739c0
-        version: 0.28.0-11739c0(@effect/stream@0.28.0)
+        specifier: 0.29.0-11739c0
+        version: 0.29.0-11739c0(@effect/stream@0.29.0)
       '@tsplus/installer':
         specifier: ^0.0.177
         version: 0.0.177(@types/node@20.4.2)(typescript@5.1.6)
@@ -85,17 +85,17 @@ importers:
   packages/core:
     dependencies:
       '@effect/data':
-        specifier: ^0.15.1
-        version: 0.15.1
+        specifier: ^0.16.0
+        version: 0.16.0
       '@effect/io':
-        specifier: ^0.34.0
-        version: 0.34.0
+        specifier: ^0.35.0
+        version: 0.35.0
       '@effect/schema':
-        specifier: ~0.28.0
-        version: 0.28.0
+        specifier: ~0.29.0
+        version: 0.29.0
       '@effect/stream':
-        specifier: ~0.28.0
-        version: 0.28.0
+        specifier: ~0.29.0
+        version: 0.29.0
       find-my-way:
         specifier: ^7.6.2
         version: 7.6.2
@@ -110,17 +110,17 @@ importers:
         specifier: ^2.26.2
         version: 2.26.2
       '@tsplus-types/effect__data':
-        specifier: 0.15.1-11739c0
-        version: 0.15.1-11739c0(@effect/data@0.15.1)
+        specifier: 0.16.0-11739c0
+        version: 0.16.0-11739c0(@effect/data@0.16.0)
       '@tsplus-types/effect__io':
-        specifier: 0.34.0-11739c0
-        version: 0.34.0-11739c0(@effect/io@0.34.0)
+        specifier: 0.35.0-11739c0
+        version: 0.35.0-11739c0(@effect/io@0.35.0)
       '@tsplus-types/effect__schema':
-        specifier: 0.28.0-11739c0
-        version: 0.28.0-11739c0(@effect/schema@0.28.0)
+        specifier: 0.29.0-11739c0
+        version: 0.29.0-11739c0(@effect/schema@0.29.0)
       '@tsplus-types/effect__stream':
-        specifier: 0.28.0-11739c0
-        version: 0.28.0-11739c0(@effect/stream@0.28.0)
+        specifier: 0.29.0-11739c0
+        version: 0.29.0-11739c0(@effect/stream@0.29.0)
       '@tsplus/installer':
         specifier: ^0.0.177
         version: 0.0.177(@types/node@20.4.2)(typescript@5.1.6)
@@ -150,17 +150,17 @@ importers:
         specifier: ^0.33.0
         version: link:../core/dist
       '@effect/data':
-        specifier: ^0.15.1
-        version: 0.15.1
+        specifier: ^0.16.0
+        version: 0.16.0
       '@effect/io':
-        specifier: ^0.34.0
-        version: 0.34.0
+        specifier: ^0.35.0
+        version: 0.35.0
       '@effect/schema':
-        specifier: ^0.28.0
-        version: 0.28.0
+        specifier: ^0.29.0
+        version: 0.29.0
       '@effect/stream':
-        specifier: ^0.28.0
-        version: 0.28.0
+        specifier: ^0.29.0
+        version: 0.29.0
       busboy:
         specifier: ^1.6.0
         version: 1.6.0
@@ -172,17 +172,17 @@ importers:
         specifier: ^2.26.2
         version: 2.26.2
       '@tsplus-types/effect__data':
-        specifier: 0.15.1-11739c0
-        version: 0.15.1-11739c0(@effect/data@0.15.1)
+        specifier: 0.16.0-11739c0
+        version: 0.16.0-11739c0(@effect/data@0.16.0)
       '@tsplus-types/effect__io':
-        specifier: 0.34.0-11739c0
-        version: 0.34.0-11739c0(@effect/io@0.34.0)
+        specifier: 0.35.0-11739c0
+        version: 0.35.0-11739c0(@effect/io@0.35.0)
       '@tsplus-types/effect__schema':
-        specifier: 0.28.0-11739c0
-        version: 0.28.0-11739c0(@effect/schema@0.28.0)
+        specifier: 0.29.0-11739c0
+        version: 0.29.0-11739c0(@effect/schema@0.29.0)
       '@tsplus-types/effect__stream':
-        specifier: 0.28.0-11739c0
-        version: 0.28.0-11739c0(@effect/stream@0.28.0)
+        specifier: 0.29.0-11739c0
+        version: 0.29.0-11739c0(@effect/stream@0.29.0)
       '@tsplus/installer':
         specifier: ^0.0.177
         version: 0.0.177(@types/node@20.4.2)(typescript@5.1.6)
@@ -421,26 +421,26 @@ packages:
       '@jridgewell/trace-mapping': 0.3.9
     dev: true
 
-  /@effect/data@0.15.1:
-    resolution: {integrity: sha512-dYe3GL2Lq8M56Q+QvEOPRtpRovhy1QprlBRGIjaCRPZ8DbwRFQZSdPPOL+ZX6e7y3DPF0RW+DFLHYRMA6qGOCw==}
+  /@effect/data@0.16.0:
+    resolution: {integrity: sha512-ckZ/WvvI4zZGo+vRVTRBfBi4KvY9ZjLlnDWlrfhKnAJvgDu6SI8A5FJ8c/eJphmtLWNdoQx8j9pFhWLSIQe5RQ==}
 
-  /@effect/io@0.34.0:
-    resolution: {integrity: sha512-v3elB62xFAoHEXxgJIRwEChw1kLB6139TNO/wOY7nLmHrGyVbonhzfBGlXF6bYleCgSeeM4bfEyoVydm9qWNZQ==}
+  /@effect/io@0.35.0:
+    resolution: {integrity: sha512-6OgaG8+V8Acqy/JI75TNcYJXoLZMTXpRESw5CngVKxuxD6qQJiPia1cxhkfS2v5CmSLt4ZgP4u6gQtWKIYo7Lg==}
     dependencies:
-      '@effect/data': 0.15.1
+      '@effect/data': 0.16.0
 
-  /@effect/schema@0.28.0:
-    resolution: {integrity: sha512-HIMw//zc0aeHF8PLxtMm0wHo72X5njg8v+0nRGr2gM1nKfFWApuiGI/i/6PZGMg1hD/721vVjCUs+rI+eh8kiw==}
+  /@effect/schema@0.29.0:
+    resolution: {integrity: sha512-yO8FkCoblU1oeB02nHi3yJu0Z66euVd30RbjwyOeZp7YAqyzaA2GPbm6ldd9bNIKDiGz+Zr1gw/wUmS0dvUfHw==}
     dependencies:
-      '@effect/data': 0.15.1
-      '@effect/io': 0.34.0
+      '@effect/data': 0.16.0
+      '@effect/io': 0.35.0
       fast-check: 3.11.0
 
-  /@effect/stream@0.28.0:
-    resolution: {integrity: sha512-Jn9YewdG/xYEDsbo4yWxicjjCM3aNGtcG5PafdpgcgyzJWeG5D9DbwJUYjPEDbbKv3GhawZLkdVc77MXmxcchQ==}
+  /@effect/stream@0.29.0:
+    resolution: {integrity: sha512-hIo2HsT/EBVgJNFQF/Mn6GY+NHto9EkKZm3od+NdJOu0Zo+kZ5zTkZuLzdhMd7Q81Gy73Lb6ip4mx9LIsBZ33g==}
     dependencies:
-      '@effect/data': 0.15.1
-      '@effect/io': 0.34.0
+      '@effect/data': 0.16.0
+      '@effect/io': 0.35.0
 
   /@hutson/parse-repository-url@3.0.2:
     resolution: {integrity: sha512-H9XAx3hc0BQHY6l+IFSWHDySypcXsvsuLhgYLUGywmJ5pswRVQJUHpOsobnLYp2ZUaUlKiKDrgWWhosOwAEM8Q==}
@@ -918,36 +918,36 @@ packages:
     resolution: {integrity: sha512-vxhUy4J8lyeyinH7Azl1pdd43GJhZH/tP2weN8TntQblOY+A0XbT8DJk1/oCPuOOyg/Ja757rG0CgHcWC8OfMA==}
     dev: true
 
-  /@tsplus-types/effect__data@0.15.1-11739c0(@effect/data@0.15.1):
-    resolution: {integrity: sha512-gOWZBrF2Aim0doKZY3nEeYzLe2Ol4u76yoVhjay2bIhlC/HmssGI0CgRxttn5IIQJNRACc0KxrStcacm/bxQrg==}
+  /@tsplus-types/effect__data@0.16.0-11739c0(@effect/data@0.16.0):
+    resolution: {integrity: sha512-o8keGT5VcJPoKDRfy5zj8xjDD7nxIArw5dYM/jYUEpp7/opZxwCZtN6guJnSe564HKSYV4pmUFpBfEc0XhiIvw==}
     peerDependencies:
-      '@effect/data': 0.15.1
+      '@effect/data': 0.16.0
     dependencies:
-      '@effect/data': 0.15.1
+      '@effect/data': 0.16.0
     dev: true
 
-  /@tsplus-types/effect__io@0.34.0-11739c0(@effect/io@0.34.0):
-    resolution: {integrity: sha512-AVf7rUoquyg/n2p9zwH/5NijI3qk6kQ7C+lfJZ+c+7yMpqB5E3nDyVwZmc1Zp5kRzlq+wNgQDM0FkPVQ9/1p/A==}
+  /@tsplus-types/effect__io@0.35.0-11739c0(@effect/io@0.35.0):
+    resolution: {integrity: sha512-OjjdHY+ei0tT4Qe7KGv14lQ1ux4RHPNWnV+YHtpy+o0IbRxgUKStkGrO+qJ8nkslta6SZW8xTiDEOoRsE+8zXA==}
     peerDependencies:
-      '@effect/io': 0.34.0
+      '@effect/io': 0.35.0
     dependencies:
-      '@effect/io': 0.34.0
+      '@effect/io': 0.35.0
     dev: true
 
-  /@tsplus-types/effect__schema@0.28.0-11739c0(@effect/schema@0.28.0):
-    resolution: {integrity: sha512-D4D+8RE85Q3uwLiBVWEAsO0ZsLnozw++HTMWUahXNjHqwAoAx7TbnEw1T2IXbArlAdbAZmz0nTT8VibEf7Q5Jw==}
+  /@tsplus-types/effect__schema@0.29.0-11739c0(@effect/schema@0.29.0):
+    resolution: {integrity: sha512-7mq3VpMcU0jJ2K3cZSKFXoAzCf7R09XXll6e91pJJzqECu//81A9oCPdgbw7X0QAP1R+UJRCP66EGA7MNhnxlg==}
     peerDependencies:
-      '@effect/schema': 0.28.0
+      '@effect/schema': 0.29.0
     dependencies:
-      '@effect/schema': 0.28.0
+      '@effect/schema': 0.29.0
     dev: true
 
-  /@tsplus-types/effect__stream@0.28.0-11739c0(@effect/stream@0.28.0):
-    resolution: {integrity: sha512-I0neURflnhX+ROiG1X6GkmlumT/xlsxJvz+ebByiUFjb7SAx1o6yw4GqyETt+fA/bBFD/beKVpFzG+SaH3N7ZA==}
+  /@tsplus-types/effect__stream@0.29.0-11739c0(@effect/stream@0.29.0):
+    resolution: {integrity: sha512-ba2cnlirwNroZkQfoViSmuG3TBpRD+FUvRz8CN7/xxDE1FwESHIz/F2w8MscMMLFZHTxvP3dn+pifyp1dMrroQ==}
     peerDependencies:
-      '@effect/stream': 0.28.0
+      '@effect/stream': 0.29.0
     dependencies:
-      '@effect/stream': 0.28.0
+      '@effect/stream': 0.29.0
     dev: true
 
   /@tsplus/installer@0.0.177(@types/node@20.4.2)(typescript@5.1.6):
