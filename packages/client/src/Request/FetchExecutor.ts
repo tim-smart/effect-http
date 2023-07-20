@@ -1,5 +1,5 @@
 import type { ParseOptions } from "@effect/schema/AST"
-import { Json, Schema } from "@effect/schema/Schema"
+import { Schema } from "@effect/schema/Schema"
 import {
   RequestError,
   ResponseDecodeError,
@@ -110,7 +110,7 @@ export const fetchJson_: (
  *
  * @since 1.0.0
  */
-export const fetchDecode = <I extends Json, O>(
+export const fetchDecode = <I, O>(
   schema: Schema<I, O>,
   options?: ParseOptions,
   requestInit?: RequestInit,
@@ -126,7 +126,7 @@ export const fetchDecode = <I extends Json, O>(
 /**
  * @tsplus pipeable effect-http/client/Request fetchDecode
  */
-export const fetchDecode_: <I extends Json, O>(
+export const fetchDecode_: <I, O>(
   schema: Schema<I, O>,
   options?: ParseOptions,
   requestInit?: RequestInit,

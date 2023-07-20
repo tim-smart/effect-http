@@ -2,7 +2,7 @@ import type { Effect } from "@effect/io/Effect"
 import { ResponseDecodeError, SchemaDecodeError } from "./Error.js"
 import { fromReadableStream } from "./util/stream.js"
 import type { ParseOptions } from "@effect/schema/AST"
-import { Json, Schema } from "@effect/schema/Schema"
+import { Schema } from "@effect/schema/Schema"
 
 export interface Response {
   readonly status: number
@@ -12,7 +12,7 @@ export interface Response {
   readonly text: Effect<never, ResponseDecodeError, string>
   readonly formData: Effect<never, ResponseDecodeError, FormData>
   readonly blob: Effect<never, ResponseDecodeError, Blob>
-  readonly decode: <I extends Json, O>(
+  readonly decode: <I, O>(
     schema: Schema<I, O>,
     options?: ParseOptions,
   ) => Effect<never, ResponseDecodeError | SchemaDecodeError, O>
@@ -65,7 +65,7 @@ class ResponseImpl implements Response {
     })
   }
 
-  decode<I extends Json, O>(
+  decode<I, O>(
     schema: Schema<I, O>,
     options?: ParseOptions,
   ): Effect<never, ResponseDecodeError | SchemaDecodeError, O> {

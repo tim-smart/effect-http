@@ -3,7 +3,7 @@ import { SchemaEncodeError } from "./Error.js"
 import type { RequestBody } from "./Request/Body.js"
 import * as body from "./Request/Body.js"
 import { RequestExecutor } from "./Request/Executor.js"
-import { Json, Schema } from "@effect/schema/Schema"
+import { Schema } from "@effect/schema/Schema"
 import { dual } from "@effect/data/Function"
 
 export type HttpMethod =
@@ -377,7 +377,7 @@ export const streamBody =
 /**
  * @tsplus pipeable effect-http/client/Request withSchema
  */
-export const withSchema = <I extends Json, O, R, E, A>(
+export const withSchema = <I, O, R, E, A>(
   schema: Schema<I, O>,
   run: RequestExecutor<R, E, A>,
   options?: ParseOptions,

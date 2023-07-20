@@ -56,13 +56,13 @@ export const executeJson = execute
   .contramap(_ => _.acceptJson)
   .mapEffect(_ => _.json)
 
-export const executeDecode = <I extends S.Json, A>(schema: S.Schema<I, A>) =>
+export const executeDecode = <I, A>(schema: S.Schema<I, A>) =>
   execute.contramap(_ => _.acceptJson).mapEffect(_ => _.decode(schema))
 
 /**
  * @tsplus pipeable effect-http/client/Request executeDecode
  */
-export const executeDecode_: <I extends S.Json, A>(
+export const executeDecode_: <I, A>(
   schema: S.Schema<I, A>,
 ) => (
   request: Http.Request,
@@ -222,7 +222,7 @@ export class ResponseImpl implements Http.response.Response {
       .mapError(_ => new Http.ResponseDecodeError(_, this, "blob"))
   }
 
-  decode<I extends S.Json, A>(
+  decode<I, A>(
     schema: S.Schema<I, A>,
     options?: ParseOptions,
   ): Effect.Effect<

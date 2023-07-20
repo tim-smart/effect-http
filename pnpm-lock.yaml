@@ -21,15 +21,15 @@ importers:
         specifier: ^0.16.0
         version: 0.16.0
       '@effect/io':
-        specifier: ^0.35.0
-        version: 0.35.0
+        specifier: ^0.35.1
+        version: 0.35.1
     devDependencies:
       '@tsplus-types/effect__data':
         specifier: 0.16.0-11739c0
         version: 0.16.0-11739c0(@effect/data@0.16.0)
       '@tsplus-types/effect__io':
-        specifier: 0.35.0-11739c0
-        version: 0.35.0-11739c0(@effect/io@0.35.0)
+        specifier: 0.35.1-11739c0
+        version: 0.35.1-11739c0(@effect/io@0.35.1)
       '@tsplus/installer':
         specifier: ^0.0.177
         version: 0.0.177(@types/node@20.4.2)(typescript@5.1.6)
@@ -50,11 +50,11 @@ importers:
         specifier: ^0.16.0
         version: 0.16.0
       '@effect/io':
-        specifier: ^0.35.0
-        version: 0.35.0
+        specifier: ^0.35.1
+        version: 0.35.1
       '@effect/schema':
-        specifier: ^0.29.0
-        version: 0.29.0
+        specifier: ^0.30.0
+        version: 0.30.0
       '@effect/stream':
         specifier: ^0.29.0
         version: 0.29.0
@@ -63,11 +63,11 @@ importers:
         specifier: 0.16.0-11739c0
         version: 0.16.0-11739c0(@effect/data@0.16.0)
       '@tsplus-types/effect__io':
-        specifier: 0.35.0-11739c0
-        version: 0.35.0-11739c0(@effect/io@0.35.0)
+        specifier: 0.35.1-11739c0
+        version: 0.35.1-11739c0(@effect/io@0.35.1)
       '@tsplus-types/effect__schema':
-        specifier: 0.29.0-11739c0
-        version: 0.29.0-11739c0(@effect/schema@0.29.0)
+        specifier: 0.30.0-11739c0
+        version: 0.30.0-11739c0(@effect/schema@0.30.0)
       '@tsplus-types/effect__stream':
         specifier: 0.29.0-11739c0
         version: 0.29.0-11739c0(@effect/stream@0.29.0)
@@ -88,11 +88,11 @@ importers:
         specifier: ^0.16.0
         version: 0.16.0
       '@effect/io':
-        specifier: ^0.35.0
-        version: 0.35.0
+        specifier: ^0.35.1
+        version: 0.35.1
       '@effect/schema':
-        specifier: ~0.29.0
-        version: 0.29.0
+        specifier: ~0.30.0
+        version: 0.30.0
       '@effect/stream':
         specifier: ~0.29.0
         version: 0.29.0
@@ -113,11 +113,11 @@ importers:
         specifier: 0.16.0-11739c0
         version: 0.16.0-11739c0(@effect/data@0.16.0)
       '@tsplus-types/effect__io':
-        specifier: 0.35.0-11739c0
-        version: 0.35.0-11739c0(@effect/io@0.35.0)
+        specifier: 0.35.1-11739c0
+        version: 0.35.1-11739c0(@effect/io@0.35.1)
       '@tsplus-types/effect__schema':
-        specifier: 0.29.0-11739c0
-        version: 0.29.0-11739c0(@effect/schema@0.29.0)
+        specifier: 0.30.0-11739c0
+        version: 0.30.0-11739c0(@effect/schema@0.30.0)
       '@tsplus-types/effect__stream':
         specifier: 0.29.0-11739c0
         version: 0.29.0-11739c0(@effect/stream@0.29.0)
@@ -153,11 +153,11 @@ importers:
         specifier: ^0.16.0
         version: 0.16.0
       '@effect/io':
-        specifier: ^0.35.0
-        version: 0.35.0
+        specifier: ^0.35.1
+        version: 0.35.1
       '@effect/schema':
-        specifier: ^0.29.0
-        version: 0.29.0
+        specifier: ^0.30.0
+        version: 0.30.0
       '@effect/stream':
         specifier: ^0.29.0
         version: 0.29.0
@@ -175,11 +175,11 @@ importers:
         specifier: 0.16.0-11739c0
         version: 0.16.0-11739c0(@effect/data@0.16.0)
       '@tsplus-types/effect__io':
-        specifier: 0.35.0-11739c0
-        version: 0.35.0-11739c0(@effect/io@0.35.0)
+        specifier: 0.35.1-11739c0
+        version: 0.35.1-11739c0(@effect/io@0.35.1)
       '@tsplus-types/effect__schema':
-        specifier: 0.29.0-11739c0
-        version: 0.29.0-11739c0(@effect/schema@0.29.0)
+        specifier: 0.30.0-11739c0
+        version: 0.30.0-11739c0(@effect/schema@0.30.0)
       '@tsplus-types/effect__stream':
         specifier: 0.29.0-11739c0
         version: 0.29.0-11739c0(@effect/stream@0.29.0)
@@ -424,23 +424,23 @@ packages:
   /@effect/data@0.16.0:
     resolution: {integrity: sha512-ckZ/WvvI4zZGo+vRVTRBfBi4KvY9ZjLlnDWlrfhKnAJvgDu6SI8A5FJ8c/eJphmtLWNdoQx8j9pFhWLSIQe5RQ==}
 
-  /@effect/io@0.35.0:
-    resolution: {integrity: sha512-6OgaG8+V8Acqy/JI75TNcYJXoLZMTXpRESw5CngVKxuxD6qQJiPia1cxhkfS2v5CmSLt4ZgP4u6gQtWKIYo7Lg==}
+  /@effect/io@0.35.1:
+    resolution: {integrity: sha512-kSYaYXSzBkDdtEgBOBZTOsF+7D9HRiMNwkDTGRARRow/5zXJVZxHxDAZJdA/3Am7irCD7yeDDsxsMVwqgfJdYg==}
     dependencies:
       '@effect/data': 0.16.0
 
-  /@effect/schema@0.29.0:
-    resolution: {integrity: sha512-yO8FkCoblU1oeB02nHi3yJu0Z66euVd30RbjwyOeZp7YAqyzaA2GPbm6ldd9bNIKDiGz+Zr1gw/wUmS0dvUfHw==}
+  /@effect/schema@0.30.0:
+    resolution: {integrity: sha512-Pj0MUD6kfYwUPUYejig2hAcQUR4aH+9e3My+puc3VkfLLlY1XkyMUIZZGV/B36iZYdMsNF4sEvpzXcZwZOaI6A==}
     dependencies:
       '@effect/data': 0.16.0
-      '@effect/io': 0.35.0
+      '@effect/io': 0.35.1
       fast-check: 3.11.0
 
   /@effect/stream@0.29.0:
     resolution: {integrity: sha512-hIo2HsT/EBVgJNFQF/Mn6GY+NHto9EkKZm3od+NdJOu0Zo+kZ5zTkZuLzdhMd7Q81Gy73Lb6ip4mx9LIsBZ33g==}
     dependencies:
       '@effect/data': 0.16.0
-      '@effect/io': 0.35.0
+      '@effect/io': 0.35.1
 
   /@hutson/parse-repository-url@3.0.2:
     resolution: {integrity: sha512-H9XAx3hc0BQHY6l+IFSWHDySypcXsvsuLhgYLUGywmJ5pswRVQJUHpOsobnLYp2ZUaUlKiKDrgWWhosOwAEM8Q==}
@@ -926,20 +926,20 @@ packages:
       '@effect/data': 0.16.0
     dev: true
 
-  /@tsplus-types/effect__io@0.35.0-11739c0(@effect/io@0.35.0):
-    resolution: {integrity: sha512-OjjdHY+ei0tT4Qe7KGv14lQ1ux4RHPNWnV+YHtpy+o0IbRxgUKStkGrO+qJ8nkslta6SZW8xTiDEOoRsE+8zXA==}
+  /@tsplus-types/effect__io@0.35.1-11739c0(@effect/io@0.35.1):
+    resolution: {integrity: sha512-X8qb7yNN7SDX1+ZuVxOSmibqzgriW2TXwqhNmj/K+3MnGhIdA3xvNyv7EKhvXYVqhOjN7j2823WYgfMJ8xq0ew==}
     peerDependencies:
-      '@effect/io': 0.35.0
+      '@effect/io': 0.35.1
     dependencies:
-      '@effect/io': 0.35.0
+      '@effect/io': 0.35.1
     dev: true
 
-  /@tsplus-types/effect__schema@0.29.0-11739c0(@effect/schema@0.29.0):
-    resolution: {integrity: sha512-7mq3VpMcU0jJ2K3cZSKFXoAzCf7R09XXll6e91pJJzqECu//81A9oCPdgbw7X0QAP1R+UJRCP66EGA7MNhnxlg==}
+  /@tsplus-types/effect__schema@0.30.0-11739c0(@effect/schema@0.30.0):
+    resolution: {integrity: sha512-YR41qjCNIX0ZtVvjbXLPR7tjw7cxSxCWt5Yy2YqfgMGN6G2Dx9CASeIjbz1C/g+FItzDuUdRoskqovgtXGuGKQ==}
     peerDependencies:
-      '@effect/schema': 0.29.0
+      '@effect/schema': 0.30.0
     dependencies:
-      '@effect/schema': 0.29.0
+      '@effect/schema': 0.30.0
     dev: true
 
   /@tsplus-types/effect__stream@0.29.0-11739c0(@effect/stream@0.29.0):

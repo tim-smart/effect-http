@@ -1,10 +1,13 @@
-import { Json, Schema } from "@effect/schema/Schema"
+import { Schema } from "@effect/schema/Schema"
 import { ToResponseOptions } from "./internal/HttpFs.js"
 import * as Mime from "mime-types"
 
 export class EncodeSchemaError {
   readonly _tag = "EncodeSchemaError"
-  constructor(readonly error: ParseError, readonly value: unknown) {}
+  constructor(
+    readonly error: ParseError,
+    readonly value: unknown,
+  ) {}
 }
 
 /**
@@ -24,7 +27,10 @@ export class HttpStreamError {
 
 export class EmptyResponse {
   readonly _tag = "EmptyResponse"
-  constructor(readonly status: number, readonly headers: Headers | undefined) {}
+  constructor(
+    readonly status: number,
+    readonly headers: Headers | undefined,
+  ) {}
 }
 
 export class FormDataResponse {
@@ -85,7 +91,7 @@ export const json = (
 /**
  * @tsplus static effect-http/Response.Ops encodeJson
  */
-export const encodeJson = <I extends Json, A>(schema: Schema<I, A>) => {
+export const encodeJson = <I, A>(schema: Schema<I, A>) => {
   const encode = schema.encode
   return (
     value: A,

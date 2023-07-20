@@ -1,4 +1,4 @@
-import { Json, Schema } from "@effect/schema/Schema"
+import { Schema } from "@effect/schema/Schema"
 import type { HttpRequest } from "./Request.js"
 import * as Effect from "@effect/io/Effect"
 
@@ -31,8 +31,8 @@ const decodeEffect =
       decode(input).mapError(_ => new DecodeSchemaError(_, request, input))
   }
 
-export const decode = <I extends Json, A>(schema: Schema<I, A>) => {
-  const decode = decodeEffect<Json>()(schema)
+export const decode = <I, A>(schema: Schema<I, A>) => {
+  const decode = decodeEffect<any>()(schema)
 
   return Do($ => {
     const ctx = $(Effect.map(RouteContext, identity))
@@ -77,9 +77,9 @@ const jsonParse = (_: string) =>
   })
 
 export const decodeJsonFromFormData =
-  <I extends Json, A>(schema: Schema<I, A>) =>
+  <I, A>(schema: Schema<I, A>) =>
   (key: string, formData?: FormData) => {
-    const decode = decodeEither<Json>()(schema)
+    const decode = decodeEither<any>()(schema)
 
     return Do($ => {
       const { request } = $(Effect.map(RouteContext, identity))
