@@ -144,7 +144,7 @@ export const stream = (
       }),
     ),
     Stream.unwrapScoped,
-    Stream.bufferChunks(bufferSize),
+    Stream.bufferChunks({ capacity: bufferSize }),
   )
 
 export const write = (fd: number, data: Uint8Array, offset?: number) =>

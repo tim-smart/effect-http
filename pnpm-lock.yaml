@@ -31,11 +31,11 @@ importers:
         specifier: 0.35.1-11739c0
         version: 0.35.1-11739c0(@effect/io@0.35.1)
       '@tsplus/installer':
-        specifier: ^0.0.177
-        version: 0.0.177(@types/node@20.4.2)(typescript@5.1.6)
+        specifier: ^0.0.178
+        version: 0.0.178(@types/node@20.4.4)(typescript@5.1.6)
       bun-types:
-        specifier: ^0.6.14
-        version: 0.6.14
+        specifier: ^0.7.0
+        version: 0.7.0
       prettier:
         specifier: ^3.0.0
         version: 3.0.0
@@ -56,8 +56,8 @@ importers:
         specifier: ^0.30.0
         version: 0.30.0
       '@effect/stream':
-        specifier: ^0.29.0
-        version: 0.29.0
+        specifier: ^0.30.1
+        version: 0.30.1
     devDependencies:
       '@tsplus-types/effect__data':
         specifier: 0.16.0-11739c0
@@ -69,11 +69,11 @@ importers:
         specifier: 0.30.0-11739c0
         version: 0.30.0-11739c0(@effect/schema@0.30.0)
       '@tsplus-types/effect__stream':
-        specifier: 0.29.0-11739c0
-        version: 0.29.0-11739c0(@effect/stream@0.29.0)
+        specifier: 0.30.0-11739c0
+        version: 0.30.0-11739c0(@effect/stream@0.30.1)
       '@tsplus/installer':
-        specifier: ^0.0.177
-        version: 0.0.177(@types/node@20.4.2)(typescript@5.1.6)
+        specifier: ^0.0.178
+        version: 0.0.178(@types/node@20.4.4)(typescript@5.1.6)
       prettier:
         specifier: ^3.0.0
         version: 3.0.0
@@ -94,8 +94,8 @@ importers:
         specifier: ~0.30.0
         version: 0.30.0
       '@effect/stream':
-        specifier: ~0.29.0
-        version: 0.29.0
+        specifier: ~0.30.1
+        version: 0.30.1
       find-my-way:
         specifier: ^7.6.2
         version: 7.6.2
@@ -119,17 +119,17 @@ importers:
         specifier: 0.30.0-11739c0
         version: 0.30.0-11739c0(@effect/schema@0.30.0)
       '@tsplus-types/effect__stream':
-        specifier: 0.29.0-11739c0
-        version: 0.29.0-11739c0(@effect/stream@0.29.0)
+        specifier: 0.30.0-11739c0
+        version: 0.30.0-11739c0(@effect/stream@0.30.1)
       '@tsplus/installer':
-        specifier: ^0.0.177
-        version: 0.0.177(@types/node@20.4.2)(typescript@5.1.6)
+        specifier: ^0.0.178
+        version: 0.0.178(@types/node@20.4.4)(typescript@5.1.6)
       '@types/mime-types':
         specifier: ^2.1.1
         version: 2.1.1
       '@types/node':
-        specifier: ^20.4.2
-        version: 20.4.2
+        specifier: ^20.4.4
+        version: 20.4.4
       '@types/range-parser':
         specifier: ^1.2.4
         version: 1.2.4
@@ -159,8 +159,8 @@ importers:
         specifier: ^0.30.0
         version: 0.30.0
       '@effect/stream':
-        specifier: ^0.29.0
-        version: 0.29.0
+        specifier: ^0.30.1
+        version: 0.30.1
       busboy:
         specifier: ^1.6.0
         version: 1.6.0
@@ -181,17 +181,17 @@ importers:
         specifier: 0.30.0-11739c0
         version: 0.30.0-11739c0(@effect/schema@0.30.0)
       '@tsplus-types/effect__stream':
-        specifier: 0.29.0-11739c0
-        version: 0.29.0-11739c0(@effect/stream@0.29.0)
+        specifier: 0.30.0-11739c0
+        version: 0.30.0-11739c0(@effect/stream@0.30.1)
       '@tsplus/installer':
-        specifier: ^0.0.177
-        version: 0.0.177(@types/node@20.4.2)(typescript@5.1.6)
+        specifier: ^0.0.178
+        version: 0.0.178(@types/node@20.4.4)(typescript@5.1.6)
       '@types/busboy':
         specifier: ^1.5.0
         version: 1.5.0
       '@types/node':
-        specifier: ^20.4.2
-        version: 20.4.2
+        specifier: ^20.4.4
+        version: 20.4.4
       prettier:
         specifier: ^3.0.0
         version: 3.0.0
@@ -436,8 +436,8 @@ packages:
       '@effect/io': 0.35.1
       fast-check: 3.11.0
 
-  /@effect/stream@0.29.0:
-    resolution: {integrity: sha512-hIo2HsT/EBVgJNFQF/Mn6GY+NHto9EkKZm3od+NdJOu0Zo+kZ5zTkZuLzdhMd7Q81Gy73Lb6ip4mx9LIsBZ33g==}
+  /@effect/stream@0.30.1:
+    resolution: {integrity: sha512-OU/7qG6iyyYHxh5BmbXvgsiJnq6YeVv3aPJBJbAamK3bTDJv4Tbc0Ps7H3hF3X+1OzfgrRYQd1zKtrtlyoCUDA==}
     dependencies:
       '@effect/data': 0.16.0
       '@effect/io': 0.35.1
@@ -942,22 +942,22 @@ packages:
       '@effect/schema': 0.30.0
     dev: true
 
-  /@tsplus-types/effect__stream@0.29.0-11739c0(@effect/stream@0.29.0):
-    resolution: {integrity: sha512-ba2cnlirwNroZkQfoViSmuG3TBpRD+FUvRz8CN7/xxDE1FwESHIz/F2w8MscMMLFZHTxvP3dn+pifyp1dMrroQ==}
+  /@tsplus-types/effect__stream@0.30.0-11739c0(@effect/stream@0.30.1):
+    resolution: {integrity: sha512-gG++3ey7mzahQeC6bHLzS+D31ZLbLqrhabkoj4+W2YtdUkO+0+RQyPBKieiiSC9VfjlmIKUzZRYQAxfJd3nnMw==}
     peerDependencies:
-      '@effect/stream': 0.29.0
+      '@effect/stream': 0.30.0
     dependencies:
-      '@effect/stream': 0.29.0
+      '@effect/stream': 0.30.1
     dev: true
 
-  /@tsplus/installer@0.0.177(@types/node@20.4.2)(typescript@5.1.6):
-    resolution: {integrity: sha512-4L4aZa9HdAY2qW+OSs017n7ma/Svi2rZjOdsxoHFa1Es/M6a5bqhsBFVdQCr45nBkUZONhZbbxkvNU7/gBhIlg==}
+  /@tsplus/installer@0.0.178(@types/node@20.4.4)(typescript@5.1.6):
+    resolution: {integrity: sha512-O0FXU0q/Fs96MEEm8Yt5DWj5JSTyDmdIdE92in0P37XrwGi1NSWV0BNCiTLn1HB8mfuMtUlIF2bgWJm7nylB1Q==}
     hasBin: true
     dependencies:
       mkdirp: 1.0.4
       rimraf: 3.0.2
-      tar: 6.1.11
-      ts-node: 10.9.1(@types/node@20.4.2)(typescript@5.1.6)
+      tar: 6.1.15
+      ts-node: 10.9.1(@types/node@20.4.4)(typescript@5.1.6)
       zlib: 1.0.5
     transitivePeerDependencies:
       - '@swc/core'
@@ -982,7 +982,7 @@ packages:
   /@types/busboy@1.5.0:
     resolution: {integrity: sha512-ncOOhwmyFDW76c/Tuvv9MA9VGYUCn8blzyWmzYELcNGDb0WXWLSmFi7hJq25YdRBYJrmMBB5jZZwUjlJe9HCjQ==}
     dependencies:
-      '@types/node': 20.4.2
+      '@types/node': 20.4.4
     dev: true
 
   /@types/is-ci@3.0.0:
@@ -1007,8 +1007,8 @@ packages:
     resolution: {integrity: sha512-J8xLz7q2OFulZ2cyGTLE1TbbZcjpno7FaN6zdJNrgAdrJ+DZzh/uFR6YrTb4C+nXakvud8Q4+rbhoIWlYQbUFQ==}
     dev: true
 
-  /@types/node@20.4.2:
-    resolution: {integrity: sha512-Dd0BYtWgnWJKwO1jkmTrzofjK2QXXcai0dmtzvIBhcA+RsG5h8R3xlyta0kGOZRNfL9GuRtb1knmPEhQrePCEw==}
+  /@types/node@20.4.4:
+    resolution: {integrity: sha512-CukZhumInROvLq3+b5gLev+vgpsIqC2D0deQr/yS1WnxvmYLlJXZpaQrQiseMY+6xusl79E04UjWoqyr+t1/Ew==}
     dev: true
 
   /@types/normalize-package-data@2.4.1:
@@ -1059,8 +1059,8 @@ packages:
     engines: {node: '>=0.4.0'}
     dev: true
 
-  /acorn@8.9.0:
-    resolution: {integrity: sha512-jaVNAFBHNLXspO543WnNNPZFRtavh3skAkITqD0/2aeMkKZTN+254PyhwxFYrk3vQ1xfY+2wbesJMs/JC8/PwQ==}
+  /acorn@8.10.0:
+    resolution: {integrity: sha512-F0SAmZ8iUtS//m8DmCTA0jlh6TDKkHQyK6xc6V4KDTyZKA9dnvX9/3sRTVQrWm79glUAZbnmmNcdYwUIHWVybw==}
     engines: {node: '>=0.4.0'}
     hasBin: true
     dev: true
@@ -1307,8 +1307,8 @@ packages:
       semver: 7.5.4
     dev: true
 
-  /bun-types@0.6.14:
-    resolution: {integrity: sha512-sRdvu+t59+H/TVOe7FSGFWYITbqkhiCx9NxVUHt2+JOXM9gUOe5uMPvVvcr/hGngnh+/yb5a7uPE4JaS6uxujg==}
+  /bun-types@0.7.0:
+    resolution: {integrity: sha512-jXFiYtwSUQtD/Y3LHRWeWNwhFaUYvcO96zI7y3gSPgTq+ozxXpuTGDxABLdIKmFc672Q7Qp/OgrfJFEjg4Mnkg==}
     dev: true
 
   /busboy@1.6.0:
@@ -4776,6 +4776,18 @@ packages:
       yallist: 4.0.0
     dev: true
 
+  /tar@6.1.15:
+    resolution: {integrity: sha512-/zKt9UyngnxIT/EAGYuxaMYgOIJiP81ab9ZfkILq4oNLPFX50qyYmu7jRj9qeXoxmJHjGlbH0+cm2uy1WCs10A==}
+    engines: {node: '>=10'}
+    dependencies:
+      chownr: 2.0.0
+      fs-minipass: 2.1.0
+      minipass: 5.0.0
+      minizlib: 2.1.2
+      mkdirp: 1.0.4
+      yallist: 4.0.0
+    dev: true
+
   /temp-dir@1.0.0:
     resolution: {integrity: sha512-xZFXEGbG7SNC3itwBzI3RYjq/cEhBkx2hJuKGIUOcEULmkQExXiHat2z/qkISYsuR+IKumhEfKKbV5qXmhICFQ==}
     engines: {node: '>=4'}
@@ -4837,7 +4849,7 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /ts-node@10.9.1(@types/node@20.4.2)(typescript@5.1.6):
+  /ts-node@10.9.1(@types/node@20.4.4)(typescript@5.1.6):
     resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
     hasBin: true
     peerDependencies:
@@ -4856,8 +4868,8 @@ packages:
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.4
-      '@types/node': 20.4.2
-      acorn: 8.9.0
+      '@types/node': 20.4.4
+      acorn: 8.10.0
       acorn-walk: 8.2.0
       arg: 4.1.3
       create-require: 1.1.1

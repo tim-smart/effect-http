@@ -26,8 +26,8 @@
   "devDependencies": {
     "@tsplus-types/effect__data": "0.16.0-11739c0",
     "@tsplus-types/effect__io": "0.35.1-11739c0",
-    "@tsplus/installer": "^0.0.177",
-    "bun-types": "^0.6.14",
+    "@tsplus/installer": "^0.0.178",
+    "bun-types": "^0.7.0",
     "prettier": "^3.0.0",
     "typescript": "5.1.6"
   },
