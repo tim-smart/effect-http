@@ -33,7 +33,7 @@ export const serve =
   <R>(httpApp: HttpApp<R, EarlyResponse>) =>
     Effect.runtime<R>()
       .flatMap(runtime =>
-        Effect.asyncInterrupt<never, NodeHttpError, never>(resume => {
+        Effect.async<never, NodeHttpError, never>(resume => {
           const server = makeServer()
 
           server.once("error", err => {

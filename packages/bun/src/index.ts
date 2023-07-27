@@ -22,7 +22,7 @@ export const serve =
     Effect.runtime<R>()
       .flatMap(rt => {
         const run = rt.runPromise
-        return Effect.asyncInterrupt<never, never, void>(() => {
+        return Effect.async<never, never, void>(() => {
           const server = Bun.serve({
             ...options,
             fetch(request) {
