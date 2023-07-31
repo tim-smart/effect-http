@@ -20,14 +20,14 @@
   "license": "ISC",
   "dependencies": {
     "@effect-http/core": "^0.38.0",
-    "@effect/data": "^0.17.0",
-    "@effect/io": "^0.36.0"
+    "@effect/data": "^0.17.1",
+    "@effect/io": "^0.37.0"
   },
   "devDependencies": {
-    "@tsplus-types/effect__data": "0.17.0-11739c0",
-    "@tsplus-types/effect__io": "0.36.0-11739c0",
+    "@tsplus-types/effect__data": "0.17.1-11739c0",
+    "@tsplus-types/effect__io": "0.37.0-11739c0",
     "@tsplus/installer": "^0.0.178",
-    "bun-types": "^0.7.0",
+    "bun-types": "^0.7.1",
     "prettier": "^3.0.0",
     "typescript": "5.1.6"
   },

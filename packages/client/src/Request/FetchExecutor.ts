@@ -44,7 +44,7 @@ export const fetch =
       const body = request.body.map(convertBody).getOrUndefined
 
       return $(
-        Effect.tryPromiseInterrupt({
+        Effect.tryPromise({
           try: signal =>
             globalThis.fetch(url, {
               ...options,

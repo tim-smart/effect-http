@@ -6,7 +6,7 @@ export const fromReadableStream = <A = Uint8Array>(
 ) =>
   Stream.unwrapScoped(
     Effect(() => evaluate().getReader())
-      .acquireRelease(reader => Effect.promise(reader.cancel()))
+      .acquireRelease(reader => Effect.promise(() => reader.cancel()))
       .map(reader =>
         Stream.repeatEffectOption(
           Effect.tryPromise({
