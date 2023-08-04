@@ -18,19 +18,22 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "@effect-http/core": "^0.39.0",
-    "@effect/data": "^0.17.1",
-    "@effect/io": "^0.37.0"
-  },
   "devDependencies": {
+    "@effect-http/core": "workspace:^",
+    "@effect/data": "^0.17.1",
+    "@effect/io": "^0.38.0",
     "@tsplus-types/effect__data": "0.17.1-11739c0",
-    "@tsplus-types/effect__io": "0.37.0-11739c0",
+    "@tsplus-types/effect__io": "0.38.0-11739c0",
     "@tsplus/installer": "^0.0.178",
-    "bun-types": "^0.7.1",
-    "prettier": "^3.0.0",
+    "bun-types": "^0.7.2",
+    "prettier": "^3.0.1",
     "typescript": "5.1.6"
   },
   "sideEffects": false,
-  "gitHead": "f285647e065f4b904e4d2165df54dd797a9c51fc"
+  "gitHead": "f285647e065f4b904e4d2165df54dd797a9c51fc",
+  "peerDependencies": {
+    "@effect-http/core": "workspace:^",
+    "@effect/data": "^0.17.1",
+    "@effect/io": "^0.38.0"
+  }
 }
