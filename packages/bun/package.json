@@ -19,7 +19,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@effect-http/core": "workspace:^",
+    "@effect-http/core": "workspace:*",
     "@effect/data": "^0.17.1",
     "@effect/io": "^0.38.0",
     "@tsplus-types/effect__data": "0.17.1-11739c0",
@@ -32,7 +32,7 @@
   "sideEffects": false,
   "gitHead": "f285647e065f4b904e4d2165df54dd797a9c51fc",
   "peerDependencies": {
-    "@effect-http/core": "workspace:^",
+    "@effect-http/core": "workspace:*",
     "@effect/data": "^0.17.1",
     "@effect/io": "^0.38.0"
   }
