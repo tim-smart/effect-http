@@ -15,7 +15,7 @@ importers:
   packages/bun:
     devDependencies:
       '@effect-http/core':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../core/dist
       '@effect/data':
         specifier: ^0.17.1
@@ -152,10 +152,10 @@ importers:
         specifier: ^2.26.2
         version: 2.26.2
       '@effect-http/client':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../client/dist
       '@effect-http/core':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../core/dist
       '@effect/data':
         specifier: ^0.17.1
